@@ -1,6 +1,6 @@
 ##
 ## EPITECH PROJECT, 2024
-## Arcade
+## Zappy
 ## File description:
 ## Makefile
 ##

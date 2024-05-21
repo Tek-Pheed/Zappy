@@ -1,6 +1,6 @@
 ##
 ## EPITECH PROJECT, 2024
-## GroundHog
+## Zappy
 ## File description:
 ## Makefile
 ##
@@ -8,7 +8,8 @@
 NAME    =   zappy_ai
 
 $(NAME):
-	@cp src/ai.py $(NAME)
+	@echo "#!/usr/bin/env python3" > $(NAME)
+	@cat src/ai.py >> $(NAME)
 	@chmod 755 $(NAME)
 
 all:	$(NAME)
