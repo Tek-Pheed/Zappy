@@ -7,7 +7,9 @@
 
 MAKEFLAGS += --no-print-directory
 
-server: $(OBJ)
+all: server ai gui
+
+server:
 	@make -C ./server/
 	@echo "Zappy-Server ✔"
 
@@ -18,8 +20,6 @@ ai:
 gui:
 	@make -C ./gui/
 	@echo "Zappy-gui ✔"
-
-all: server ai gui
 
 clean:
 	@make clean -C ./server/
