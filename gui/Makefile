@@ -8,9 +8,10 @@
 NAME    =   zappy_gui
 
 $(NAME):
-	chmod 755 $(NAME)
 
 all:	$(NAME)
+
+CFLAGS = -W -Wall -Wextra
 
 clean:
 	rm -rf $(NAME)
