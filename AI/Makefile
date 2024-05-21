@@ -8,8 +8,8 @@
 NAME    =   zappy_ai
 
 $(NAME):
-	cp src/ai.py $(NAME)
-	chmod 755 $(NAME)
+	@cp src/ai.py $(NAME)
+	@chmod 755 $(NAME)
 
 all:	$(NAME)
 
