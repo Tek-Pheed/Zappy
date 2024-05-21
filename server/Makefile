@@ -55,10 +55,4 @@ asan:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic -fsanitize=address\
 	-fsanitize=undefined
 asan:	re
 
-lint:
-	mkdir -p __cppcheckWorkaroundInclude
-	find . -type f \( -iname \*.h -o -iname \*.inl -o -iname \*.hpp \) -exec cp {} __cppcheckWorkaroundInclude \;
-	cppcheck --enable=all --quiet --suppress=missingIncludeSystem \
-		--suppress=constVariablePointer --suppress=variableScope --error-exitcode=1 --output-file=check.txt -I__cppcheckWorkaroundInclude .
-
 .PHONY:	clean fclean re all debug asan fast lint
