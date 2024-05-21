@@ -42,6 +42,15 @@
 *.idb
 *.pdb
 
+*.pdf
+bin
+.vscode
+*.json
+
+zappy_gui
+zappy_server
+zappy_ai
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
