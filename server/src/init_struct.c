@@ -22,3 +22,14 @@ server_t *init_struct(void)
     tmp->_freq = 100;
     return tmp;
 }
+
+void free_struct(server_t *serv)
+{
+    if (serv != NULL && serv->_tName != NULL) {
+        for (int i = 0; serv->_tName[i] != NULL; i++)
+            free(serv->_tName[i]);
+        free(serv->_tName);
+    }
+    if (serv != NULL)
+        free(serv);
+}

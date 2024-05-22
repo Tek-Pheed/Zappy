@@ -80,8 +80,10 @@ int main(int argc, char *argv[])
     server_t *serv = init_struct();
     int retval = check_args(argc, argv, serv);
 
-    if (retval != 0)
+    if (retval != 0) {
+        free_struct(serv);
         return 84;
+    }
     printf("P: %d\n", serv->_port);
     printf("X: %d\n", serv->_resX);
     printf("Y: %d\n", serv->_resY);
@@ -90,5 +92,6 @@ int main(int argc, char *argv[])
     }
     printf("C: %d\n", serv->_clientNb);
     printf("F: %d\n", serv->_freq);
+    free_struct(serv);
     return 0;
 }

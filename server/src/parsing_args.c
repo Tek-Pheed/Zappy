@@ -16,19 +16,25 @@ extern int optind, opterr, optopt;
 
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
 {
-    size_t size;
+    size_t allocated_size = 2;
+    size_t current_size = 0;
+    char **new_tName = NULL;
 
-    serv->_tName = malloc(sizeof(char *) * 1);
+    serv->_tName = calloc(allocated_size, sizeof(char *));
     if (serv->_tName == NULL)
         return;
-    serv->_tName[0] = strdup(optarg);
+    serv->_tName[current_size] = strdup(optarg);
+    current_size++;
     for (; optind < argc && *argv[optind] != '-'; optind++) {
-        size = malloc_usable_size(serv->_tName);
-        serv->_tName = realloc(serv->_tName, size + (sizeof(char *) * 1));
-        if (serv->_tName == NULL)
-            return;
-        serv->_tName[optind - OFFSET_ARGS] = strdup(argv[optind]);
+        if (current_size >= allocated_size - 1) {
+            allocated_size *= 2;
+            new_tName = realloc(serv->_tName, allocated_size * sizeof(char *));
+            serv->_tName = new_tName;
+        }
+        serv->_tName[current_size] = strdup(argv[optind]);
+        current_size++;
     }
+    serv->_tName[current_size] = NULL;
     flags[3] = 1;
 }
 

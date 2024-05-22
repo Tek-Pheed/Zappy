@@ -23,3 +23,4 @@ void parse_clientnb(server_t *serv, int flags[6]);
 void parse_resy(server_t *serv, int flags[6]);
 void parse_resx(server_t *serv, int flags[6]);
 void parse_port(server_t *serv, int flags[6]);
+void free_struct(server_t *serv);
