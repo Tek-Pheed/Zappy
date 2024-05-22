@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
 from sys import argv as av
+from ai.src.arguments import parse_args
 
-print(av)
+args = parse_args(av[1:])
+
+print(args)
