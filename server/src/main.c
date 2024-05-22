@@ -23,44 +23,37 @@ static int check_all_args(int flags[6])
     return 0;
 }
 
+static void parse_freq(server_t *serv, int flags[6])
+{
+    serv->_freq = atoi(optarg);
+    flags[5] = 1;
+}
+
+static void check_opt(int opt, server_t *serv, int flags[6])
+{
+    if (opt == 'p')
+        parse_port(serv, flags);
+    if (opt == 'x')
+        parse_resx(serv, flags);
+    if (opt == 'y')
+        parse_resy(serv, flags);
+    if (opt == 'c')
+        parse_clientnb(serv, flags);
+    if (opt == 'f')
+        parse_freq(serv, flags);
+}
+
 static int parse_args(int argc, char *argv[], server_t *serv)
 {
-    int opt;
+    int opt = getopt(argc, argv, "p:x:y:n:c:f:");
     int flags[6] = {0};
 
-    opt = getopt(argc, argv, "p:x:y:n:c:f:");
     while (opt != -1) {
-        switch (opt) {
-            case 'p':
-                serv->_port = atoi(optarg);
-                flags[0] = 1;
-                break;
-            case 'x':
-                serv->_resX = atoi(optarg);
-                flags[1] = 1;
-                break;
-            case 'y':
-                serv->_resY = atoi(optarg);
-                flags[2] = 1;
-                break;
-            case 'n':
-                parse_team_name(serv, flags, argc, argv);
-                break;
-            case 'c':
-                serv->_clientNb = atoi(optarg);
-                flags[4] = 1;
-                break;
-            case 'f':
-                serv->_freq = atoi(optarg);
-                flags[5] = 1;
-                break;
-            case '?':
-                printf("Invalid args\n");
-                return 84;
-            default:
-                printf("Error parsing args\n");
-                return 84;
-        }
+        if (opt == 'n')
+            parse_team_name(serv, flags, argc, argv);
+        if (opt == '?')
+            return 84;
+        check_opt(opt, serv, flags);
         opt = getopt(argc, argv, "p:x:y:n:c:f:");
     }
     return check_all_args(flags);
@@ -87,6 +80,8 @@ int main(int argc, char *argv[])
     server_t *serv = init_struct();
     int retval = check_args(argc, argv, serv);
 
+    if (retval != 0)
+        return 84;
     printf("P: %d\n", serv->_port);
     printf("X: %d\n", serv->_resX);
     printf("Y: %d\n", serv->_resY);
@@ -95,5 +90,5 @@ int main(int argc, char *argv[])
     }
     printf("C: %d\n", serv->_clientNb);
     printf("F: %d\n", serv->_freq);
-    return retval;
+    return 0;
 }

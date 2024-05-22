@@ -19,3 +19,7 @@ struct server_s {
 typedef struct server_s server_t;
 server_t *init_struct(void);
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[]);
+void parse_clientnb(server_t *serv, int flags[6]);
+void parse_resy(server_t *serv, int flags[6]);
+void parse_resx(server_t *serv, int flags[6]);
+void parse_port(server_t *serv, int flags[6]);
