@@ -7,6 +7,10 @@ def parse_args(av):
     parser.add_argument("-h", type=str, help="name of the machine; localhost by default")
     parser.add_argument('-help', action='help')
 
+    if len(av) == 0:
+        print("ERROR: no arguments")
+        exit(84)
+
     try:
         args = parser.parse_args(av)
     except SystemExit:
