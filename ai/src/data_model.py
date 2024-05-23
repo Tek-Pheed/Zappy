@@ -10,5 +10,6 @@ class Inventory(NamedTuple):
     thystame: int
 
 class Player(NamedTuple):
+    name: str
     level: int
     inv: Inventory
