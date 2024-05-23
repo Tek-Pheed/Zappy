@@ -11,6 +11,7 @@
 server_t *init_struct(void)
 {
     server_t *tmp = malloc(sizeof(server_t));
+    list_t *node = {NULL, NULL};
 
     if (tmp == NULL)
         return tmp;
@@ -20,6 +21,7 @@ server_t *init_struct(void)
     tmp->_tName = NULL;
     tmp->_clientNb = -1;
     tmp->_freq = 100;
+    tmp->client = node;
     return tmp;
 }
 
