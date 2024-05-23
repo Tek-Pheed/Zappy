@@ -3,10 +3,6 @@ from ai.src.arguments import parse_args
 from ai.src.data_model import *
 from ai.src.server import *
 
-if len(av) <= 1:
-    print("Error: not enought args")
-    exit(84)
-
 args = parse_args(av[1:])
 
 server: Server = Server(args.h, args.p)
