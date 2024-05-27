@@ -14,14 +14,13 @@
 
 class IItems {
     public:
-        IItems();
-        ~IItems();
-        std::map<std::string, int> getPosition();
-        void setPosition(positions: map<std::string string, int>);
-        int GetAmount();
-        void SetAmount(int amount);
-        std::vector<std::map<std::string, int>> getSameItems();
-        void addSameItems(std::map<std::string, int> position);
+        virtual ~IItems() = default;
+        virtual std::map<std::string, int> getPosition() = 0;
+        virtual void setPosition(std::map<std::string, int> position) = 0;
+        virtual int GetAmount() = 0;
+        virtual void SetAmount(int amount) = 0;
+        virtual std::vector<std::map<std::string, int>> getSameItems() = 0;
+        virtual void addSameItems(std::map<std::string, int> position) = 0;
         // void RemoveItems(int amount); ???? a voir si on en a besoin
 
     protected:
