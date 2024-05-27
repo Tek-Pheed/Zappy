@@ -18,46 +18,46 @@ void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
 {
     size_t allocated_size = 2;
     size_t current_size = 0;
-    char **new_tName = NULL;
+    char **newtName = NULL;
 
-    serv->_tName = calloc(allocated_size, sizeof(char *));
-    if (serv->_tName == NULL)
+    serv->tName = calloc(allocated_size, sizeof(char *));
+    if (serv->tName == NULL)
         return;
-    serv->_tName[current_size] = strdup(optarg);
+    serv->tName[current_size] = strdup(optarg);
     current_size++;
     for (; optind < argc && *argv[optind] != '-'; optind++) {
         if (current_size >= allocated_size - 1) {
             allocated_size *= 2;
-            new_tName = realloc(serv->_tName, allocated_size * sizeof(char *));
-            serv->_tName = new_tName;
+            newtName = realloc(serv->tName, allocated_size * sizeof(char *));
+            serv->tName = newtName;
         }
-        serv->_tName[current_size] = strdup(argv[optind]);
+        serv->tName[current_size] = strdup(argv[optind]);
         current_size++;
     }
-    serv->_tName[current_size] = NULL;
+    serv->tName[current_size] = NULL;
     flags[3] = 1;
 }
 
-void parse_port(server_t *serv, int flags[6])
+void parseport(server_t *serv, int flags[6])
 {
-    serv->_port = atoi(optarg);
+    serv->port = atoi(optarg);
     flags[0] = 1;
 }
 
-void parse_resx(server_t *serv, int flags[6])
+void parseresX(server_t *serv, int flags[6])
 {
-    serv->_resX = atoi(optarg);
+    serv->resX = atoi(optarg);
     flags[1] = 1;
 }
 
-void parse_resy(server_t *serv, int flags[6])
+void parseresY(server_t *serv, int flags[6])
 {
-    serv->_resY = atoi(optarg);
+    serv->resY = atoi(optarg);
     flags[2] = 1;
 }
 
-void parse_clientnb(server_t *serv, int flags[6])
+void parseclientNb(server_t *serv, int flags[6])
 {
-    serv->_clientNb = atoi(optarg);
+    serv->clientNb = atoi(optarg);
     flags[4] = 1;
 }

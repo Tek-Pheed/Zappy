@@ -14,33 +14,26 @@ LIBINC	=	 -I libs/list/
 
 CFLAGS	=	$(INCFLAGS) $(LIBINC) -Wall -Wextra -Werror -O2
 
-
-LIBSRC	=	libs/list/list_generic_del.c		\
-			libs/list/list_generic_display.c	\
-			libs/list/list_generic_get.c		\
-			libs/list/list_generic.c			\
-
-SRC	=	src/main.c			\
+SRC	=	libs/list/list_generic_del.c		\
+		libs/list/list_generic_display.c	\
+		libs/list/list_generic_get.c		\
+		libs/list/list_generic.c			\
+		src/main.c			\
 		src/init_struct.c	\
 		src/parsing_args.c	\
 		src/loop_server.c	\
-		src/server.c
+		src/server.c		\
+		src/map.c
 
 OBJ	=	$(SRC:.c=.o)
-LIBOBJ	=	$(LIBSRC:.c=.o)
 
-$(NAME):	$(LIBNAME)	$(OBJ)
+$(NAME):	$(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
-
-$(LIBNAME):	$(LIBOBJ)
-	$(AR) cr -o $(LIBNAME) $(LIBOBJ)
 
 all: $(NAME)
 
 clean:
 	rm -f $(OBJ)
-	rm -f $(LIBOBJ)
-	rm -f $(LIBNAME)
 	rm -f $(OBJ:.o=.gcno)
 	rm -f $(OBJ:.o=.gcda)
 	rm -f coding-style-reports.log

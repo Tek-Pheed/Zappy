@@ -59,7 +59,7 @@ static bool start_socket(int fd)
 
 bool init_server(server_t *serv)
 {
-    serv->socket = init_server_socket(serv->_port);
+    serv->socket = init_server_socket(serv->port);
     if (serv->socket == -1) {
         return false;
     }

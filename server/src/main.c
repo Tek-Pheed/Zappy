@@ -25,20 +25,20 @@ static int check_all_args(int flags[6])
 
 static void parse_freq(server_t *serv, int flags[6])
 {
-    serv->_freq = atoi(optarg);
+    serv->freq = atoi(optarg);
     flags[5] = 1;
 }
 
 static void check_opt(int opt, server_t *serv, int flags[6])
 {
     if (opt == 'p')
-        parse_port(serv, flags);
+        parseport(serv, flags);
     if (opt == 'x')
-        parse_resx(serv, flags);
+        parseresX(serv, flags);
     if (opt == 'y')
-        parse_resy(serv, flags);
+        parseresY(serv, flags);
     if (opt == 'c')
-        parse_clientnb(serv, flags);
+        parseclientNb(serv, flags);
     if (opt == 'f')
         parse_freq(serv, flags);
 }
@@ -84,14 +84,14 @@ int main(int argc, char *argv[])
         free_struct(serv);
         return 84;
     }
-    printf("P: %d\n", serv->_port);
-    printf("X: %d\n", serv->_resX);
-    printf("Y: %d\n", serv->_resY);
-    for (int i = 0; serv->_tName[i] != NULL; i++) {
-        printf("N: %s\n", serv->_tName[i]);
+    printf("P: %d\n", serv->port);
+    printf("X: %d\n", serv->resX);
+    printf("Y: %d\n", serv->resY);
+    for (int i = 0; serv->tName[i] != NULL; i++) {
+        printf("N: %s\n", serv->tName[i]);
     }
-    printf("C: %d\n", serv->_clientNb);
-    printf("F: %d\n", serv->_freq);
+    printf("C: %d\n", serv->clientNb);
+    printf("F: %d\n", serv->freq);
     free_struct(serv);
     return 0;
 }
