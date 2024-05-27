@@ -9,19 +9,19 @@
 #define OFFSET_ARGS           8
 #define UNUSED                __attribute__((unused))
 #define CONN_TIMEOUT_DELAY_US 25000000
-#define linemate              0
-#define deraumere             1
-#define sibur                 2
-#define mendiane              3
-#define phiras                4
-#define thystame              5
-#define linemate_r            0.3
-#define deraumere_r           0.15
-#define sibur_r               0.1
-#define mendiane_r            0.1
-#define phiras_r              0.08
-#define thystame_r            0.05
-#define food_r                0.5
+#define LINEMATE              0
+#define DERAUMERE             1
+#define SIBUR                 2
+#define MENDIANE              3
+#define PHIRAS                4
+#define THYSTAME              5
+#define LINEMATE_R            0.3
+#define DERAUMERE_R           0.15
+#define SIBUR_R               0.1
+#define MENDIANE_R            0.1
+#define PHIRAS_R              0.08
+#define THYSTAME_R            0.05
+#define FOOD_R                0.5
 #include "list.h"
 
 struct server_s {
@@ -37,10 +37,10 @@ struct server_s {
 typedef struct server_s server_t;
 server_t *init_struct(void);
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[]);
-void parseclientNb(server_t *serv, int flags[6]);
-void parseresY(server_t *serv, int flags[6]);
-void parseresX(server_t *serv, int flags[6]);
-void parseport(server_t *serv, int flags[6]);
+void parse_client_nb(server_t *serv, int flags[6]);
+void parse_res_y(server_t *serv, int flags[6]);
+void parse_res_x(server_t *serv, int flags[6]);
+void parse_port(server_t *serv, int flags[6]);
 void free_struct(server_t *serv);
 struct client_s {
     int fd;
@@ -53,3 +53,5 @@ struct cell_s {
     bool is_player_on;
 };
 typedef struct cell_s cell_t;
+cell_t **create_map(server_t *serv);
+void free_map(server_t *serv, cell_t **map);

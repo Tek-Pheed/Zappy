@@ -32,13 +32,13 @@ static void parse_freq(server_t *serv, int flags[6])
 static void check_opt(int opt, server_t *serv, int flags[6])
 {
     if (opt == 'p')
-        parseport(serv, flags);
+        parse_port(serv, flags);
     if (opt == 'x')
-        parseresX(serv, flags);
+        parse_res_x(serv, flags);
     if (opt == 'y')
-        parseresY(serv, flags);
+        parse_res_y(serv, flags);
     if (opt == 'c')
-        parseclientNb(serv, flags);
+        parse_client_nb(serv, flags);
     if (opt == 'f')
         parse_freq(serv, flags);
 }
@@ -75,15 +75,8 @@ static int check_args(int argc, char *argv[], server_t *serv)
     return parse_args(argc, argv, serv);
 }
 
-int main(int argc, char *argv[])
+static void print_serv(server_t *serv)
 {
-    server_t *serv = init_struct();
-    int retval = check_args(argc, argv, serv);
-
-    if (retval != 0) {
-        free_struct(serv);
-        return 84;
-    }
     printf("P: %d\n", serv->port);
     printf("X: %d\n", serv->resX);
     printf("Y: %d\n", serv->resY);
@@ -92,6 +85,21 @@ int main(int argc, char *argv[])
     }
     printf("C: %d\n", serv->clientNb);
     printf("F: %d\n", serv->freq);
+}
+
+int main(int argc, char *argv[])
+{
+    server_t *serv = init_struct();
+    int retval = check_args(argc, argv, serv);
+    cell_t **map = NULL;
+
+    if (retval != 0) {
+        free_struct(serv);
+        return 84;
+    }
+    print_serv(serv);
+    map = create_map(serv);
+    free_map(serv, map);
     free_struct(serv);
     return 0;
 }

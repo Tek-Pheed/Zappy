@@ -38,25 +38,25 @@ void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
     flags[3] = 1;
 }
 
-void parseport(server_t *serv, int flags[6])
+void parse_port(server_t *serv, int flags[6])
 {
     serv->port = atoi(optarg);
     flags[0] = 1;
 }
 
-void parseresX(server_t *serv, int flags[6])
+void parse_res_x(server_t *serv, int flags[6])
 {
     serv->resX = atoi(optarg);
     flags[1] = 1;
 }
 
-void parseresY(server_t *serv, int flags[6])
+void parse_res_y(server_t *serv, int flags[6])
 {
     serv->resY = atoi(optarg);
     flags[2] = 1;
 }
 
-void parseclientNb(server_t *serv, int flags[6])
+void parse_client_nb(server_t *serv, int flags[6])
 {
     serv->clientNb = atoi(optarg);
     flags[4] = 1;

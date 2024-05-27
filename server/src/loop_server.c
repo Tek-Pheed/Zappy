@@ -63,7 +63,6 @@ int server_loop(server_t *serv)
     if (select(FD_SETSIZE, &fdset, &fdwset, NULL, &time) != -1) {
         if (FD_ISSET(serv->socket, &fdset) != 0)
             add_client(serv);
-        // command
         return 0;
     }
     return 0;

@@ -5,35 +5,72 @@
 ** map
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "server.h"
 
-void create_cell(cell_t *cell)
+static void calculate_quantity(server_t *serv, float quantity[7])
+{
+    float total = serv->resX * serv->resY;
+
+    quantity[LINEMATE] = total * LINEMATE_R;
+    quantity[DERAUMERE] = total * DERAUMERE_R;
+    quantity[SIBUR] = total * SIBUR_R;
+    quantity[MENDIANE] = total * MENDIANE_R;
+    quantity[PHIRAS] = total * PHIRAS_R;
+    quantity[THYSTAME] = total * THYSTAME_R;
+    quantity[6] = total * FOOD_R;
+}
+
+static void create_cell(cell_t *cell)
 {
     cell->is_player_on = false;
     cell->food = 0;
-    cell->stone[linemate] = 0;
-    cell->stone[deraumere] = 0;
-    cell->stone[sibur] = 0;
-    cell->stone[mendiane] = 0;
-    cell->stone[phiras] = 0;
-    cell->stone[thystame] = 0;
+    for (int i = 0; i < 6; ++i)
+        cell->stone[i] = 0;
+}
+
+static void distribute_items(
+    cell_t **map, server_t *serv, int quant, int item_type)
+{
+    int x = 0;
+    int y = 0;
+
+    srand(time(NULL));
+    for (int i = 0; i < quant; ++i) {
+        x = rand() % serv->resX;
+        y = rand() % serv->resY;
+        if (item_type == 6) {
+            map[x][y].food++;
+        } else {
+            map[x][y].stone[item_type]++;
+        }
+    }
+}
+
+void free_map(server_t *serv, cell_t **map)
+{
+    for (int i = 0; i < serv->resX; ++i) {
+        free(map[i]);
+    }
+    free(map);
 }
 
 cell_t **create_map(server_t *serv)
 {
-    cell_t **map = calloc(serv->resX, sizeof(cell_t));
-    // float food_density = serv->resX * serv->resY * food_r;
+    cell_t **map = calloc(serv->resX, sizeof(cell_t *));
+    float quant[7] = {0};
 
     if (map == NULL)
         return NULL;
-    srand(time(NULL));
+    calculate_quantity(serv, quant);
     for (int i = 0; i != serv->resX; i++) {
         map[i] = calloc(serv->resY, sizeof(cell_t));
-        for (int y = 0; y != serv->resY; y++) {
+        for (int y = 0; y != serv->resY; y++)
             create_cell(&map[i][y]);
-        }
     }
+    for (int i = 0; i != 7; i++)
+        distribute_items(map, serv, quant[i], i);
     return map;
 }
