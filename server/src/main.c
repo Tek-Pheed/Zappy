@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
 {
     server_t *serv = init_struct();
     int retval = check_args(argc, argv, serv);
-    cell_t **map = NULL;
 
     if (retval != 0) {
         free_struct(serv);

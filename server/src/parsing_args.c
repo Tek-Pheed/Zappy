@@ -35,6 +35,7 @@ void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
         current_size++;
     }
     serv->tName[current_size] = NULL;
+    serv->teamNb = (int) current_size;
     flags[3] = 1;
 }
 

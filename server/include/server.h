@@ -32,6 +32,7 @@ struct server_s {
     int resX;
     int resY;
     char **tName;
+    int teamNb;
     int clientNb;
     int freq;
     int socket;
@@ -47,6 +48,12 @@ void parse_port(server_t *serv, int flags[6]);
 void free_struct(server_t *serv);
 struct client_s {
     int fd;
+    int number;
+    int orient;
+    int level;
+    char *team;
+    int posX;
+    int posY;
 };
 typedef struct client_s client_t;
 int server_loop(server_t *serv);
@@ -57,3 +64,8 @@ struct cell_s {
 };
 cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);
+char *map_size(server_t *serv);
+char *tile_content(server_t *serv, int x, int y);
+char *all_content(server_t *serv);
+char *all_name(server_t *serv);
+char *conn_new_player(server_t *serv);

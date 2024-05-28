@@ -18,6 +18,7 @@ server_t *init_struct(void)
     tmp->port = -1;
     tmp->resX = -1;
     tmp->resY = -1;
+    tmp->teamNb = -1;
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
