@@ -24,6 +24,9 @@
 #define FOOD_R                0.5
 #include "list.h"
 
+typedef struct cell_s cell_t;
+typedef struct server_s server_t;
+
 struct server_s {
     int port;
     int resX;
@@ -33,8 +36,8 @@ struct server_s {
     int freq;
     int socket;
     list_t *client;
+    cell_t **map;
 };
-typedef struct server_s server_t;
 server_t *init_struct(void);
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[]);
 void parse_client_nb(server_t *serv, int flags[6]);
@@ -52,6 +55,5 @@ struct cell_s {
     int stone[6];
     bool is_player_on;
 };
-typedef struct cell_s cell_t;
 cell_t **create_map(server_t *serv);
-void free_map(server_t *serv, cell_t **map);
+void free_map(server_t *serv);

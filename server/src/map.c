@@ -49,12 +49,13 @@ static void distribute_items(
     }
 }
 
-void free_map(server_t *serv, cell_t **map)
+void free_map(server_t *serv)
 {
     for (int i = 0; i < serv->resX; ++i) {
-        free(map[i]);
+        free(serv->map[i]);
     }
-    free(map);
+    free(serv->map);
+    serv->map = NULL;
 }
 
 cell_t **create_map(server_t *serv)

@@ -87,16 +87,16 @@ static void print_serv(server_t *serv)
     printf("F: %d\n", serv->freq);
 }
 
-static void print_map(server_t *serv, cell_t **map)
+static void print_map(server_t *serv)
 {
     for (int i = 0; i < serv->resX; ++i) {
         for (int y = 0; y < serv->resY; ++y) {
             printf("Cell (%d, %d): Food: %d, Linemate: %d, Deraumere: %d, "
                    "Sibur: %d, Mendiane: %d, Phiras: %d, Thystame: %d\n",
-                i, y, map[i][y].food, map[i][y].stone[LINEMATE],
-                map[i][y].stone[DERAUMERE], map[i][y].stone[SIBUR],
-                map[i][y].stone[MENDIANE], map[i][y].stone[PHIRAS],
-                map[i][y].stone[THYSTAME]);
+                i, y, serv->map[i][y].food, serv->map[i][y].stone[LINEMATE],
+                serv->map[i][y].stone[DERAUMERE], serv->map[i][y].stone[SIBUR],
+                serv->map[i][y].stone[MENDIANE], serv->map[i][y].stone[PHIRAS],
+                serv->map[i][y].stone[THYSTAME]);
         }
     }
 }
@@ -112,9 +112,8 @@ int main(int argc, char *argv[])
         return 84;
     }
     print_serv(serv);
-    map = create_map(serv);
-    print_map(serv, map);
-    free_map(serv, map);
+    serv->map = create_map(serv);
+    print_map(serv);
     free_struct(serv);
     return 0;
 }
