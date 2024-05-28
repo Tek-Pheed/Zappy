@@ -7,11 +7,16 @@
 
 NAME    =   zappy_gui
 
-$(NAME):
+SRC		=	src/
+
+OBJ		=	$(SRC:.cpp=.o)
 
 all:	$(NAME)
 
 CFLAGS = -W -Wall -Wextra
+
+$(NAME): $(OBJ)
+	g++ -o $(NAME) $(OBJ) -o $(CFLAGS)
 
 clean:
 	rm -rf $(NAME)
