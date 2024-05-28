@@ -1,13 +1,13 @@
 ##
 ## EPITECH PROJECT, 2024
-## GroundHog
+## GUI-Zappy
 ## File description:
 ## Makefile
 ##
 
 NAME    =   zappy_gui
 
-SRC		=	src/
+SRC		=	src/main.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -15,8 +15,15 @@ all:	$(NAME)
 
 CFLAGS = -W -Wall -Wextra
 
+LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+
+%.o: %.cpp
+	g++ $(CFLAGS) $^-c -o $@
+
 $(NAME): $(OBJ)
-	g++ -o $(NAME) $(OBJ) -o $(CFLAGS)
+	g++ -o $(NAME) $(OBJ) $(LDFLAGS)
+
+all: $(NAME)
 
 clean:
 	rm -rf $(NAME)
