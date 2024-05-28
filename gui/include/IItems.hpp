@@ -17,8 +17,8 @@ class IItems {
         virtual ~IItems() = default;
         virtual std::map<std::string, int> getPosition() = 0;
         virtual void setPosition(std::map<std::string, int> position) = 0;
-        virtual int GetAmount() = 0;
-        virtual void SetAmount(int amount) = 0;
+        virtual float getDensity() = 0;
+        virtual void setDensity(float density) = 0;
         virtual std::vector<std::map<std::string, int>> getSameItems() = 0;
         virtual void addSameItems(std::map<std::string, int> position) = 0;
         // void RemoveItems(int amount); ???? a voir si on en a besoin
@@ -40,16 +40,16 @@ enum items {
 class Atems : public IItems
 {
 private:
-    int _density;
+    float _density;
     std::map<std::string, int> _position;
     std::vector<std::map<std::string, int>> _sameItems;
 public:
-    Atems(/* args */);
+    Atems(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Atems();
     std::map<std::string, int> getPosition() override;
     void setPosition(std::map<std::string, int> position) override;
-    int GetAmount() override;
-    void SetAmount(int amount) override;
+    float getDensity() override;
+    void setDensity(float density) override;
     std::vector<std::map<std::string, int>> getSameItems() override;
     void addSameItems(std::map<std::string, int> position) override;
 };
@@ -57,49 +57,49 @@ public:
 class Deraumere : public Atems
 {
 public:
-    Deraumere(/* args */);
+    Deraumere(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Deraumere();
 };
 
 class Food : public Atems
 {
 public:
-    Food(/* args */);
+    Food(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Food();
 };
 
 class Linemate : public Atems
 {
 public:
-    Linemate(/* args */);
+    Linemate(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Linemate();
 };
 
 class Mendiane : public Atems
 {
 public:
-    Mendiane(/* args */);
+    Mendiane(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Mendiane();
 };
 
 class Phiras : public Atems
 {
 public:
-    Phiras(/* args */);
+    Phiras(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Phiras();
 };
 
 class Sibur : public Atems
 {
 public:
-    Sibur(/* args */);
+    Sibur(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Sibur();
 };
 
 class Thystame : public Atems
 {
 public:
-    Thystame(/* args */);
+    Thystame(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
     ~Thystame();
 };
 }
