@@ -5,11 +5,11 @@
 ** ParserData
 */
 
-#ifndef PARSERDATA_HPP_
-#define PARSERDATA_HPP_
+#pragma once
 
 #include <iostream>
 
+namespace Zappy {
 class ParserData {
     public:
         ParserData();
@@ -19,5 +19,4 @@ class ParserData {
     private:
         std::string _data;
 };
-
-#endif /* !PARSERDATA_HPP_ */
+}

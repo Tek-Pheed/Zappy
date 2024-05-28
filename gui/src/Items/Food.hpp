@@ -5,11 +5,15 @@
 ** Food.hpp
 */
 
+#pragma once
+
 #include "../Atems.hpp"
 
+namespace Zappy {
 class Food : public Atems
 {
 public:
     Food(/* args */);
     ~Food();
 };
+}

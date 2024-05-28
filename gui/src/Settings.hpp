@@ -5,9 +5,9 @@
 ** Settings
 */
 
-#ifndef SETTINGS_HPP_
-#define SETTINGS_HPP_
+#pragma once
 
+namespace Zappy {
 class Settings {
     public:
         Settings();
@@ -23,10 +23,9 @@ class Settings {
 };
 
 enum _resolution {
-    RES_1920_1080,
-    RES_1280_720,
-    RES_800_600,
-    RES_640_480
+    RES_1920_1080 = 0,
+    RES_1280_720 = 1,
+    RES_800_600 = 2,
+    RES_640_480 = 3
 };
-
-#endif /* !SETTINGS_HPP_ */
+}

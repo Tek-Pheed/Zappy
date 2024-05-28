@@ -5,9 +5,9 @@
 ** Draw
 */
 
-#ifndef DRAW_HPP_
-#define DRAW_HPP_
+#pragma once
 
+namespace Zappy {
 class Draw {
     public:
         Draw();
@@ -20,5 +20,4 @@ class Draw {
     protected:
     private:
 };
-
-#endif /* !DRAW_HPP_ */
+}

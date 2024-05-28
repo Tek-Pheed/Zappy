@@ -5,19 +5,19 @@
 ** Player
 */
 
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#pragma once
 
 #include <map>
 #include <vector>
 #include <string>
 
+namespace Zappy { 
 class Player {
     public:
         Player();
         ~Player();
         std::map<std::string, int> getPosition();
-        void setPosition(pos: std::map<std::string, int>);
+        void setPosition(std::map<std::string, int>);
         void setPositionX(int x);
         void setPositionY(int y);
         std::vector <std::map<std::string, int>> getInventory();
@@ -29,5 +29,4 @@ class Player {
         std::map<std::string, int> _inventory;
         int _playerId;
 };
-
-#endif /* !PLAYER_HPP_ */
+}

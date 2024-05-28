@@ -5,13 +5,13 @@
 ** IItems
 */
 
-#ifndef IITEMS_HPP_
-#define IITEMS_HPP_
+#pragma once
 
 #include <vector>
 #include <string>
 #include <map>
 
+namespace Zappy {
 class IItems {
     public:
         virtual ~IItems() = default;
@@ -26,5 +26,4 @@ class IItems {
     protected:
     private:
 };
-
-#endif /* !IITEMS_HPP_ */
+}

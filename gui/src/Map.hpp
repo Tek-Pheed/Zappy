@@ -5,9 +5,9 @@
 ** Map
 */
 
-#ifndef MAP_HPP_
-#define MAP_HPP_
+#pragma once
 
+namespace Zappy {
 class Map {
     public:
         Map();
@@ -22,5 +22,4 @@ class Map {
         int _x;
         int _y;
 };
-
-#endif /* !MAP_HPP_ */
+}

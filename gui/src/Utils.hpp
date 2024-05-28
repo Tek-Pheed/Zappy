@@ -5,9 +5,9 @@
 ** Utils
 */
 
-#ifndef UTILS_HPP_
-#define UTILS_HPP_
+#pragma once
 
+namespace Zappy {
 class Utils {
     public:
         Utils();
@@ -17,5 +17,4 @@ class Utils {
     protected:
     private:
 };
-
-#endif /* !UTILS_HPP_ */
+}

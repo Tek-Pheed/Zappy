@@ -5,11 +5,11 @@
 ** Server
 */
 
-#ifndef SERVER_HPP_
-#define SERVER_HPP_
+#pragma once
 
 #include <iostream>
 
+namespace Zappy {
 class Server {
     public:
         Server();
@@ -21,5 +21,4 @@ class Server {
     protected:
     private:
 };
-
-#endif /* !SERVER_HPP_ */
+}

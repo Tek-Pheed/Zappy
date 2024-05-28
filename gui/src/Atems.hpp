@@ -5,8 +5,11 @@
 ** Atems.hpp
 */
 
+#pragma once
+
 #include "IItems.hpp"
 
+namespace Zappy {
 enum items {
     Food = 0,
     Linemate = 1,
@@ -33,3 +36,4 @@ public:
     std::vector<std::map<std::string, int>> getSameItems() override;
     void addSameItems(std::map<std::string, int> position) override;
 };
+}

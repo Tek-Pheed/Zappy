@@ -5,13 +5,13 @@
 ** Graphics
 */
 
-#ifndef GRAPHICS_HPP_
-#define GRAPHICS_HPP_
+#pragma once
 
 #include <vector>
 #include "Player.hpp"
 #include "IItems.hpp"
 
+namespace Zappy {
 class Graphics {
     public:
         Graphics();
@@ -27,5 +27,4 @@ class Graphics {
         std::vector<IItems> _items;
         // _window;
 };
-
-#endif /* !GRAPHICS_HPP_ */
+}

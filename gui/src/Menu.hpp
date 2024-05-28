@@ -5,11 +5,11 @@
 ** Menu
 */
 
-#ifndef MENU_HPP_
-#define MENU_HPP_
+#pragma once
 
 #include <iostream>
 
+namespace Zappy {
 class Menu {
     public:
         Menu();
@@ -22,5 +22,4 @@ class Menu {
         std::string _host;
         std::string _port;
 };
-
-#endif /* !MENU_HPP_ */
+}

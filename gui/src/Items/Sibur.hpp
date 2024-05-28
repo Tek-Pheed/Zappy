@@ -5,11 +5,15 @@
 ** Sibur.hpp
 */
 
+#pragma once
+
 #include "../Atems.hpp"
 
+namespace Zappy {
 class Sibur : public Atems
 {
 public:
     Sibur(/* args */);
     ~Sibur();
 };
+}
