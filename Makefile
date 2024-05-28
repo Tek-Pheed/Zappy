@@ -15,7 +15,6 @@ server:
 
 ai:
 	@make -C ./ai/
-	@echo "Zappy-ai ✔"
 
 gui:
 	@make -C ./gui/

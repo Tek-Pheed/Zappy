@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 def get_inventory(response: str, inv: dict) -> dict:
     for i in range(len(response)):
@@ -18,5 +18,9 @@ def get_inventory(response: str, inv: dict) -> dict:
             inv["thystame"] = int(response[i].split(" ")[2])
     return inv
 
-def get_case_around_player(response: str, case: dict) -> dict:
-    return case
+def get_case_around_player(response: str) -> dict:
+    res = dict()
+
+    for i in range(len(response)):
+        res[i] = response[i]
+    return res
