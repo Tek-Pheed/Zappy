@@ -11,7 +11,7 @@ $(NAME):
 	@echo "#!/usr/bin/env python3" > $(NAME)
 	@cat src/ai.py >> $(NAME)
 	@chmod 755 $(NAME)
-	@mv $(NAME) ../
+	@cp $(NAME) ../
 
 all:	$(NAME)
 
