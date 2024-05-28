@@ -26,52 +26,10 @@ def get_case_around_player(response: str) -> dict:
         res[i] = response[i]
     return res
 
-def get_forward(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_right(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_left(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_broadcast(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
 def get_number_of_team_unused(response: str) -> int:
     return int(response)
 
-def get_fork(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_eject(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_take_object(response: str) -> bool:
-    if "ok" in response:
-        return True
-    else:
-        return False
-
-def get_set_object(response: str) -> bool:
+def get_OK_KO(response: str) -> bool:
     if "ok" in response:
         return True
     else:
