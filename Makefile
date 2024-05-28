@@ -32,6 +32,10 @@ fclean: clean
 	@make fclean -C ./gui/
 	@echo "FClean ✔"
 
+debug:
+	@make debug -C ./server/
+	@echo "Debug ✔"
+
 re: fclean all
 
-.PHONY: server ai gui all clean fclean re
+.PHONY: server ai gui all clean fclean debug re
