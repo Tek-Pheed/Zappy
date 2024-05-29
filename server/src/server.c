@@ -68,7 +68,7 @@ bool init_server(server_t *serv)
     return true;
 }
 
-int create_server(server_t *serv)
+int run_server(server_t *serv)
 {
     if (!init_server(serv))
         return 84;

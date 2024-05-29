@@ -87,7 +87,23 @@ static void print_serv(server_t *serv)
     printf("F: %d\n", serv->freq);
 }
 
-static void print_map(server_t *serv)
+int main(int argc, char *argv[])
+{
+    server_t *serv = init_struct();
+    int retval = check_args(argc, argv, serv);
+
+    if (retval != 0) {
+        free_struct(serv);
+        return 84;
+    }
+    print_serv(serv);
+    serv->map = create_map(serv);
+    run_server(serv);
+    free_struct(serv);
+    return 0;
+}
+
+/*static void print_map(server_t *serv)
 {
     for (int i = 0; i < serv->resX; ++i) {
         for (int y = 0; y < serv->resY; ++y) {
@@ -99,21 +115,4 @@ static void print_map(server_t *serv)
                 serv->map[i][y].stone[THYSTAME]);
         }
     }
-}
-
-int main(int argc, char *argv[])
-{
-    server_t *serv = init_struct();
-    int retval = check_args(argc, argv, serv);
-    cell_t **map = NULL;
-
-    if (retval != 0) {
-        free_struct(serv);
-        return 84;
-    }
-    print_serv(serv);
-    serv->map = create_map(serv);
-    print_map(serv);
-    free_struct(serv);
-    return 0;
-}
+}*/
