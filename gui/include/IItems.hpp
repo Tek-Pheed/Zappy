@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <raylib.h>
+#include "Utils.hpp"
 
 namespace Zappy {
 class IItems {
@@ -43,8 +45,10 @@ private:
     float _density;
     std::map<std::string, int> _position;
     std::vector<std::map<std::string, int>> _sameItems;
+    Model _model;
 public:
-    Atems(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Atems(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Atems();
     std::map<std::string, int> getPosition() override;
     void setPosition(std::map<std::string, int> position) override;
@@ -57,49 +61,56 @@ public:
 class Deraumere : public Atems
 {
 public:
-    Deraumere(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Deraumere(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Deraumere();
 };
 
 class Food : public Atems
 {
 public:
-    Food(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Food(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Food();
 };
 
 class Linemate : public Atems
 {
 public:
-    Linemate(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Linemate(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Linemate();
 };
 
 class Mendiane : public Atems
 {
 public:
-    Mendiane(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Mendiane(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Mendiane();
 };
 
 class Phiras : public Atems
 {
 public:
-    Phiras(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Phiras(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Phiras();
 };
 
 class Sibur : public Atems
 {
 public:
-    Sibur(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Sibur(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Sibur();
 };
 
 class Thystame : public Atems
 {
 public:
-    Thystame(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems);
+    Thystame(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u);
     ~Thystame();
 };
 }

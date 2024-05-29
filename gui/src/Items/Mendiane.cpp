@@ -7,7 +7,8 @@
 
 #include "IItems.hpp"
 
-Zappy::Mendiane::Mendiane(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems) : Atems(density, position, sameItems)
+Zappy::Mendiane::Mendiane(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
+    std::string model, std::string texture, Utils u) : Atems(density, position, sameItems, model, texture, u)
 {
 
 }
