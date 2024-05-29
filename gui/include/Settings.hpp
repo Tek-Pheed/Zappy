@@ -14,18 +14,20 @@ class Settings {
         ~Settings();
         void setSound(int sound);
         int getSound();
-        void setResolution(_resolution resolution);
-        _resolution getResolution();
+        void setResolution(Resolution resolution);
+        void changeResolution();
+        void createSettingsButton();
+        Resolution getResolution();
 
-    protected:
     private:
         int _sound;
+        Resolution _resolution;
 };
 
-enum _resolution {
-    RES_1920_1080 = 0,
-    RES_1280_720 = 1,
-    RES_800_600 = 2,
-    RES_640_480 = 3
+enum Resolution {
+    RES_1920_1080,
+    RES_1280_720,
+    RES_800_600,
+    RES_640_480
 };
 }
