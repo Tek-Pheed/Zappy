@@ -10,28 +10,32 @@ NAME	=	../zappy_server
 LIBNAME=	libs/libmy.a
 
 INCFLAGS	=	-I include
-LIBINC	=	 -I libs/list/
+LIBINC	=	 -I libs/list/ -I libs/strings
 
 CFLAGS	=	$(INCFLAGS) $(LIBINC) -Wall -Wextra -Werror -O2
 
-SRC	=	libs/list/list_generic_del.c		\
-		libs/list/list_generic_display.c	\
-		libs/list/list_generic_get.c		\
-		libs/list/list_generic.c			\
-		src/client_handling.c				\
-		src/init_struct.c					\
-		src/item_msg.c						\
-		src/loop_server.c					\
-		src/main.c							\
-		src/map_team_msg.c					\
-		src/map.c							\
-		src/networking.c					\
-		src/parsing_args.c					\
-		src/player_event_msg.c				\
-		src/player_msg.c                    \
-		src/server_msg.c					\
-		src/server.c						\
-        src/time_msg.c
+SRC	=	libs/list/list_generic_del.c    \
+		libs/list/list_generic_display.c  \
+		libs/list/list_generic_get.c      \
+		libs/list/list_generic.c          \
+		libs/strings/string_to_array.c    \
+		src/main.c                        \
+		src/client_handling.c             \
+		src/init_struct.c	                \
+		src/item_msg.c                    \
+		src/loop_server.c                 \
+		src/map_team_msg.c                \
+		src/map.c                         \
+		src/networking.c                  \
+		src/player_msg.c                  \
+		src/command_handler.c             \
+		src/command_handler_gui.c         \
+		src/parsing_args.c                \
+		src/player_event_msg.c            \
+		src/player_msg.c                  \
+		src/server_msg.c                  \
+		src/server.c                      \
+    src/time_msg.c
 
 OBJ	=	$(SRC:.c=.o)
 
