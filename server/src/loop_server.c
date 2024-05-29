@@ -37,7 +37,8 @@ static bool add_client(server_t *serv)
         free(user);
         return false;
     }
-    user->number = player_index;
+    user->player = calloc(1, sizeof(player_t));
+    user->player->number = player_index;
     player_index++;
     list_add_elem_at_back(&serv->client, user);
     strcpy(user->write_buffer, "WELCOME\n");
