@@ -59,7 +59,7 @@ static char *team_name(server_t *serv, int ind)
 
 char *all_name(server_t *serv)
 {
-    char *buff = calloc(serv->teamNb * 25, sizeof(char));
+    char *buff = calloc(get_team_nb(serv) * 25, sizeof(char));
 
     if (!buff)
         return NULL;

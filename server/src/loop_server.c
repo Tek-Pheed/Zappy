@@ -24,6 +24,7 @@ static bool add_client(server_t *serv)
     struct sockaddr_in clientAddr;
     socklen_t clientSockLen = sizeof(clientAddr);
     client_t *user = calloc(1, sizeof(client_t));
+    static int player_index = 0;
 
     if (user == NULL)
         return false;
@@ -33,6 +34,8 @@ static bool add_client(server_t *serv)
         free(user);
         return false;
     }
+    user->number = player_index;
+    player_index++;
     list_add_elem_at_back(&serv->client, user);
     return (true);
 }

@@ -22,6 +22,10 @@
 #define PHIRAS_R              0.08
 #define THYSTAME_R            0.05
 #define FOOD_R                0.5
+#define NORTH                 1
+#define EAST                  2
+#define SOUTH                 3
+#define WEST                  4
 #include "list.h"
 
 typedef struct cell_s cell_t;
@@ -32,7 +36,6 @@ struct server_s {
     int resX;
     int resY;
     char **tName;
-    int teamNb;
     int clientNb;
     int freq;
     int socket;
@@ -54,6 +57,8 @@ struct client_s {
     char *team;
     int posX;
     int posY;
+    int food;
+    int stone[6];
 };
 typedef struct client_s client_t;
 int server_loop(server_t *serv);
@@ -69,3 +74,7 @@ char *tile_content(server_t *serv, int x, int y);
 char *all_content(server_t *serv);
 char *all_name(server_t *serv);
 char *conn_new_player(server_t *serv);
+char *player_position(server_t *serv, int p_index);
+char *player_level(server_t *serv, int p_index);
+char *player_inventory(server_t *serv, int p_index);
+int get_team_nb(server_t *serv);

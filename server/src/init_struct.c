@@ -18,13 +18,21 @@ server_t *init_struct(void)
     tmp->port = -1;
     tmp->resX = -1;
     tmp->resY = -1;
-    tmp->teamNb = -1;
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
     tmp->client = node;
     tmp->map = NULL;
     return tmp;
+}
+
+int get_team_nb(server_t *serv)
+{
+    int index = 0;
+
+    for (index = 0; serv->tName[index] != NULL;)
+        index++;
+    return index;
 }
 
 void free_struct(server_t *serv)
