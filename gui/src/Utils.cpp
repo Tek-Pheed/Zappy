@@ -7,7 +7,6 @@
 
 #include "../include/Utils.hpp"
 
-
 Zappy::Utils::Utils()
 {
 }

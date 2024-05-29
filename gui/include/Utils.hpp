@@ -5,7 +5,6 @@
 ** Utils
 */
 #pragma once
-
 #include <iostream>
 #include "raylib.h"
 
@@ -19,3 +18,4 @@ namespace Zappy {
        private:
    };
 }
+
