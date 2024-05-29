@@ -6,6 +6,8 @@
 */
 
 #pragma once
+#define BUFFER_MAX_SIZE 512
+
 #define OFFSET_ARGS           8
 #define UNUSED                __attribute__((unused))
 #define CONN_TIMEOUT_DELAY_US 25000000
@@ -31,6 +33,18 @@
 typedef struct cell_s cell_t;
 typedef struct server_s server_t;
 
+struct player_s {
+    char team_name[BUFFER_MAX_SIZE];
+    int x;
+    int y;
+    int food;
+    int stone[6];
+    int level;
+    int orient;
+    int number;
+};
+typedef struct player_s player_t;
+
 struct server_s {
     int port;
     int resX;
@@ -42,6 +56,8 @@ struct server_s {
     list_t *client;
     cell_t **map;
 };
+typedef struct server_s server_t;
+
 server_t *init_struct(void);
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[]);
 void parse_client_nb(server_t *serv, int flags[6]);
@@ -49,26 +65,32 @@ void parse_res_y(server_t *serv, int flags[6]);
 void parse_res_x(server_t *serv, int flags[6]);
 void parse_port(server_t *serv, int flags[6]);
 void free_struct(server_t *serv);
+
+enum client_state {
+    CREATED,
+    AI,
+    GRAPHICAL
+};
+
 struct client_s {
     int fd;
-    int number;
-    int orient;
-    int level;
-    char *team;
-    int posX;
-    int posY;
-    int food;
-    int stone[6];
+    char write_buffer[BUFFER_MAX_SIZE];
+    char read_buffer[BUFFER_MAX_SIZE];
+    char team_name[BUFFER_MAX_SIZE];
+    enum client_state state;
+    player_t *player;
 };
+
 typedef struct client_s client_t;
 int server_loop(server_t *serv);
 struct cell_s {
     int food;
     int stone[6];
-    bool is_player_on;
+    bool is_player_on; // need to change that
 };
 cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);
+int run_server(server_t *serv);
 char *map_size(server_t *serv);
 char *tile_content(server_t *serv, int x, int y);
 char *all_content(server_t *serv);

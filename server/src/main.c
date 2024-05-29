@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     }
     print_serv(serv);
     serv->map = create_map(serv);
+    run_server(serv);
     free_struct(serv);
     return 0;
 }
