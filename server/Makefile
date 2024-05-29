@@ -28,7 +28,9 @@ SRC	=	libs/list/list_generic_del.c		\
 		src/networking.c					\
 		src/client_handling.c				\
 		src/map_team_msg.c					\
-		src/player_msg.c
+		src/player_msg.c					\
+		src/command_handler.c				\
+		src/command_handler_gui.c
 
 OBJ	=	$(SRC:.c=.o)
 
