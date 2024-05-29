@@ -10,9 +10,21 @@
 namespace Zappy {
     
     Draw::Draw(){}
+
     Draw::~Draw(){}
-    void Draw::drawRectangle(){}
-    void Draw::drawCircle(){}
+
+    void Draw::drawRectangle(float sizeX, float sizeY, float posX, float posY, Color clr)
+    {
+        Rectangle rect = {posX, posY, sizeX, sizeY};
+        DrawRectangleRec(rect, clr);
+    }
+
+    void Draw::drawCircle(float posX, float posY, int r, Color clr)
+    {
+        Vector2 circle = {posX, posY};
+        DrawCircleV(circle, r, clr);
+    }
+
     void Draw::drawPlateform3d(){}
     void Draw::draw3DModel(){}
 
