@@ -13,12 +13,12 @@ OBJ		=	$(SRC:.cpp=.o)
 
 all:	$(NAME)
 
-CFLAGS = -W -Wall -Wextra
+CFLAGS = -W -Wall -Wextra -g3
 
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 %.o: %.cpp
-	g++ $(CFLAGS) $^-c -o $@
+	g++ $(CFLAGS) $^ -c -o $@
 
 $(NAME): $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(LDFLAGS)
