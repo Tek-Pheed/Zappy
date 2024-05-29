@@ -5,12 +5,12 @@
 ** main.cpp
 */
 
-#include "gui/include/Utils.hpp"
+#include "gui/include/Draw.hpp"
 #include "raylib.h"
 
 int main()
 {
-    Zappy::Utils u;
+    Zappy::Draw u;
     const int screenWidth = 800;
     const int screenHeight = 450;
     bool btnClick = false;
