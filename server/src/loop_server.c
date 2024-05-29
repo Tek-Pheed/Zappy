@@ -65,7 +65,7 @@ static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
 
 int server_loop(server_t *serv)
 {
-    struct timeval time = {0, (1 / serv->freq) * 1000};
+    struct timeval time = {0, (1 / serv->freq) * 1000000};
     fd_set fdset;
     fd_set fdwset;
 

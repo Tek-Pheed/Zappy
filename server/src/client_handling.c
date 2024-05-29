@@ -29,16 +29,19 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-void handle_login_request(UNUSED server_t *serv, client_t *client)
+bool handle_login_request(client_t *client, const char *cmd)
 {
-    if (client->state == CREATED) {
-        strcpy(client->team_name, client->read_buffer);
-        if (strncmp(client->read_buffer, "GRAPHIC", 7) == 0) {
-            client->state = GRAPHICAL;
-        } else {
-            client->state = AI;
-        }
+    if (cmd[0] == '\0')
+        return (false);
+    strcpy(client->team_name, client->read_buffer);
+    if (strncmp(cmd, "GRAPHIC", 7) == 0) {
+        client->state = GRAPHICAL;
+        return (true);
+    } else {
+        client->state = AI;
+        return (true);
     }
+    return (false);
 }
 
 static void handle_error(bool success, client_t *client)
@@ -68,7 +71,7 @@ static bool handle_commands(server_t *serv, client_t *client)
 {
     size_t nb_commands = list_get_size(client->cmds);
     char *cmd = NULL;
-    bool result = false;
+    bool result = true;
 
     for (size_t i = 0; i < nb_commands; i++) {
         if (!is_client_ready(serv, client))
@@ -76,7 +79,10 @@ static bool handle_commands(server_t *serv, client_t *client)
         cmd = list_get_elem_at_position(client->cmds, i);
         if (cmd == NULL)
             continue;
-        result = run_command(serv, client, cmd);
+        if (client->state == CREATED)
+            result = handle_login_request(client, cmd);
+        else
+            result = run_command(serv, client, cmd);
         list_del_elem_at_position(&client->cmds, i);
         free(cmd);
         if (!result)

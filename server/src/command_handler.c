@@ -13,7 +13,7 @@
 bool run_gui(server_t *serv, client_t *client, const char *cmd, char **args)
 {
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
-        if (strcmp(gui_cmds[i].command, cmd) == 0
+        if (strncmp(gui_cmds[i].command, cmd, strlen(gui_cmds[i].command)) == 0
             && (str_array_length(args) - 1) >= gui_cmds[i].nb_args) {
             return (gui_cmds[i].ptr.gui_ptr(serv, client, args));
         }
@@ -40,7 +40,7 @@ bool run_command(server_t *serv, client_t *client, const char *cmd)
 // *arg)
 // {
 //     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
-//         if (strcmp(ai_cmds[i].command, cmd) == 0) {
+//         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command)) == 0) {
 //             return (ai_cmds[i].ptr.ai_ptr(serv, client, arg));
 //         }
 //     }

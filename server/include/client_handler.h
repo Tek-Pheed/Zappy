@@ -11,5 +11,5 @@
 
 void server_send_data(client_t *client, const char *data);
 
-void handle_login_request(server_t *serv, client_t *client);
+bool handle_login_request(client_t *client, const char *cmd);
 bool run_command(server_t *serv, client_t *client, const char *cmd);
