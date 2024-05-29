@@ -10,7 +10,7 @@ NAME	=	../zappy_server
 LIBNAME=	libs/libmy.a
 
 INCFLAGS	=	-I include
-LIBINC	=	 -I libs/list/
+LIBINC	=	 -I libs/list/ -I libs/strings
 
 CFLAGS	=	$(INCFLAGS) $(LIBINC) -Wall -Wextra -Werror -O2
 
@@ -18,6 +18,7 @@ SRC	=	libs/list/list_generic_del.c		\
 		libs/list/list_generic_display.c	\
 		libs/list/list_generic_get.c		\
 		libs/list/list_generic.c			\
+		libs/strings/string_to_array.c		\
 		src/main.c							\
 		src/init_struct.c					\
 		src/parsing_args.c					\

@@ -6,7 +6,9 @@
 */
 
 #pragma once
-#define BUFFER_MAX_SIZE 512
+#include <time.h>
+#define BUFFER_MAX_SIZE        2048
+#define MAX_CONCURENT_COMMANDS 10
 
 #define OFFSET_ARGS           8
 #define UNUSED                __attribute__((unused))
@@ -79,6 +81,9 @@ struct client_s {
     char team_name[BUFFER_MAX_SIZE];
     enum client_state state;
     player_t *player;
+    list_t *cmds;
+    time_t last_cmd_time;
+    time_t cmd_duration;
 };
 
 typedef struct client_s client_t;
@@ -100,3 +105,5 @@ char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
 char *player_inventory(server_t *serv, int p_index);
 int get_team_nb(server_t *serv);
+
+void server_send_data(client_t *client, const char *data);
