@@ -30,6 +30,7 @@
 #define EAST                  2
 #define SOUTH                 3
 #define WEST                  4
+#define DEFAULT_BUFFER_SIZE   25
 #include "list.h"
 
 typedef struct cell_s cell_t;
@@ -116,3 +117,23 @@ int get_team_nb(server_t *serv);
 
 void server_send_data(client_t *client, const char *data);
 void run_client_commands(server_t *serv);
+
+char *time_unit_request(server_t *serv);
+char *time_unit_modif(server_t *serv, int freq);
+char *ressource_drop(int p_index, int r_nb);
+char *ressource_collect(int p_index, int r_nb);
+char *egg_laying(int p_index);
+char *egg_laid(int egg_nb, int p_index, int x, int y);
+char *egg_death(int egg_nb);
+char *expulsion(int p_index);
+char *broadcast(int p_index, char *msg);
+char *end_incantation(int x, int y, char *result);
+char *player_death(int p_index);
+char *player_connection_egg(int p_index);
+char *end_game(char *winner);
+char *server_message(char *msg);
+char *unknow_command(void);
+char *command_parameter(void);
+char *time_unit_request(server_t *serv);
+char *time_unit_modif(server_t *serv, int freq);
+char *start_incantation(player_t *player, int *p_nb, int size);

@@ -12,7 +12,7 @@
 
 char *map_size(server_t *serv)
 {
-    char *buff = calloc(25, sizeof(char));
+    char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;
@@ -22,7 +22,7 @@ char *map_size(server_t *serv)
 
 char *tile_content(server_t *serv, int x, int y)
 {
-    char *buff = calloc(50, sizeof(char));
+    char *buff = calloc(DEFAULT_BUFFER_SIZE * 2, sizeof(char));
 
     if (!buff)
         return NULL;
@@ -49,7 +49,7 @@ char *all_content(server_t *serv)
 
 static char *team_name(server_t *serv, int ind)
 {
-    char *buff = calloc(25, sizeof(char));
+    char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;
@@ -59,7 +59,7 @@ static char *team_name(server_t *serv, int ind)
 
 char *all_name(server_t *serv)
 {
-    char *buff = calloc(get_team_nb(serv) * 25, sizeof(char));
+    char *buff = calloc(get_team_nb(serv) * DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;

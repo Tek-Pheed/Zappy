@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "list.h"
 #include "server.h"
 
@@ -88,5 +89,22 @@ char *player_inventory(server_t *serv, int p_index)
         }
         buff = NULL;
     }
+    return buff;
+}
+
+char *start_incantation(player_t *player, int *p_nb, int size)
+{
+    char *buff = calloc(BUFFER_MAX_SIZE, sizeof(char));
+    char str[BUFFER_MAX_SIZE];
+
+    if (!buff)
+        return NULL;
+    sprintf(buff, "pic %d %d %d #%d", player->x, player->y, player->level,
+        player->number);
+    for (int i = 0; p_nb[i] != -1 && i != size; i++) {
+        sprintf(str, " #%d", p_nb[i]);
+        strcat(buff, str);
+    }
+    strcat(buff, "\n");
     return buff;
 }
