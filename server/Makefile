@@ -18,16 +18,20 @@ SRC	=	libs/list/list_generic_del.c		\
 		libs/list/list_generic_display.c	\
 		libs/list/list_generic_get.c		\
 		libs/list/list_generic.c			\
-		src/main.c							\
+		src/client_handling.c				\
 		src/init_struct.c					\
-		src/parsing_args.c					\
+		src/item_msg.c						\
 		src/loop_server.c					\
-		src/server.c						\
+		src/main.c							\
+		src/map_team_msg.c					\
 		src/map.c							\
 		src/networking.c					\
-		src/client_handling.c				\
-		src/map_team_msg.c					\
-		src/player_msg.c
+		src/parsing_args.c					\
+		src/player_event_msg.c				\
+		src/player_msg.c                    \
+		src/server_msg.c					\
+		src/server.c						\
+        src/time_msg.c
 
 OBJ	=	$(SRC:.c=.o)
 
