@@ -29,3 +29,15 @@ bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
     free(buff);
     return true;
 }
+
+bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+{
+    server_send_data(cli, "dead\n");
+    return true;
+}
+
+bool ai_connect_nbr(
+    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+{
+    return true;
+}

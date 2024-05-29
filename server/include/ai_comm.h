@@ -19,3 +19,5 @@ bool ai_turn_left(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_connect_nbr(    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
