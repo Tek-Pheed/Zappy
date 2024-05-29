@@ -7,8 +7,14 @@
 
 #include "IItems.hpp"
 
-Zappy::Phiras::Phiras(float density, std::map<std::string, int> position, std::vector<std::map<std::string, int>> sameItems,
-    std::string model, std::string texture, Utils u) : Atems(density, position, sameItems, model, texture, u)
+Zappy::Phiras::Phiras(float density, std::map<std::string, int> position,
+           std::vector<std::map<std::string, int>> sameItems,
+           const char *model, const char *texture, Utils &u) : Atems(density, position, sameItems, model, texture, u)
 {
 
+}
+
+Zappy::Phiras::~Phiras()
+{
+    
 }

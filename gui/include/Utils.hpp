@@ -4,17 +4,18 @@
 ** File description:
 ** Utils
 */
-
 #pragma once
 
-namespace Zappy {
-class Utils {
-    public:
-        Utils();
-        ~Utils();
-        void setTexture();
+#include <iostream>
+#include "raylib.h"
 
-    protected:
-    private:
-};
+namespace Zappy {
+   class Utils {
+       public:
+           Utils();
+           ~Utils();
+           Camera createCamera();
+           Model createModel(const char *model, const char *texture);
+       private:
+   };
 }
