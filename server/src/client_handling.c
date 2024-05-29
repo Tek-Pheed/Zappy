@@ -19,6 +19,8 @@
 
 void server_send_data(client_t *client, const char *data)
 {
+    if (data == NULL)
+        return;
     if (client->write_buffer[0] == '\0') {
         strcpy(client->write_buffer, data);
     } else if (strlen(client->write_buffer) + strlen(client->read_buffer)
@@ -45,19 +47,21 @@ static void handle_error(bool success, client_t *client)
         server_send_data(client, "ko\n");
 }
 
-static double get_milliseconds(struct timeval tv)
+static double get_milliseconds(struct timeval *tv)
 {
-    return (tv.tv_sec) * 1000.0f + (tv.tv_usec) / 1000.0f;
+    return (tv->tv_sec) * 1000.0f + (tv->tv_usec) / 1000.0f;
 }
 
 static bool is_client_ready(server_t *serv, client_t *client)
 {
     struct timeval current_time;
-    double ready_time = get_milliseconds(client->last_cmd_time)
+    double ready_time = get_milliseconds(&client->last_cmd_time)
         + ((double) client->cmd_duration / serv->freq);
 
+    if (client->state == GRAPHICAL)
+        return (true);
     gettimeofday(&current_time, NULL);
-    return (ready_time < get_milliseconds(current_time));
+    return (ready_time < get_milliseconds(&current_time));
 }
 
 static bool handle_commands(server_t *serv, client_t *client)

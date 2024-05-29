@@ -19,8 +19,10 @@ char *conn_new_player(server_t *serv)
     if (!buff)
         return NULL;
     cl = list_get_elem_at_back(serv->client);
-    if (cl == NULL || cl->player == NULL)
+    if (cl == NULL || cl->player == NULL) {
+        free(buff);
         return NULL;
+    }
     sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player->number,
         cl->player->x, cl->player->y, cl->player->orient, cl->player->level,
         cl->player->team_name);
@@ -32,8 +34,10 @@ char *player_position(server_t *serv, int p_index)
     client_t *tmp = NULL;
     char *buff = calloc(BUFFER_MAX_SIZE * 2, sizeof(char));
 
-    if (list_is_empty(serv->client))
+    if (list_is_empty(serv->client)) {
+        free(buff);
         return NULL;
+    }
     for (size_t i = 0; i != list_get_size(serv->client); i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp == NULL || tmp->player == NULL)
@@ -53,8 +57,10 @@ char *player_level(server_t *serv, int p_index)
     client_t *tmp = NULL;
     char *buff = calloc(BUFFER_MAX_SIZE * 2, sizeof(char));
 
-    if (list_is_empty(serv->client))
+    if (list_is_empty(serv->client)) {
+        free(buff);
         return NULL;
+    }
     for (size_t i = 0; i != list_get_size(serv->client); i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp == NULL || tmp->player == NULL)
@@ -73,8 +79,10 @@ char *player_inventory(server_t *serv, int p_index)
     client_t *tmp = NULL;
     char *buff = calloc(BUFFER_MAX_SIZE * 2, sizeof(char));
 
-    if (list_is_empty(serv->client))
+    if (list_is_empty(serv->client)) {
+        free(buff);
         return NULL;
+    }
     for (size_t i = 0; i != list_get_size(serv->client); i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp == NULL || tmp->player == NULL)

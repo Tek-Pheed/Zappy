@@ -32,10 +32,11 @@ SRC	=	libs/list/list_generic_del.c    \
 		src/command_handler_gui.c         \
 		src/parsing_args.c                \
 		src/player_event_msg.c            \
-		src/player_msg.c                  \
 		src/server_msg.c                  \
 		src/server.c                      \
-    src/time_msg.c
+    	src/time_msg.c                    \
+		src/gui_comm/gui_comm.c           \
+		src/gui_comm/gui_comm2.c
 
 OBJ	=	$(SRC:.c=.o)
 
