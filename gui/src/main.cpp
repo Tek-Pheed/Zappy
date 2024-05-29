@@ -40,7 +40,7 @@ int main(void)
     } else {
         Material newMaterial = LoadMaterialDefault();
         model.materialCount++;
-        model.materials = (Material *)realloc(model.materials, model.materialCount * sizeof(Material));
+        model.materials = (Material *)  (model.materials, model.materialCount * sizeof(Material));
         model.materials[1] = newMaterial;
         model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = texture_leaf;
     }
