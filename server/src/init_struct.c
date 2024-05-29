@@ -25,6 +25,15 @@ server_t *init_struct(void)
     return tmp;
 }
 
+int get_team_nb(server_t *serv)
+{
+    int index = 0;
+
+    for (index = 0; serv->tName[index] != NULL;)
+        index++;
+    return index;
+}
+
 void free_struct(server_t *serv)
 {
     if (serv == NULL)

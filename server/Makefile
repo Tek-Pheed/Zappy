@@ -26,6 +26,8 @@ SRC	=	libs/list/list_generic_del.c		\
 		src/map.c							\
 		src/networking.c					\
 		src/client_handling.c
+		src/map_team_msg.c	\
+		src/player_msg.c
 
 OBJ	=	$(SRC:.c=.o)
 

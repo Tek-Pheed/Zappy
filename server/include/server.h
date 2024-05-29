@@ -24,6 +24,10 @@
 #define PHIRAS_R              0.08
 #define THYSTAME_R            0.05
 #define FOOD_R                0.5
+#define NORTH                 1
+#define EAST                  2
+#define SOUTH                 3
+#define WEST                  4
 #include "list.h"
 
 typedef struct cell_s cell_t;
@@ -87,3 +91,12 @@ struct cell_s {
 cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);
 int run_server(server_t *serv);
+char *map_size(server_t *serv);
+char *tile_content(server_t *serv, int x, int y);
+char *all_content(server_t *serv);
+char *all_name(server_t *serv);
+char *conn_new_player(server_t *serv);
+char *player_position(server_t *serv, int p_index);
+char *player_level(server_t *serv, int p_index);
+char *player_inventory(server_t *serv, int p_index);
+int get_team_nb(server_t *serv);
