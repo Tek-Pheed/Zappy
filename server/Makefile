@@ -18,12 +18,14 @@ SRC	=	libs/list/list_generic_del.c		\
 		libs/list/list_generic_display.c	\
 		libs/list/list_generic_get.c		\
 		libs/list/list_generic.c			\
-		src/main.c			\
-		src/init_struct.c	\
-		src/parsing_args.c	\
-		src/loop_server.c	\
-		src/server.c		\
-		src/map.c
+		src/main.c							\
+		src/init_struct.c					\
+		src/parsing_args.c					\
+		src/loop_server.c					\
+		src/server.c						\
+		src/map.c							\
+		src/networking.c					\
+		src/client_handling.c
 
 OBJ	=	$(SRC:.c=.o)
 

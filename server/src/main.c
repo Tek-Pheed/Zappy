@@ -87,7 +87,7 @@ static void print_serv(server_t *serv)
     printf("F: %d\n", serv->freq);
 }
 
-static void print_map(server_t *serv)
+UNUSED static void print_map(server_t *serv)
 {
     for (int i = 0; i < serv->resX; ++i) {
         for (int y = 0; y < serv->resY; ++y) {
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 {
     server_t *serv = init_struct();
     int retval = check_args(argc, argv, serv);
-    cell_t **map = NULL;
+    UNUSED cell_t **map = NULL;
 
     if (retval != 0) {
         free_struct(serv);
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     }
     print_serv(serv);
     serv->map = create_map(serv);
-    print_map(serv);
+    run_server(serv);
     free_struct(serv);
     return 0;
 }

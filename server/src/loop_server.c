@@ -8,9 +8,12 @@
 #include <netinet/ip.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
 #include "list.h"
+#include "networking.h"
 #include "server.h"
 
 static void zero_fds(fd_set *a, fd_set *b)
@@ -34,6 +37,8 @@ static bool add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
+    strcpy(user->write_buffer, "WELCOME\n");
+    user->state = CREATED;
     return (true);
 }
 
@@ -48,7 +53,8 @@ static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
         if (client == NULL || client->fd < 1)
             continue;
         FD_SET(client->fd, rfds);
-        FD_SET(client->fd, wfds);
+        if (client->write_buffer[0] != '\0')
+            FD_SET(client->fd, wfds);
     }
     FD_SET(serv->socket, rfds);
 }
@@ -61,9 +67,10 @@ int server_loop(server_t *serv)
 
     set_fd(serv, &fdset, &fdwset);
     if (select(FD_SETSIZE, &fdset, &fdwset, NULL, &time) != -1) {
+        send_buffered_data(serv, &fdwset);
         if (FD_ISSET(serv->socket, &fdset) != 0)
             add_client(serv);
-        return 0;
+        read_client_data(serv, &fdset);
     }
     return 0;
 }

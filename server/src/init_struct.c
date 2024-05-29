@@ -10,8 +10,7 @@
 
 server_t *init_struct(void)
 {
-    server_t *tmp = malloc(sizeof(server_t));
-    list_t *node = {NULL};
+    server_t *tmp = calloc(1, sizeof(server_t));
 
     if (tmp == NULL)
         return tmp;
@@ -21,7 +20,7 @@ server_t *init_struct(void)
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
-    tmp->client = node;
+    tmp->client = calloc(1, sizeof(list_t));
     tmp->map = NULL;
     return tmp;
 }
@@ -35,6 +34,7 @@ void free_struct(server_t *serv)
             free(serv->tName[i]);
         free(serv->tName);
     }
+    list_clear(&serv->client);
     if (serv->map != NULL)
         free_map(serv);
     free(serv);
