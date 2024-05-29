@@ -28,7 +28,10 @@ SRC	=	libs/list/list_generic_del.c		\
 		src/networking.c					\
 		src/client_handling.c				\
 		src/map_team_msg.c					\
-		src/player_msg.c
+		src/player_msg.c					\
+		src/ai_comm/ai_move.c				\
+		src/ai_comm/ai_object.c				\
+		src/ai_comm/ai_player_tool.c
 
 OBJ	=	$(SRC:.c=.o)
 

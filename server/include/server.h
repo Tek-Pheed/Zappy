@@ -7,6 +7,7 @@
 
 #pragma once
 #include <time.h>
+#include <bits/types/struct_timeval.h>
 #define BUFFER_MAX_SIZE        2048
 #define MAX_CONCURENT_COMMANDS 10
 
@@ -82,7 +83,7 @@ struct client_s {
     enum client_state state;
     player_t *player;
     list_t *cmds;
-    time_t last_cmd_time;
+    struct timeval last_cmd_time;
     time_t cmd_duration;
 };
 
@@ -91,7 +92,7 @@ int server_loop(server_t *serv);
 struct cell_s {
     int food;
     int stone[6];
-    bool is_player_on; // need to change that
+    int nb_player_on;
 };
 cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);

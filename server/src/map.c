@@ -25,7 +25,7 @@ static void calculate_quantity(server_t *serv, float quantity[7])
 
 static void create_cell(cell_t *cell)
 {
-    cell->is_player_on = false;
+    cell->nb_player_on = 0;
     cell->food = 0;
     for (int i = 0; i < 6; ++i)
         cell->stone[i] = 0;
