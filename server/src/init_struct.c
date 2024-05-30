@@ -50,3 +50,34 @@ void free_struct(server_t *serv)
         free_map(serv);
     free(serv);
 }
+
+void destroy_team(team_t *team)
+{
+    if (team == NULL)
+        return;
+    if (team->name != NULL)
+        free(team->name);
+    free(team);
+}
+
+void destroy_server(server_t *serv)
+{
+    client_t *client = NULL;
+    team_t *team = NULL;
+    size_t clients_nb = list_get_size(serv->client);
+    size_t team_nb = list_get_size(serv->teams);
+
+    for (size_t i = 0; i != clients_nb; i++) {
+        client = list_get_elem_at_position(serv->client, i);
+        if (client == NULL)
+            continue;
+        free(client);
+    }
+    for (size_t i = 0; i != team_nb; i++) {
+        team = list_get_elem_at_position(serv->teams, i);
+        if (team == NULL)
+            continue;
+        destroy_team(team);
+    }
+    free_struct(serv);
+}

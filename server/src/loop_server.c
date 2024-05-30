@@ -27,7 +27,6 @@ static bool add_client(server_t *serv)
     struct sockaddr_in clientAddr;
     socklen_t clientSockLen = sizeof(clientAddr);
     client_t *user = calloc(1, sizeof(client_t));
-    static int player_index = 0;
 
     if (user == NULL)
         return false;
@@ -37,9 +36,6 @@ static bool add_client(server_t *serv)
         free(user);
         return false;
     }
-    user->player = calloc(1, sizeof(player_t));
-    user->player->number = player_index;
-    player_index++;
     list_add_elem_at_back(&serv->client, user);
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
@@ -63,9 +59,44 @@ static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
     FD_SET(serv->socket, rfds);
 }
 
+static void remove_old_clients(server_t *serv)
+{
+    client_t *client = NULL;
+    list_t *clients = serv->client;
+    size_t clients_nb = list_get_size(clients);
+
+    for (size_t i = 0; i != clients_nb; i++) {
+        client = list_get_elem_at_position(clients, i);
+        if (client == NULL || client->fd == -1)
+            continue;
+        if (client->fd == -1) {
+            list_del_elem_at_position(&serv->client, i);
+            free(client);
+            i--;
+        }
+    }
+}
+
+void destroy_client(client_t *client)
+{
+    size_t nb_cmds = 0;
+    char *cmd = NULL;
+
+    if (client == NULL)
+        return;
+    nb_cmds = list_get_size(client->cmds);
+    for (size_t i = 0; i != nb_cmds; i++) {
+        cmd = list_get_elem_at_position(client->cmds, i);
+        if (cmd == NULL)
+            continue;
+        free(cmd);
+    }
+    free(client);
+}
+
 int server_loop(server_t *serv)
 {
-    struct timeval time = {0, (1 / serv->freq) * 1000000};
+    struct timeval time = {0, (1.0f / (float) serv->freq) * 1000000};
     fd_set fdset;
     fd_set fdwset;
 
@@ -77,5 +108,6 @@ int server_loop(server_t *serv)
         read_client_data(serv, &fdset);
     }
     run_client_commands(serv);
+    remove_old_clients(serv);
     return 0;
 }

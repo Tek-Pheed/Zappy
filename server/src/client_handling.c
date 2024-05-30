@@ -29,8 +29,11 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
+#include <stdio.h>
 bool handle_login_request(client_t *client, const char *cmd)
 {
+    static int player_index = 0;
+
     if (cmd[0] == '\0')
         return (false);
     strcpy(client->team_name, client->read_buffer);
@@ -39,6 +42,8 @@ bool handle_login_request(client_t *client, const char *cmd)
         return (true);
     } else {
         client->state = AI;
+        client->player.number = player_index;
+        player_index++;
         return (true);
     }
     return (false);
@@ -117,6 +122,17 @@ static void add_client_command(client_t *client)
     memset(client->read_buffer, 0, sizeof(client->read_buffer));
 }
 
+static void read_client(client_t *client)
+{
+    int ret =
+        read(client->fd, client->read_buffer, sizeof(client->read_buffer));
+
+    if (ret < 1) {
+        close(client->fd);
+        client->fd = -1;
+    }
+}
+
 void read_client_data(server_t *serv, fd_set *read_set)
 {
     client_t *client = NULL;
@@ -129,7 +145,7 @@ void read_client_data(server_t *serv, fd_set *read_set)
             continue;
         if (FD_ISSET(client->fd, read_set)) {
             memset(client->read_buffer, 0, sizeof(client->read_buffer));
-            read(client->fd, client->read_buffer, sizeof(client->read_buffer));
+            read_client(client);
             add_client_command(client);
         }
     }

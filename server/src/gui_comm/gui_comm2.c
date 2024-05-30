@@ -46,6 +46,10 @@ bool gui_player_inventory(server_t *server, client_t *client, char **args)
     buff = player_inventory(server, number);
     if (buff == NULL)
         return (false);
+    if (buff[0] == '\0') {
+        free(buff);
+        return (false);
+    }
     server_send_data(client, buff);
     free(buff);
     return (true);

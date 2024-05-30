@@ -47,9 +47,9 @@ static bool take_stone(server_t *serv, client_t *cli, int id)
 {
     if (id == LINEMATE || id == DERAUMERE || id == SIBUR || id == MENDIANE
         || id == PHIRAS || id == THYSTAME) {
-        if (serv->map[cli->player->x][cli->player->y].stone[id] > 0) {
-            cli->player->stone[id] += 1;
-            serv->map[cli->player->x][cli->player->y].stone[id] -= 1;
+        if (serv->map[cli->player.x][cli->player.y].stone[id] > 0) {
+            cli->player.stone[id] += 1;
+            serv->map[cli->player.x][cli->player.y].stone[id] -= 1;
             server_send_data(cli, "ok\n");
             return true;
         }
@@ -65,9 +65,9 @@ bool ai_take_object(server_t *serv, client_t *cli, const char *obj)
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
     if (id == 6) {
-        if (serv->map[cli->player->x][cli->player->x].food > 0) {
-            cli->player->food += 1;
-            serv->map[cli->player->x][cli->player->x].food -= 1;
+        if (serv->map[cli->player.x][cli->player.x].food > 0) {
+            cli->player.food += 1;
+            serv->map[cli->player.x][cli->player.x].food -= 1;
             server_send_data(cli, "ok\n");
             return true;
         } else {
@@ -86,14 +86,14 @@ bool ai_set_object(server_t *serv, client_t *cli, const char *obj)
 
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
-    if (id == 6 && cli->player->food > 0) {
-        cli->player->food -= 1;
-        serv->map[cli->player->x][cli->player->y].food += 1;
+    if (id == 6 && cli->player.food > 0) {
+        cli->player.food -= 1;
+        serv->map[cli->player.x][cli->player.y].food += 1;
         server_send_data(cli, "ok\n");
         return true;
-    } else if (id != -1 && cli->player->stone[id] > 0) {
-        cli->player->stone[id] -= 1;
-        serv->map[cli->player->x][cli->player->y].stone[id] += 1;
+    } else if (id != -1 && cli->player.stone[id] > 0) {
+        cli->player.stone[id] -= 1;
+        serv->map[cli->player.x][cli->player.y].stone[id] += 1;
         server_send_data(cli, "ok\n");
         return true;
     }
