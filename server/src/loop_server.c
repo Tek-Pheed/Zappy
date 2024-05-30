@@ -67,7 +67,7 @@ static void remove_old_clients(server_t *serv)
 
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(clients, i);
-        if (client == NULL || client->fd == -1)
+        if (client == NULL)
             continue;
         if (client->fd == -1) {
             list_del_elem_at_position(&serv->client, i);
