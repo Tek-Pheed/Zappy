@@ -21,6 +21,7 @@ server_t *init_struct(void)
     tmp->clientNb = -1;
     tmp->freq = 100;
     tmp->client = calloc(1, sizeof(list_t));
+    tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
     return tmp;
 }
@@ -44,6 +45,7 @@ void free_struct(server_t *serv)
         free(serv->tName);
     }
     list_clear(&serv->client);
+    list_clear(&serv->teams);
     if (serv->map != NULL)
         free_map(serv);
     free(serv);
