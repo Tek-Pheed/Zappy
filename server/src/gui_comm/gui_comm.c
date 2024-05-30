@@ -29,7 +29,7 @@ bool gui_tile_content(server_t *server, client_t *client, char **args)
     if (args[1] != NULL)
         x = atoi(args[1]);
     if (args[2] != NULL)
-        x = atoi(args[2]);
+        y = atoi(args[2]);
     buff = tile_content(server, x, y);
     if (buff == NULL)
         return (false);

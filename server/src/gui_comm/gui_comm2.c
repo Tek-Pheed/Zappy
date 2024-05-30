@@ -14,7 +14,7 @@ bool gui_player_position(server_t *server, client_t *client, char **args)
     char *buff = NULL;
     int number = 0;
 
-    number = atoi(args[1]);
+    number = atoi(args[1] + 1);
     buff = player_position(server, number);
     if (buff == NULL)
         return (false);
@@ -28,7 +28,7 @@ bool gui_player_level(server_t *server, client_t *client, char **args)
     char *buff = NULL;
     int number = 0;
 
-    number = atoi(args[1]);
+    number = atoi(args[1] + 1);
     buff = player_level(server, number);
     if (buff == NULL)
         return (false);
@@ -42,10 +42,14 @@ bool gui_player_inventory(server_t *server, client_t *client, char **args)
     char *buff = NULL;
     int number = 0;
 
-    number = atoi(args[1]);
+    number = atoi(args[1] + 1);
     buff = player_inventory(server, number);
     if (buff == NULL)
         return (false);
+    if (buff[0] == '\0') {
+        free(buff);
+        return (false);
+    }
     server_send_data(client, buff);
     free(buff);
     return (true);
