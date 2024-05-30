@@ -53,10 +53,22 @@ void free_struct(server_t *serv)
 
 void destroy_team(team_t *team)
 {
+    egg_t *tmp_eggs = NULL;
+    size_t size = 0;
+
     if (team == NULL)
         return;
     if (team->name != NULL)
         free(team->name);
+    size = list_get_size(team->eggs);
+    for (size_t i = 0; i < size; i++) {
+        tmp_eggs = list_get_elem_at_position(team->eggs, i);
+        if (tmp_eggs != NULL)
+            free(tmp_eggs);
+        list_del_elem_at_position(&(team->eggs), i);
+    }
+    if (team->eggs != NULL)
+        free(team->eggs);
     free(team);
 }
 

@@ -78,10 +78,8 @@ static bool handle_commands(server_t *serv, client_t *client)
     bool result = true;
 
     for (size_t i = 0; i < nb_commands; i++) {
-        if (!is_client_ready(serv, client)) {
-            printf("Client %d not ready\n", client->player.number);
+        if (!is_client_ready(serv, client))
             break;
-        }
         cmd = list_get_elem_at_position(client->cmds, i);
         if (cmd == NULL)
             continue;
