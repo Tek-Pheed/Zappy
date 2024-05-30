@@ -29,7 +29,6 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-#include <stdio.h>
 bool handle_login_request(client_t *client, const char *cmd)
 {
     static int player_index = 0;
