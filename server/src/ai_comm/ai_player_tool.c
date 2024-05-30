@@ -59,8 +59,8 @@ bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj)
         return false;
     egg = calloc(1, sizeof(egg_t));
     egg->team = tmp;
-    egg->x = cli->player->x;
-    egg->y = cli->player->y;
+    egg->x = cli->player.x;
+    egg->y = cli->player.y;
     cli->cmd_duration = 42;
     list_add_elem_at_back(&tmp->eggs, egg);
     gettimeofday(&cli->last_cmd_time, NULL);
@@ -73,7 +73,7 @@ static void eject_destroy_eggs(client_t *cli, team_t *tmp_team, int i, int y)
     egg_t *tmp_eggs = NULL;
 
     tmp_eggs = list_get_elem_at_position(tmp_team->eggs, i);
-    if (tmp_eggs->x == cli->player->x && tmp_eggs->y == cli->player->y) {
+    if (tmp_eggs->x == cli->player.x && tmp_eggs->y == cli->player.y) {
         free(list_get_elem_at_position(tmp_team->eggs, y));
         list_del_elem_at_position(&tmp_team->eggs, y);
     }
@@ -84,7 +84,7 @@ static void eject_player(int i, client_t *cli, server_t *serv, char msg[20])
     client_t *tcli = NULL;
 
     tcli = list_get_elem_at_position(serv->client, i);
-    if (tcli->player->x == cli->player->x && tcli->player->y == cli->player->y)
+    if (tcli->player.x == cli->player.x && tcli->player.y == cli->player.y)
         server_send_data(tcli, msg);
 }
 
@@ -97,7 +97,7 @@ bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj)
     char msg[20];
 
     memset(msg, '\0', sizeof(msg));
-    sprintf(msg, "eject: %d\n", cli->player->orient);
+    sprintf(msg, "eject: %d\n", cli->player.orient);
     for (int i = 0; i != len_client; i++)
         eject_player(i, cli, serv, msg);
     for (int i = 0; i != len_team; i++) {
