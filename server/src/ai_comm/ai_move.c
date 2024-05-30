@@ -12,6 +12,7 @@
 bool ai_move_forward(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 {
+    serv->map[cli->player->x][cli->player->y].nb_player_on -= 1;
     if (cli->player->orient == NORTH)
         cli->player->y =
             cli->player->y == 0 ? serv->resY - 1 : cli->player->y - 1;
@@ -27,6 +28,7 @@ bool ai_move_forward(
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
     server_send_data(cli, "ok\n");
+    serv->map[cli->player->x][cli->player->y].nb_player_on += 1;
     return true;
 }
 
