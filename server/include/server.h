@@ -40,6 +40,20 @@ typedef struct client_s client_t;
 typedef struct team_s team_t;
 typedef struct egg_s egg_t;
 
+
+struct ivect2D_s {
+    int x;
+    int y;
+};
+typedef struct ivect2D_s ivect2D_t;
+
+struct fvect2D_s {
+    float x;
+    float y;
+};
+typedef struct fvect2D_s fvect2D_t;
+
+
 struct player_s {
     char team_name[BUFFER_MAX_SIZE];
     int x;
