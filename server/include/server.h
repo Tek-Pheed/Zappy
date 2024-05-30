@@ -35,6 +35,9 @@
 
 typedef struct cell_s cell_t;
 typedef struct server_s server_t;
+typedef struct player_s player_t;
+typedef struct client_s client_t;
+typedef struct team_s team_t;
 
 struct player_s {
     char team_name[BUFFER_MAX_SIZE];
@@ -46,7 +49,6 @@ struct player_s {
     int orient;
     int number;
 };
-typedef struct player_s player_t;
 
 struct server_s {
     int port;
@@ -58,8 +60,8 @@ struct server_s {
     int socket;
     list_t *client;
     cell_t **map;
+    list_t *teams;
 };
-typedef struct server_s server_t;
 
 server_t *init_struct(void);
 void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[]);
@@ -68,13 +70,13 @@ void parse_res_y(server_t *serv, int flags[6]);
 void parse_res_x(server_t *serv, int flags[6]);
 void parse_port(server_t *serv, int flags[6]);
 void free_struct(server_t *serv);
-
+// clang-format off
 enum client_state {
     CREATED,
     AI,
     GRAPHICAL
 };
-
+// clang-format onn
 struct client_s {
     int fd;
     char write_buffer[BUFFER_MAX_SIZE];
@@ -87,7 +89,6 @@ struct client_s {
     time_t cmd_duration;
 };
 
-typedef struct client_s client_t;
 int server_loop(server_t *serv);
 struct cell_s {
     int food;
@@ -108,3 +109,10 @@ char *player_inventory(server_t *serv, int p_index);
 int get_team_nb(server_t *serv);
 
 void server_send_data(client_t *client, const char *data);
+struct team_s {
+    char *name;
+    int nb_player;
+    int max_player;
+};
+team_t *get_team_client(server_t *serv, client_t *cli);
+int get_free_space_team(team_t *team);

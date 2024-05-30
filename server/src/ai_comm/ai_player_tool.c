@@ -37,7 +37,7 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 }
 
 bool ai_connect_nbr(
-    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+    UNUSED server_t *serv, UNUSED client_t *cli, UNUSED const char *obj)
 {
     return true;
 }
