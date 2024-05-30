@@ -49,6 +49,17 @@ char *get_str_part(
     return (part);
 }
 
+size_t str_array_length(char **array)
+{
+    size_t i = 0;
+
+    if (array == NULL)
+        return (0);
+    while (array[i] != NULL)
+        i++;
+    return (i);
+}
+
 void str_array_destroy(char **array)
 {
     if (array == NULL)

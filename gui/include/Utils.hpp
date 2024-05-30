@@ -6,15 +6,16 @@
 */
 
 #pragma once
+#include <iostream>
+#include "raylib.h"
 
 namespace Zappy {
-class Utils {
-    public:
-        Utils();
-        ~Utils();
-        void setTexture();
-
-    protected:
-    private:
-};
+    class Utils {
+        public:
+            Utils();
+            ~Utils();
+            void setTexture();
+        private:
+    };
 }
+
