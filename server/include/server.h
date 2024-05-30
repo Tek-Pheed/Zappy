@@ -84,7 +84,7 @@ struct client_s {
     char read_buffer[BUFFER_MAX_SIZE];
     char team_name[BUFFER_MAX_SIZE];
     enum client_state state;
-    player_t *player;
+    player_t player;
     list_t *cmds;
     struct timeval last_cmd_time;
     int cmd_duration;
@@ -153,3 +153,4 @@ char *command_parameter(void);
 char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
 char *start_incantation(player_t *player, int *p_nb, int size);
+void destroy_server(server_t *serv);

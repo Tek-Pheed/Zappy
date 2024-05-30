@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     print_serv(serv);
     serv->map = create_map(serv);
     retval = run_server(serv);
-    free_struct(serv);
+    destroy_server(serv);
     return retval;
 }
 
