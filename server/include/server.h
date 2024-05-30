@@ -62,6 +62,7 @@ struct server_s {
     list_t *client;
     cell_t **map;
     list_t *teams;
+    char *winner;
 };
 
 server_t *init_struct(void);
@@ -77,7 +78,7 @@ enum client_state {
     AI,
     GRAPHICAL
 };
-// clang-format onn
+// clang-format on
 struct client_s {
     int fd;
     char write_buffer[BUFFER_MAX_SIZE];
