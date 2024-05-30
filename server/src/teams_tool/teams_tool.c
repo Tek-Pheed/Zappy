@@ -23,5 +23,5 @@ team_t *get_team_client(server_t *serv, client_t *cli)
 
 int get_free_space_team(team_t *team)
 {
-    return team->max_player - team->nb_player;
+    return list_get_size(team->eggs);
 }

@@ -38,6 +38,7 @@ typedef struct server_s server_t;
 typedef struct player_s player_t;
 typedef struct client_s client_t;
 typedef struct team_s team_t;
+typedef struct egg_s egg_t;
 
 struct player_s {
     char team_name[BUFFER_MAX_SIZE];
@@ -121,10 +122,16 @@ void server_send_data(client_t *client, const char *data);
 struct team_s {
     char *name;
     int nb_player;
-    int max_player;
+    list_t *eggs;
 };
 team_t *get_team_client(server_t *serv, client_t *cli);
 int get_free_space_team(team_t *team);
+
+struct egg_s {
+    int x;
+    int y;
+    team_t *team;
+};
 
 void run_client_commands(server_t *serv);
 char *time_unit_request(server_t *serv);

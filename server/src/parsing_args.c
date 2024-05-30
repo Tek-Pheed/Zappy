@@ -20,9 +20,9 @@ static void create_team(server_t *serv, int flags[6])
 
     for (int i = 0; serv->tName[i] != NULL; i++) {
         team = calloc(1, sizeof(team_t));
-        team->max_player = serv->clientNb;
         team->name = strdup(serv->tName[i]);
         team->nb_player = 0;
+        team->eggs = calloc(1, sizeof(list_t));
         list_add_elem_at_back(&serv->teams, team);
     }
     flags[3] = 1;
