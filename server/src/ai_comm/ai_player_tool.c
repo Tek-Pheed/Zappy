@@ -107,5 +107,7 @@ bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj)
             eject_destroy_eggs(cli, tteam, i, y);
         }
     }
+    cli->cmd_duration = 7;
+    gettimeofday(&cli->last_cmd_time, NULL);
     return true;
 }
