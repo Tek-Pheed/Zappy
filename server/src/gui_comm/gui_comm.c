@@ -13,6 +13,8 @@ bool gui_map_size(server_t *server, client_t *client, UNUSED char **args)
 {
     char *buff = map_size(server);
 
+    if (buff == NULL)
+        return (false);
     server_send_data(client, buff);
     free(buff);
     return (true);
@@ -29,6 +31,8 @@ bool gui_tile_content(server_t *server, client_t *client, char **args)
     if (args[2] != NULL)
         x = atoi(args[2]);
     buff = tile_content(server, x, y);
+    if (buff == NULL)
+        return (false);
     server_send_data(client, buff);
     return (true);
 }
@@ -38,6 +42,8 @@ bool gui_map_content(server_t *server, client_t *client, UNUSED char **args)
     char *buff = NULL;
 
     buff = all_content(server);
+    if (buff == NULL)
+        return (false);
     server_send_data(client, buff);
     return (true);
 }
@@ -47,6 +53,8 @@ bool gui_all_name(server_t *server, client_t *client, UNUSED char **args)
     char *buff = NULL;
 
     buff = all_name(server);
+    if (buff == NULL)
+        return (false);
     server_send_data(client, buff);
     return (true);
 }
