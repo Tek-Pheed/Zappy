@@ -40,7 +40,8 @@ bool run_command(server_t *serv, client_t *client, const char *cmd)
 // *arg)
 // {
 //     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
-//         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command)) == 0) {
+//         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command)) ==
+//         0) {
 //             return (ai_cmds[i].ptr.ai_ptr(serv, client, arg));
 //         }
 //     }

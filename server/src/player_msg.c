@@ -93,9 +93,7 @@ char *player_inventory(server_t *serv, int p_index)
                 tmp->player->stone[LINEMATE], tmp->player->stone[DERAUMERE],
                 tmp->player->stone[SIBUR], tmp->player->stone[MENDIANE],
                 tmp->player->stone[PHIRAS], tmp->player->stone[THYSTAME]);
-            return buff;
         }
-        buff = NULL;
     }
     return buff;
 }
