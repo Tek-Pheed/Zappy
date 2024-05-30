@@ -49,6 +49,7 @@ struct player_s {
     int level;
     int orient;
     int number;
+    bool elevating;
 };
 
 struct server_s {
