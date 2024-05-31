@@ -154,3 +154,4 @@ char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
 char *start_incantation(player_t *player, int *p_nb, int size);
 void destroy_server(server_t *serv);
+void send_login_answer(server_t *serv, client_t *client);
