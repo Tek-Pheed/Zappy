@@ -16,21 +16,11 @@ def create_team(args, server: Server):
 
 def get_food(cases: dict, player: dict, server: Server):
     for i in range (len(cases)):
-        if "food" in cases[i] and player["inventory"]["food"] <= 5:
-            if i == 0:
-                send_request(server, "Take food")
-            elif i == 1:
-                send_request(server, "Forward")
-                send_request(server, "Right")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 2:
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 3:
-                send_request(server, "Forward")
-                send_request(server, "Left")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
+        if "food" in cases[i]:
+            send_request(server, "Take food")
         else:
             send_request(server, "Forward")
+            if i == 1:
+                send_request(server, "Right")
+            elif i == 3:
+                send_request(server, "Left")
