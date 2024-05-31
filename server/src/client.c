@@ -14,6 +14,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
+#include "define.h"
 #include "list.h"
 #include "server.h"
 
@@ -45,6 +46,16 @@ static void send_login_answer(server_t *serv, client_t *client)
     server_send_data(client, buffer);
 }
 
+static void create_player(client_t *client, int index)
+{
+    client->player.food = 10;
+    client->player.elevating = false;
+    client->player.level = 1;
+    client->player.number = index;
+    client->player.orient = 1;
+    gettimeofday(&client->player.last_food_update, NULL);
+}
+
 bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
 {
     static int player_index = 0;
@@ -57,8 +68,7 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
         return (true);
     } else {
         client->state = AI;
-        client->player.number = player_index;
-        client->player.orient = 1;
+        create_player(client, player_index);
         player_index++;
         send_login_answer(serv, client);
         return (true);
@@ -94,7 +104,7 @@ void check_lvl_player(server_t *serv)
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp && tmp->state == AI && tmp->player.level == 8) {
-            serv->winner = strdup(tmp->player.team_name);
+            serv->winner = strdup(tmp->team_name);
             return;
         }
     }

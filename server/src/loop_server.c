@@ -49,6 +49,10 @@ static void remove_old_clients(server_t *serv)
         client = list_get_elem_at_position(clients, i);
         if (client == NULL)
             continue;
+        if (client->state == AI && client->player.is_dead){
+            close(client->fd);
+            client->fd = -1;
+        }
         if (client->fd == -1) {
             list_del_elem_at_position(&serv->client, i);
             free(client);
@@ -72,5 +76,6 @@ int server_loop(server_t *serv)
     }
     run_client_commands(serv);
     remove_old_clients(serv);
+    game_update(serv);
     return 0;
 }

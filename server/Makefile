@@ -41,7 +41,9 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/networking.c                  \
 		src/command_handler.c             \
 		src/parsing_args.c                \
-		src/server.c
+		src/server.c                      \
+		src/game_update.c                 \
+		src/time_management.c
 
 OBJ	=	$(SRC:.c=.o)
 
