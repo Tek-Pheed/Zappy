@@ -56,14 +56,14 @@ static void handle_error(bool success, client_t *client)
 
 static double get_milliseconds(struct timeval *tv)
 {
-    return (tv->tv_sec) * 1000.0f + (tv->tv_usec) / 1000.0f;
+    return (tv->tv_sec) * 1000.0 + (tv->tv_usec) / 1000.0;
 }
 
 static bool is_client_ready(server_t *serv, client_t *client)
 {
     struct timeval current_time;
     double ready_time = get_milliseconds(&client->last_cmd_time)
-        + ((double) client->cmd_duration / serv->freq);
+        + (((double) client->cmd_duration / serv->freq) * 1000.0);
 
     if (client->state == GRAPHICAL)
         return (true);
