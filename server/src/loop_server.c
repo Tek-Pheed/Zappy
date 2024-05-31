@@ -12,6 +12,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
+#include "define.h"
 #include "list.h"
 #include "server.h"
 #include "commands.h"
@@ -57,7 +58,35 @@ static void remove_old_clients(server_t *serv)
     }
 }
 
-int server_loop(server_t *serv)
+static void send_win(server_t *serv, const char *win_msg)
+{
+    size_t client_nb = list_get_size(serv->client);
+    client_t *client = NULL;
+
+    for (size_t i = 0; i != client_nb; i++) {
+        client = list_get_elem_at_position(serv->client, i);
+        if (client == NULL || client->state != GRAPHICAL)
+            continue;
+        server_send_data(client, win_msg);
+    }
+}
+
+static bool check_win(server_t *serv)
+{
+    char *win_buff = NULL;
+
+    if (serv->winner != NULL) {
+        win_buff = event_end_game(serv->winner);
+        if (win_buff == NULL)
+            return (false);
+        send_win(serv, win_buff);
+        free(win_buff);
+        return (true);
+    }
+    return (false);
+}
+
+bool server_loop(server_t *serv)
 {
     struct timeval time = {0, (1.0f / (float) serv->freq) * 1000000};
     fd_set fdset;
@@ -72,5 +101,5 @@ int server_loop(server_t *serv)
     }
     run_client_commands(serv);
     remove_old_clients(serv);
-    return 0;
+    return (check_win(serv));
 }

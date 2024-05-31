@@ -35,7 +35,7 @@ void parse_res_x(server_t *serv, int flags[6]);
 void parse_port(server_t *serv, int flags[6]);
 
 void destroy_server(server_t *serv);
-int server_loop(server_t *serv);
+bool server_loop(server_t *serv);
 int run_server(server_t *serv);
 int get_team_nb(server_t *serv);
 void server_send_data(client_t *client, const char *data);
