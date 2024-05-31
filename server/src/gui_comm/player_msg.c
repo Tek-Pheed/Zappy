@@ -25,7 +25,7 @@ char *event_conn_new_player(server_t *serv)
     }
     sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number, cl->player.x,
         cl->player.y, cl->player.orient, cl->player.level,
-        cl->player.team_name);
+        cl->team_name);
     return buff;
 }
 

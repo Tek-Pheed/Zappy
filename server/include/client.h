@@ -20,7 +20,6 @@ enum client_state {
 // clang-format on
 
 struct player_s {
-    char team_name[BUFFER_MAX_SIZE];
     int x;
     int y;
     int food;
@@ -29,6 +28,8 @@ struct player_s {
     int orient;
     int number;
     bool elevating;
+    bool is_dead;
+    struct timeval last_food_update;
 };
 
 struct client_s {
