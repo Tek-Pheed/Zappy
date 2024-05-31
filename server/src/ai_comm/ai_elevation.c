@@ -96,6 +96,7 @@ bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
         mark_player_elevating(serv, cli);
         server_send_data(cli, "Elevation underway\n");
         val = true;
+        check_lvl_player(serv);
     } else {
         server_send_data(cli, "ko\n");
         val = false;

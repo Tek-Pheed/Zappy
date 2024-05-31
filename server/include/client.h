@@ -57,3 +57,4 @@ struct egg_s {
     int y;
     team_t *team;
 };
+void check_lvl_player(server_t *serv);

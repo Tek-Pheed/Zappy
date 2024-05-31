@@ -5,17 +5,17 @@
 ** client
 */
 
+#include "client.h"
 #include <netinet/ip.h>
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
 #include "list.h"
 #include "server.h"
-#include "client.h"
 
 void destroy_client(client_t *client)
 {
@@ -84,4 +84,18 @@ bool server_add_client(server_t *serv)
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);
+}
+
+void check_lvl_player(server_t *serv)
+{
+    int len = list_get_size(serv->client);
+    client_t *tmp;
+
+    for (int i = 0; i != len; i++) {
+        tmp = list_get_elem_at_position(serv->client, i);
+        if (tmp && tmp->state == AI && tmp->player.level == 8) {
+            serv->winner = strdup(tmp->player.team_name);
+            return;
+        }
+    }
 }
