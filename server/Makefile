@@ -22,6 +22,7 @@ SRC	=	libs/list/list_generic_del.c		\
 		src/ai_comm/ai_move.c				\
 		src/ai_comm/ai_object.c				\
 		src/ai_comm/ai_player_tool.c		\
+		src/ai_comm/ai_elevation.c			\
 		src/teams_tool/teams_tool.c			\
 		src/main.c                        \
 		src/client_handling.c             \
@@ -38,7 +39,7 @@ SRC	=	libs/list/list_generic_del.c		\
 		src/player_event_msg.c            \
 		src/server_msg.c                  \
 		src/server.c                      \
-    src/time_msg.c                    \
+    	src/time_msg.c                    \
 		src/gui_comm/gui_comm.c           \
 		src/gui_comm/gui_comm2.c
 

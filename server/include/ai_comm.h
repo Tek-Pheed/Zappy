@@ -29,4 +29,5 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
 bool ai_take_object(server_t *serv, client_t *cli, const char *obj);
 bool ai_set_object(server_t *serv, client_t *cli, const char *obj);
-// incantation
+bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_end_elevation(server_t *serv, client_t *cli, UNUSED const char *obj);

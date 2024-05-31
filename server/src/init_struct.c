@@ -24,6 +24,7 @@ server_t *init_struct(void)
     tmp->client = calloc(1, sizeof(list_t));
     tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
+    tmp->winner = NULL;
     return tmp;
 }
 
