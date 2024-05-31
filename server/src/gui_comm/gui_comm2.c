@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "server.h"
-#include "command_handler.h"
+#include "commands.h"
 
 bool gui_player_position(server_t *server, client_t *client, char **args)
 {

@@ -11,12 +11,6 @@
 #include "list.h"
 #include "server.h"
 
-typedef struct server_s server_t;
-typedef struct client_s client_t;
-typedef struct player_s player_t;
-typedef struct team_s team_t;
-typedef struct egg_s egg_t;
-
 // clang-format off
 enum client_state {
     CREATED,

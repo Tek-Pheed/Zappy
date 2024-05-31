@@ -9,7 +9,6 @@
 
 #include <stddef.h>
 #include "server.h"
-#include "ai_comm.h"
 
 struct command_handler_s {
     char command[32];
@@ -55,6 +54,30 @@ bool gui_player_level(server_t *server, client_t *client, char **args);
 bool gui_player_inventory(server_t *server, client_t *client, char **args);
 bool gui_get_time_unit(server_t *server, client_t *client, char **args);
 bool gui_set_time_unit(server_t *server, client_t *client, char **args);
+
+char *to_lower_case(const char *str);
+
+bool ai_move_forward(
+    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_turn_right(
+    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_turn_left(
+    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+
+// look around
+bool ai_inventory(
+    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+// broadcast
+
+bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
+
+bool ai_take_object(server_t *serv, client_t *cli, const char *obj);
+bool ai_set_object(server_t *serv, client_t *cli, const char *obj);
+bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_end_elevation(server_t *serv, client_t *cli, UNUSED const char *obj);
 
 void run_client_commands(server_t *serv);
 

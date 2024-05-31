@@ -5,7 +5,7 @@
 ** command_handler
 */
 
-#include "command_handler.h"
+#include "commands.h"
 #include <string.h>
 #include "server.h"
 #include "strings_array.h"

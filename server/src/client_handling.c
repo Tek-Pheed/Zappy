@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include "list.h"
 #include "server.h"
-#include "client_handler.h"
 #include "strings_array.h"
 
 void server_send_data(client_t *client, const char *data)

@@ -13,9 +13,8 @@
 #include <unistd.h>
 #include <uuid/uuid.h>
 #include "list.h"
-#include "networking.h"
 #include "server.h"
-#include "command_handler.h"
+#include "commands.h"
 
 static void zero_fds(fd_set *a, fd_set *b)
 {

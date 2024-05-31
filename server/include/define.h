@@ -30,3 +30,10 @@
 #define SOUTH                 3
 #define WEST                  4
 #define DEFAULT_BUFFER_SIZE   25
+
+typedef struct server_s server_t;
+typedef struct cell_s cell_t;
+typedef struct client_s client_t;
+typedef struct player_s player_t;
+typedef struct team_s team_t;
+typedef struct egg_s egg_t;
