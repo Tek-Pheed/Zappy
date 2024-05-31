@@ -64,7 +64,7 @@ bool ai_turn_right(
 bool ai_turn_left(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
-// look around
+bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 // event_broadcast
