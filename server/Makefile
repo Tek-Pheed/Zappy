@@ -30,7 +30,7 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/gui_comm/player_event_msg.c   \
 		src/gui_comm/player_msg.c         \
 		src/gui_comm/server_msg.c         \
-    	src/gui_comm/time_msg.c           \
+		src/gui_comm/time_msg.c           \
 		src/teams_tool/teams_tool.c       \
 		src/main.c                        \
 		src/client_handling.c             \
