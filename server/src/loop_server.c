@@ -56,7 +56,7 @@ static void remove_old_clients(server_t *serv)
         }
         if (client->fd == -1) {
             list_del_elem_at_position(&serv->client, i);
-            free(client);
+            destroy_client(serv, client);
             i--;
         }
     }

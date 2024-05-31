@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     }
     print_serv(serv);
     serv->map = create_map(serv);
+    create_teams_eggs(serv);
     retval = run_server(serv);
     destroy_server(serv);
     return retval;

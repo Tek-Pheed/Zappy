@@ -52,3 +52,5 @@ void game_update(server_t *serv);
 double timeval_get_milliseconds(struct timeval *tv);
 
 bool time_is_ready(double time_ready);
+bool team_remove_client(server_t *serv, const client_t *client);
+bool team_add_client(server_t *serv, const client_t *client);

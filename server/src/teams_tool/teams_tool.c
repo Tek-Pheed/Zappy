@@ -9,7 +9,7 @@
 #include <string.h>
 #include "server.h"
 
-team_t *get_team_client(server_t *serv, client_t *cli)
+team_t *team_get_client(server_t *serv, client_t *cli)
 {
     int len = list_get_size(serv->teams);
     team_t *tmp = NULL;
@@ -22,7 +22,53 @@ team_t *get_team_client(server_t *serv, client_t *cli)
     return NULL;
 }
 
-int get_free_space_team(team_t *team)
+static bool team_can_add_player(const server_t *serv, team_t *team)
+{
+    size_t nb_eggs = list_get_size(team->eggs);
+
+    if (nb_eggs == 0)
+        return (false);
+    if (team->nb_player >= serv->clientNb)
+        return (false);
+    return (true);
+}
+
+bool team_add_client(server_t *serv, const client_t *client)
+{
+    size_t nb_teams = list_get_size(serv->teams);
+    team_t *team = NULL;
+
+    for (size_t i = 0; i != nb_teams; i++) {
+        team = list_get_elem_at_position(serv->teams, i);
+        if (team == NULL)
+            continue;
+        if (strcmp(team->name, client->team_name) == 0
+            && team_can_add_player(serv, team)) {
+            team->nb_player++;
+            return (true);
+        }
+    }
+    return (false);
+}
+
+bool team_remove_client(server_t *serv, const client_t *client)
+{
+    size_t nb_teams = list_get_size(serv->teams);
+    team_t *team = NULL;
+
+    for (size_t i = 0; i != nb_teams; i++) {
+        team = list_get_elem_at_position(serv->teams, i);
+        if (team == NULL)
+            continue;
+        if (strcmp(team->name, client->team_name) == 0) {
+            team->nb_player--;
+            return (true);
+        }
+    }
+    return (false);
+}
+
+int team_get_free_space(team_t *team)
 {
     if (team == NULL)
         return (0);

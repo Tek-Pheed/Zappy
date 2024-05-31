@@ -47,12 +47,12 @@ void destroy_team(team_t *team)
     if (team->name != NULL)
         free(team->name);
     size = list_get_size(team->eggs);
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i != size; i++) {
         tmp_eggs = list_get_elem_at_position(team->eggs, i);
         if (tmp_eggs != NULL)
             free(tmp_eggs);
-        list_del_elem_at_position(&(team->eggs), i);
     }
+    list_clear(&team->eggs);
     if (team->eggs != NULL)
         free(team->eggs);
     free(team);
@@ -86,7 +86,7 @@ void destroy_server(server_t *serv)
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
-        free(client);
+        destroy_client(serv, client);
     }
     for (size_t i = 0; i != team_nb; i++) {
         team = list_get_elem_at_position(serv->teams, i);
