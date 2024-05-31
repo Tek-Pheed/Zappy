@@ -77,6 +77,7 @@ int run_server(server_t *serv)
     }
     signal(SIGINT, stop_server);
     while (is_on(0))
-        server_loop(serv);
+        if (server_loop(serv))
+            break;
     return 0;
 }
