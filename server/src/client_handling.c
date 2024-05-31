@@ -29,7 +29,7 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-bool handle_login_request(client_t *client, const char *cmd)
+bool handle_login_request(server_t *serv, client_t *client, const char *cmd)
 {
     static int player_index = 0;
 
@@ -43,6 +43,7 @@ bool handle_login_request(client_t *client, const char *cmd)
         client->state = AI;
         client->player.number = player_index;
         player_index++;
+        send_login_answer(serv, client);
         return (true);
     }
     return (false);
@@ -84,7 +85,7 @@ static bool handle_commands(server_t *serv, client_t *client)
         if (cmd == NULL)
             continue;
         if (client->state == CREATED)
-            result = handle_login_request(client, cmd);
+            result = handle_login_request(serv, client, cmd);
         else
             result = run_command(serv, client, cmd);
         list_del_elem_at_position(&client->cmds, i);
