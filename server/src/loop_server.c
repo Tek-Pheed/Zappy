@@ -15,6 +15,7 @@
 #include "list.h"
 #include "networking.h"
 #include "server.h"
+#include "command_handler.h"
 
 static void zero_fds(fd_set *a, fd_set *b)
 {

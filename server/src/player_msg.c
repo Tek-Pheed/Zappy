@@ -23,8 +23,8 @@ char *conn_new_player(server_t *serv)
         free(buff);
         return NULL;
     }
-    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number,
-        cl->player.x, cl->player.y, cl->player.orient, cl->player.level,
+    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number, cl->player.x,
+        cl->player.y, cl->player.orient, cl->player.level,
         cl->player.team_name);
     return buff;
 }
