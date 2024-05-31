@@ -5,7 +5,6 @@
 ** networking
 */
 
-#include "networking.h"
 #include <stddef.h>
 #include <string.h>
 #include <sys/select.h>

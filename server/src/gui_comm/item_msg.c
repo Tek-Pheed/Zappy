@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** Zappy
 ** File description:
-** player_event_msg
+** item_msg
 */
 
 #include <stdio.h>
@@ -10,52 +10,52 @@
 #include <string.h>
 #include "server.h"
 
-char *expulsion(int p_index)
+char *event_ressource_drop(int p_index, int r_nb)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;
-    sprintf(buff, "pex #%d\n", p_index);
+    sprintf(buff, "pdr #%d %d\n", p_index, r_nb);
     return buff;
 }
 
-char *broadcast(int p_index, char *msg)
-{
-    char *buff = calloc(BUFFER_MAX_SIZE, sizeof(char));
-
-    if (!buff)
-        return NULL;
-    sprintf(buff, "pbc #%d %s\n", p_index, msg);
-    return buff;
-}
-
-char *end_incantation(int x, int y, char *result)
-{
-    char *buff = calloc(BUFFER_MAX_SIZE, sizeof(char));
-
-    if (!buff)
-        return NULL;
-    sprintf(buff, "pie %d %d %s\n", x, y, result);
-    return buff;
-}
-
-char *player_death(int p_index)
+char *event_ressource_collect(int p_index, int r_nb)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;
-    sprintf(buff, "pdi %d\n", p_index);
+    sprintf(buff, "pgt #%d %d\n", p_index, r_nb);
     return buff;
 }
 
-char *player_connection_egg(int p_index)
+char *event_egg_laying(int p_index)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
     if (!buff)
         return NULL;
-    sprintf(buff, "ebo #%d\n", p_index);
+    sprintf(buff, "pfk #%d\n", p_index);
+    return buff;
+}
+
+char *event_egg_laid(int egg_nb, int p_index, int x, int y)
+{
+    char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
+
+    if (!buff)
+        return NULL;
+    sprintf(buff, "enw #%d #%d %d %d\n", egg_nb, p_index, x, y);
+    return buff;
+}
+
+char *event_egg_death(int egg_nb)
+{
+    char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
+
+    if (!buff)
+        return NULL;
+    sprintf(buff, "edi #%d\n", egg_nb);
     return buff;
 }

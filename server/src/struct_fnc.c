@@ -5,6 +5,7 @@
 ** init_struct
 */
 
+#include <unistd.h>
 #include <stdlib.h>
 #include "server.h"
 
@@ -23,6 +24,7 @@ server_t *init_struct(void)
     tmp->client = calloc(1, sizeof(list_t));
     tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
+    tmp->winner = NULL;
     return tmp;
 }
 
@@ -35,7 +37,28 @@ int get_team_nb(server_t *serv)
     return index;
 }
 
-void free_struct(server_t *serv)
+void destroy_team(team_t *team)
+{
+    egg_t *tmp_eggs = NULL;
+    size_t size = 0;
+
+    if (team == NULL)
+        return;
+    if (team->name != NULL)
+        free(team->name);
+    size = list_get_size(team->eggs);
+    for (size_t i = 0; i < size; i++) {
+        tmp_eggs = list_get_elem_at_position(team->eggs, i);
+        if (tmp_eggs != NULL)
+            free(tmp_eggs);
+        list_del_elem_at_position(&(team->eggs), i);
+    }
+    if (team->eggs != NULL)
+        free(team->eggs);
+    free(team);
+}
+
+static void free_struct(server_t *serv)
 {
     if (serv == NULL)
         return;
@@ -51,15 +74,6 @@ void free_struct(server_t *serv)
     free(serv);
 }
 
-void destroy_team(team_t *team)
-{
-    if (team == NULL)
-        return;
-    if (team->name != NULL)
-        free(team->name);
-    free(team);
-}
-
 void destroy_server(server_t *serv)
 {
     client_t *client = NULL;
@@ -67,6 +81,7 @@ void destroy_server(server_t *serv)
     size_t clients_nb = list_get_size(serv->client);
     size_t team_nb = list_get_size(serv->teams);
 
+    close(serv->socket);
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)

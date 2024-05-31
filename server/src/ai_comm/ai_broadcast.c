@@ -59,7 +59,8 @@ list_t get_players_on_cell(server_t *serv, ivect2D_t *world_pos)
     return (lst);
 }
 
-static bool broadcast_cell(server_t *serv, client_t *cli, ivect2D_t *cell_pos, ivect2D_t *prev_pos)
+static bool broadcast_cell(
+    server_t *serv, client_t *cli, ivect2D_t *cell_pos, ivect2D_t *prev_pos)
 {
     ivect2D_t position = get_pos_in_bounds(serv, cell_pos);
     list_t player_lst = get_players_on_cell(serv, &position);

@@ -11,7 +11,7 @@
 #include "list.h"
 #include "server.h"
 
-char *conn_new_player(server_t *serv)
+char *event_conn_new_player(server_t *serv)
 {
     char *buff = calloc(BUFFER_MAX_SIZE * 2, sizeof(char));
     client_t *cl;
@@ -23,8 +23,8 @@ char *conn_new_player(server_t *serv)
         free(buff);
         return NULL;
     }
-    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number,
-        cl->player.x, cl->player.y, cl->player.orient, cl->player.level,
+    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number, cl->player.x,
+        cl->player.y, cl->player.orient, cl->player.level,
         cl->player.team_name);
     return buff;
 }
@@ -98,7 +98,7 @@ char *player_inventory(server_t *serv, int p_index)
     return buff;
 }
 
-char *start_incantation(player_t *player, int *p_nb, int size)
+char *event_start_incantation(player_t *player, int *p_nb, int size)
 {
     char *buff = calloc(BUFFER_MAX_SIZE, sizeof(char));
     char str[BUFFER_MAX_SIZE];

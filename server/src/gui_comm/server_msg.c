@@ -10,7 +10,7 @@
 #include <string.h>
 #include "server.h"
 
-char *end_game(char *winner)
+char *event_end_game(char *winner)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE * 2, sizeof(char));
 
@@ -20,7 +20,7 @@ char *end_game(char *winner)
     return buff;
 }
 
-char *server_message(char *msg)
+char *event_server_message(char *msg)
 {
     char *buff = calloc(strlen(msg) + 5, sizeof(char));
 
@@ -30,7 +30,7 @@ char *server_message(char *msg)
     return buff;
 }
 
-char *unknow_command(void)
+char *event_unknow_command(void)
 {
     char *buff = calloc(5, sizeof(char));
 
@@ -40,7 +40,7 @@ char *unknow_command(void)
     return buff;
 }
 
-char *command_parameter(void)
+char *event_command_parameter(void)
 {
     char *buff = calloc(5, sizeof(char));
 

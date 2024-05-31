@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "server.h"
-#include "command_handler.h"
+#include "commands.h"
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args)
 {

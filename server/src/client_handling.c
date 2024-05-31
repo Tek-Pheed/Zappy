@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include "list.h"
 #include "server.h"
-#include "client_handler.h"
 #include "strings_array.h"
 
 void server_send_data(client_t *client, const char *data)
@@ -29,41 +28,16 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-bool handle_login_request(client_t *client, const char *cmd)
-{
-    static int player_index = 0;
-
-    if (cmd[0] == '\0')
-        return (false);
-    strcpy(client->team_name, client->read_buffer);
-    if (strncmp(cmd, "GRAPHIC", 7) == 0) {
-        client->state = GRAPHICAL;
-        return (true);
-    } else {
-        client->state = AI;
-        client->player.number = player_index;
-        player_index++;
-        return (true);
-    }
-    return (false);
-}
-
-static void handle_error(bool success, client_t *client)
-{
-    if (!success)
-        server_send_data(client, "ko\n");
-}
-
 static double get_milliseconds(struct timeval *tv)
 {
-    return (tv->tv_sec) * 1000.0f + (tv->tv_usec) / 1000.0f;
+    return (tv->tv_sec) * 1000.0 + (tv->tv_usec) / 1000.0;
 }
 
 static bool is_client_ready(server_t *serv, client_t *client)
 {
     struct timeval current_time;
     double ready_time = get_milliseconds(&client->last_cmd_time)
-        + ((double) client->cmd_duration / serv->freq);
+        + (((double) client->cmd_duration / serv->freq) * 1000.0);
 
     if (client->state == GRAPHICAL)
         return (true);
@@ -84,7 +58,7 @@ static bool handle_commands(server_t *serv, client_t *client)
         if (cmd == NULL)
             continue;
         if (client->state == CREATED)
-            result = handle_login_request(client, cmd);
+            result = handle_client_login(serv, client, cmd);
         else
             result = run_command(serv, client, cmd);
         list_del_elem_at_position(&client->cmds, i);
@@ -104,7 +78,8 @@ void run_client_commands(server_t *serv)
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
-        handle_error(handle_commands(serv, client), client);
+        if (!handle_commands(serv, client))
+            server_send_data(client, "ko\n");
     }
 }
 

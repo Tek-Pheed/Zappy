@@ -5,6 +5,7 @@
 ** teams_tool
 */
 
+#include <stdio.h>
 #include <string.h>
 #include "server.h"
 
@@ -23,5 +24,7 @@ team_t *get_team_client(server_t *serv, client_t *cli)
 
 int get_free_space_team(team_t *team)
 {
+    if (team == NULL)
+        return (0);
     return list_get_size(team->eggs);
 }
