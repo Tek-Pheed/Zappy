@@ -10,6 +10,7 @@
 #include <netinet/ip.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -68,10 +69,12 @@ bool init_server(server_t *serv)
     return true;
 }
 
-int create_server(server_t *serv)
+int run_server(server_t *serv)
 {
-    if (!init_server(serv))
+    if (!init_server(serv)) {
+        perror("Unable to initialize server");
         return 84;
+    }
     signal(SIGINT, stop_server);
     while (is_on(0))
         server_loop(serv);
