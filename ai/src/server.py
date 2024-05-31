@@ -1,4 +1,5 @@
 import socket
+import select
 
 class Server:
     def __init__(self, hostname, port):
@@ -14,6 +15,7 @@ class Server:
             print(f"Connection to {self.hostname}:{self.port}")
             self.socket.connect(address)
             print("Connection etablished")
+            self.socket.setblocking(False)
         except Exception as e:
             print(f"Error: {e}")
             exit(84)
@@ -21,10 +23,19 @@ class Server:
     def receive_message(self, buffer_size=1024):
         if self.socket:
             try:
-                data = self.socket.recv(buffer_size)
-                return data.decode('utf-8')
+                readable, _, _ = select.select([self.socket], [], [], 1)
+                if self.socket in readable:
+                    data = self.socket.recv(buffer_size)
+                    if data:
+                        return data.decode('utf-8')
+                    else:
+                        print("Connection closed by the server !")
+                        self.close_connection()
+                        return None
             except Exception as e:
                 print(f"Error: {e}")
+                self.close_connection()
+                exit(84)
         else:
             print("Error: no connection")
 
@@ -34,6 +45,7 @@ class Server:
                 self.socket.sendall(command.encode("utf-8"))
             except Exception as e:
                 print(f"Error: {e}")
+                self.close_connection()
                 exit(84)
         else:
             print("Error: no connection")
