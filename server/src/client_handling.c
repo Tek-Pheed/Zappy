@@ -42,6 +42,7 @@ bool handle_login_request(server_t *serv, client_t *client, const char *cmd)
     } else {
         client->state = AI;
         client->player.number = player_index;
+        client->player.orient = 1;
         player_index++;
         send_login_answer(serv, client);
         return (true);

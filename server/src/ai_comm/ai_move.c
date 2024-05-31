@@ -32,17 +32,26 @@ bool ai_move_forward(
     return true;
 }
 
+// clang-format off
 bool ai_turn_right(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    if (cli->player.orient == NORTH)
-        cli->player.orient += 1;
-    if (cli->player.orient == SOUTH)
-        cli->player.orient += 1;
-    if (cli->player.orient == EAST)
-        cli->player.orient += 1;
-    if (cli->player.orient == WEST)
-        cli->player.orient = 1;
+    switch (cli->player.orient) {
+        case NORTH:
+            cli->player.orient = EAST;
+            break;
+        case EAST:
+            cli->player.orient = SOUTH;
+            break;
+        case SOUTH:
+            cli->player.orient = WEST;
+            break;
+        case WEST:
+            cli->player.orient = NORTH;
+            break;
+        default:
+            return false;
+    }
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
     server_send_data(cli, "ok\n");
@@ -51,14 +60,22 @@ bool ai_turn_right(
 
 bool ai_turn_left(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    if (cli->player.orient == NORTH)
-        cli->player.orient = 4;
-    if (cli->player.orient == SOUTH)
-        cli->player.orient -= 1;
-    if (cli->player.orient == EAST)
-        cli->player.orient -= 1;
-    if (cli->player.orient == WEST)
-        cli->player.orient -= 1;
+    switch (cli->player.orient) {
+        case NORTH:
+            cli->player.orient = WEST;
+            break;
+        case WEST:
+            cli->player.orient = SOUTH;
+            break;
+        case SOUTH:
+            cli->player.orient = EAST;
+            break;
+        case EAST:
+            cli->player.orient = NORTH;
+            break;
+        default:
+            return false;
+    }
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
     server_send_data(cli, "ok\n");
