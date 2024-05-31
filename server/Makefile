@@ -14,34 +14,34 @@ LIBINC	=	 -I libs/list/ -I libs/strings
 
 CFLAGS	=	$(INCFLAGS) $(LIBINC) -Wall -Wextra -Werror -O2
 
-SRC	=	libs/list/list_generic_del.c		\
-		libs/list/list_generic_display.c	\
-		libs/list/list_generic_get.c		\
-		libs/list/list_generic.c			\
-		libs/strings/string_to_array.c		\
-		src/ai_comm/ai_move.c				\
-		src/ai_comm/ai_object.c				\
-		src/ai_comm/ai_player_tool.c		\
-		src/ai_comm/ai_elevation.c			\
-		src/teams_tool/teams_tool.c			\
+SRC	=	libs/list/list_generic_del.c      \
+		libs/list/list_generic_display.c  \
+		libs/list/list_generic_get.c      \
+		libs/list/list_generic.c          \
+		libs/strings/string_to_array.c    \
+		src/ai_comm/ai_move.c             \
+		src/ai_comm/ai_object.c           \
+		src/ai_comm/ai_player_tool.c      \
+		src/ai_comm/ai_elevation.c        \
+		src/gui_comm/gui_comm.c           \
+		src/gui_comm/gui_comm2.c          \
+		src/gui_comm/item_msg.c           \
+		src/gui_comm/map_team_msg.c       \
+		src/gui_comm/player_event_msg.c   \
+		src/gui_comm/player_msg.c         \
+		src/gui_comm/server_msg.c         \
+    	src/gui_comm/time_msg.c           \
+		src/teams_tool/teams_tool.c       \
 		src/main.c                        \
 		src/client_handling.c             \
-		src/init_struct.c	              \
-		src/item_msg.c                    \
+		src/client.c                      \
+		src/struct_fnc.c                  \
 		src/loop_server.c                 \
-		src/map_team_msg.c                \
 		src/map.c                         \
 		src/networking.c                  \
-		src/player_msg.c                  \
 		src/command_handler.c             \
-		src/command_handler_gui.c         \
 		src/parsing_args.c                \
-		src/player_event_msg.c            \
-		src/server_msg.c                  \
-		src/server.c                      \
-    	src/time_msg.c                    \
-		src/gui_comm/gui_comm.c           \
-		src/gui_comm/gui_comm2.c
+		src/server.c
 
 OBJ	=	$(SRC:.c=.o)
 

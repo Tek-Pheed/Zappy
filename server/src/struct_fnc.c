@@ -37,22 +37,6 @@ int get_team_nb(server_t *serv)
     return index;
 }
 
-void free_struct(server_t *serv)
-{
-    if (serv == NULL)
-        return;
-    if (serv->tName != NULL) {
-        for (int i = 0; serv->tName[i] != NULL; i++)
-            free(serv->tName[i]);
-        free(serv->tName);
-    }
-    list_clear(&serv->client);
-    list_clear(&serv->teams);
-    if (serv->map != NULL)
-        free_map(serv);
-    free(serv);
-}
-
 void destroy_team(team_t *team)
 {
     egg_t *tmp_eggs = NULL;
@@ -72,6 +56,22 @@ void destroy_team(team_t *team)
     if (team->eggs != NULL)
         free(team->eggs);
     free(team);
+}
+
+static void free_struct(server_t *serv)
+{
+    if (serv == NULL)
+        return;
+    if (serv->tName != NULL) {
+        for (int i = 0; serv->tName[i] != NULL; i++)
+            free(serv->tName[i]);
+        free(serv->tName);
+    }
+    list_clear(&serv->client);
+    list_clear(&serv->teams);
+    if (serv->map != NULL)
+        free_map(serv);
+    free(serv);
 }
 
 void destroy_server(server_t *serv)

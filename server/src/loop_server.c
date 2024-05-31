@@ -22,26 +22,6 @@ static void zero_fds(fd_set *a, fd_set *b)
     FD_ZERO(b);
 }
 
-static bool add_client(server_t *serv)
-{
-    struct sockaddr_in clientAddr;
-    socklen_t clientSockLen = sizeof(clientAddr);
-    client_t *user = calloc(1, sizeof(client_t));
-
-    if (user == NULL)
-        return false;
-    user->fd =
-        accept(serv->socket, (struct sockaddr *) &clientAddr, &clientSockLen);
-    if (user->fd == -1) {
-        free(user);
-        return false;
-    }
-    list_add_elem_at_back(&serv->client, user);
-    strcpy(user->write_buffer, "WELCOME\n");
-    user->state = CREATED;
-    return (true);
-}
-
 static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
 {
     client_t *client;
@@ -77,23 +57,6 @@ static void remove_old_clients(server_t *serv)
     }
 }
 
-void destroy_client(client_t *client)
-{
-    size_t nb_cmds = 0;
-    char *cmd = NULL;
-
-    if (client == NULL)
-        return;
-    nb_cmds = list_get_size(client->cmds);
-    for (size_t i = 0; i != nb_cmds; i++) {
-        cmd = list_get_elem_at_position(client->cmds, i);
-        if (cmd == NULL)
-            continue;
-        free(cmd);
-    }
-    free(client);
-}
-
 int server_loop(server_t *serv)
 {
     struct timeval time = {0, (1.0f / (float) serv->freq) * 1000000};
@@ -104,7 +67,7 @@ int server_loop(server_t *serv)
     if (select(FD_SETSIZE, &fdset, &fdwset, NULL, &time) != -1) {
         send_buffered_data(serv, &fdwset);
         if (FD_ISSET(serv->socket, &fdset) != 0)
-            add_client(serv);
+            server_add_client(serv);
         read_client_data(serv, &fdset);
     }
     run_client_commands(serv);

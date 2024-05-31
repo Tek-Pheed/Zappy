@@ -5,12 +5,13 @@
 ** command_handler
 */
 
-#include "commands.h"
 #include <string.h>
+#include "commands.h"
 #include "server.h"
 #include "strings_array.h"
 
-bool run_gui(server_t *serv, client_t *client, const char *cmd, char **args)
+static bool run_gui(
+    server_t *serv, client_t *client, const char *cmd, char **args)
 {
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
         if (strncmp(gui_cmds[i].command, cmd, strlen(gui_cmds[i].command)) == 0
@@ -22,7 +23,8 @@ bool run_gui(server_t *serv, client_t *client, const char *cmd, char **args)
     return (true);
 }
 
-bool run_ai(server_t *serv, client_t *client, const char *cmd, const char *arg)
+static bool run_ai(
+    server_t *serv, client_t *client, const char *cmd, const char *arg)
 {
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))

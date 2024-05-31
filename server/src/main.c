@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     int retval = check_args(argc, argv, serv);
 
     if (retval != 0) {
-        free_struct(serv);
+        destroy_server(serv);
         return 84;
     }
     print_serv(serv);
@@ -102,17 +102,3 @@ int main(int argc, char *argv[])
     destroy_server(serv);
     return retval;
 }
-
-/*static void print_map(server_t *serv)
-{
-    for (int i = 0; i < serv->resX; ++i) {
-        for (int y = 0; y < serv->resY; ++y) {
-            printf("Cell (%d, %d): Food: %d, Linemate: %d, Deraumere: %d, "
-                   "Sibur: %d, Mendiane: %d, Phiras: %d, Thystame: %d\n",
-                i, y, serv->map[i][y].food, serv->map[i][y].stone[LINEMATE],
-                serv->map[i][y].stone[DERAUMERE], serv->map[i][y].stone[SIBUR],
-                serv->map[i][y].stone[MENDIANE], serv->map[i][y].stone[PHIRAS],
-                serv->map[i][y].stone[THYSTAME]);
-        }
-    }
-}*/

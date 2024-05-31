@@ -25,25 +25,25 @@ char *all_name(server_t *serv);
 char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
 char *player_inventory(server_t *serv, int p_index);
-char *conn_new_player(server_t *serv);
+char *event_conn_new_player(server_t *serv);
 
 char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
-char *ressource_drop(int p_index, int r_nb);
-char *ressource_collect(int p_index, int r_nb);
-char *egg_laying(int p_index);
-char *egg_laid(int egg_nb, int p_index, int x, int y);
-char *egg_death(int egg_nb);
-char *expulsion(int p_index);
-char *broadcast(int p_index, char *msg);
-char *end_incantation(int x, int y, char *result);
-char *player_death(int p_index);
-char *player_connection_egg(int p_index);
-char *end_game(char *winner);
-char *server_message(char *msg);
-char *unknow_command(void);
-char *command_parameter(void);
-char *start_incantation(player_t *player, int *p_nb, int size);
+char *event_ressource_drop(int p_index, int r_nb);
+char *event_ressource_collect(int p_index, int r_nb);
+char *event_egg_laying(int p_index);
+char *event_egg_laid(int egg_nb, int p_index, int x, int y);
+char *event_egg_death(int egg_nb);
+char *event_expulsion(int p_index);
+char *event_broadcast(int p_index, char *msg);
+char *event_end_incantation(int x, int y, char *result);
+char *event_player_death(int p_index);
+char *event_player_connection_egg(int p_index);
+char *event_end_game(char *winner);
+char *event_server_message(char *msg);
+char *event_unknow_command(void);
+char *event_command_parameter(void);
+char *event_start_incantation(player_t *player, int *p_nb, int size);
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
 bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);
@@ -67,7 +67,7 @@ bool ai_turn_left(
 // look around
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
-// broadcast
+// event_broadcast
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);

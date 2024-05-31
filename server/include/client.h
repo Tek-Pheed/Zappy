@@ -50,6 +50,7 @@ struct team_s {
 };
 team_t *get_team_client(server_t *serv, client_t *cli);
 int get_free_space_team(team_t *team);
+void destroy_client(client_t *client);
 
 struct egg_s {
     int x;

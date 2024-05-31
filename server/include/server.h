@@ -33,17 +33,16 @@ void parse_client_nb(server_t *serv, int flags[6]);
 void parse_res_y(server_t *serv, int flags[6]);
 void parse_res_x(server_t *serv, int flags[6]);
 void parse_port(server_t *serv, int flags[6]);
-void free_struct(server_t *serv);
 
+void destroy_server(server_t *serv);
 int server_loop(server_t *serv);
 int run_server(server_t *serv);
 int get_team_nb(server_t *serv);
 void server_send_data(client_t *client, const char *data);
-void destroy_server(server_t *serv);
-void send_login_answer(server_t *serv, client_t *client);
 
+bool server_add_client(server_t *serv);
 void server_send_data(client_t *client, const char *data);
-bool handle_login_request(server_t *serv, client_t *client, const char *cmd);
+bool handle_client_login(server_t *serv, client_t *client, const char *cmd);
 bool run_command(server_t *serv, client_t *client, const char *cmd);
 
 void handle_destroyed_clients(server_t *server);
