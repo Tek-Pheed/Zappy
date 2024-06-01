@@ -1,27 +1,49 @@
+import subprocess
 from sys import argv as av
 from ai.src.arguments import parse_args
 from ai.src.server import *
 from ai.src.response import *
 from ai.src.action import *
+from ai.src.player import Player
 
-args = parse_args(av[1:])
+class AI:
+    def __init__(self) -> None:
+        self.args = None
+        self.server: Server
+        self.player: Player
 
-server: Server = Server(args.h, args.p)
-create_team(args, server)
-player = dict()
-player["team"] = args.n
-inv = dict()
-player["inventory"] = inv
-while True:
-    res = send_request(server, "Inventory")
-    inv = get_inventory(res.split(","), inv)
-    arround = send_request(server, "Look")
-    arround = arround.replace("[", "")
-    arround = arround.replace(" ", "", 1)
-    arround = arround.replace("]", "")
-    arround = arround.replace("\n", "")
-    cases = get_case_around_player(arround.split(","))
-    get_food(cases, player, server)
-    print(inv)
+    def run(self, args):
+        self.server = Server(args.h, args.p)
+        message = ""
+        self.server.init_connection()
+        self.player = Player(args.n)
+        while True:
+            event = self.server.selectors.select(timeout=None)
+            for _, mask in event:
+                if mask & selectors.EVENT_READ:
+                    data = self.server.socket.recv(1024).decode("utf-8")
+                    if data:
+                        message += data
+                    else:
+                        self.server.selectors.unregister(self.server.socket)
+                        self.server.close_connection()
+                    tmp = data.split("\n")
+                    for elem in tmp[:-1]:
+                        if "dead" in elem:
+                            self.server.close_connection()
+                            exit(0)
+                        if "Inventory" in self.player.data_to_send:
+                            self.player.inventory = get_inventory(elem, self.player.inventory)
 
-server.close_connection()
+                if mask & selectors.EVENT_WRITE:
+                    if self.player.logged == False and self.player.team in self.player.data_to_send:
+                        self.player.logged = True
+                        self.server.socket.send(self.player.data_to_send.encode())
+                    else:
+                        subprocess.Popen(["python3", "zappy_ai","-p", str(self.args.p), "-n", self.args.n, "-h", self.args.h])
+
+if __name__ == "__main__":
+    ai: AI = AI()
+    ai.args = parse_args(av[1:])
+
+    ai.run(ai.args)
