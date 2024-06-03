@@ -11,7 +11,6 @@
 #include "list.h"
 #include "server.h"
 
-
 // clang-format off
 enum client_state {
     CREATED,
@@ -49,6 +48,7 @@ struct team_s {
     char *name;
     int nb_player;
     list_t *eggs;
+    int nb_level_max;
 };
 team_t *team_get_client(server_t *serv, client_t *cli);
 int team_get_free_space(team_t *team);
