@@ -12,12 +12,14 @@
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-bool InitWindowAndResources(int screenWidth, int screenHeight) {
+bool InitWindowAndResources(int screenWidth, int screenHeight)
+{
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
-void LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf) {
+void LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
+{
     model = LoadModel("assets/korok.glb");
     if (model.meshCount == 0) {
         std::cerr << "Erreur : Impossible de charger le modèle 'assets/korok.glb'" << std::endl;
@@ -60,7 +62,6 @@ void ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-
 void TextBoxForPort(Rectangle textBox, bool mouseOnText, char port[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter)
 {
     if (mouseOnText) {
@@ -69,32 +70,27 @@ void TextBoxForPort(Rectangle textBox, bool mouseOnText, char port[MAX_INPUT_CHA
         framesCounter = 0;
     }
 
-    BeginDrawing();
-        DrawText("Entry port", 1350, 140, 20, GRAY);
-        DrawRectangleRec(textBox, LIGHTGRAY);
-        if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
-        else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
-        DrawText(port, (int)textBox.x + 5, (int)textBox.y + 8, 40, MAROON);
+    DrawText("Entry port", 1350, 140, 20, GRAY);
+    DrawRectangleRec(textBox, LIGHTGRAY);
+    if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
+    else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
+    DrawText(port, (int)textBox.x + 5, (int)textBox.y + 8, 40, MAROON);
 
-        if (mouseOnText) {
-            if (letterCount < MAX_INPUT_CHARS) {
-                if (((framesCounter / 20) % 2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(port, 40), (int)textBox.y + 12, 40, MAROON);
-            } else {
-                DrawText("Press BACKSPACE to delete chars...", 230, 300, 20, GRAY);
-            }
+    if (mouseOnText) {
+        if (letterCount < MAX_INPUT_CHARS) {
+            if (((framesCounter / 20) % 2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(port, 40), (int)textBox.y + 12, 40, MAROON);
+        } else {
+            DrawText("Press BACKSPACE to delete chars...", 230, 300, 20, GRAY);
         }
-    EndDrawing();
+    }
 }
 
-
 void GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds) {
-    BeginDrawing();
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     DrawBoundingBox(bounds, GREEN);
     EndMode3D();
     DrawFPS(10, 10);
-    EndDrawing();
 }
 
 void LoopForTextbox(Rectangle textBox, bool &mouseOnText, char name[MAX_INPUT_CHARS + 1], int &letterCount, int &framesCounter)
@@ -105,19 +101,19 @@ void LoopForTextbox(Rectangle textBox, bool &mouseOnText, char name[MAX_INPUT_CH
     if (mouseOnText) {
         SetMouseCursor(MOUSE_CURSOR_IBEAM);
 
-        int key = GetCharPressed();
+        int key = GetKeyPressed();
         while (key > 0) {
             if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS)) {
                 name[letterCount] = (char)key;
                 name[letterCount + 1] = '\0';
                 letterCount++;
             }
-            key = GetCharPressed();
+            key = GetKeyPressed();
         }
 
         if (IsKeyDown(KEY_BACKSPACE)) {
             framesCounter++;
-            if (framesCounter % 10 == 0) {  // Adjust the delay to your needs
+            if (framesCounter % 5 == 0) {  // Adjust the delay to your needs
                 letterCount--;
                 if (letterCount < 0) letterCount = 0;
                 name[letterCount] = '\0';
@@ -185,7 +181,6 @@ void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position
         EndDrawing();
     }
 }
-
 
 void UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
 {
