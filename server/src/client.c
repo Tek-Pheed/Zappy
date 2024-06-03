@@ -69,16 +69,18 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
     strcpy(client->team_name, cmd);
     if (strncmp(cmd, "GRAPHIC", 7) == 0) {
         client->state = GRAPHICAL;
+        server_log(EVENT, client->fd, "logged in as GRAPHIC");
         return (true);
     }
     if (!create_player(serv, client, player_index)) {
-        printf("Unable to create player in team: %s\n", client->team_name);
+        server_log(WARNING, 0, "Unable to create player in team");
         client->state = CREATED;
         return (false);
     }
     client->state = AI;
     player_index++;
     send_login_answer(serv, client);
+    server_log(EVENT, client->fd, "logged in as AI");
     return (true);
 }
 
@@ -97,6 +99,7 @@ bool server_add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
+    server_log(EVENT, user->fd, "connection request");
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);

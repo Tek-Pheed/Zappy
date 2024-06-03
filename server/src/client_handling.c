@@ -73,8 +73,10 @@ void run_client_commands(server_t *serv)
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
-        if (!handle_commands(serv, client))
+        if (!handle_commands(serv, client)) {
             server_send_data(client, "ko\n");
+            server_log(WARNING, 0, "Unable to process command");
+        }
     }
 }
 
@@ -96,8 +98,10 @@ static void read_client(client_t *client)
     int ret =
         read(client->fd, client->read_buffer, sizeof(client->read_buffer));
 
+    server_log(RECEIVING, client->fd, client->read_buffer);
     if (ret < 1) {
         close(client->fd);
+        server_log(EVENT, client->fd, "logged out");
         client->fd = -1;
     }
 }

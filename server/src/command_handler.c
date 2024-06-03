@@ -5,6 +5,7 @@
 ** command_handler
 */
 
+#include <stdio.h>
 #include <string.h>
 #include "commands.h"
 #include "server.h"
@@ -16,9 +17,11 @@ static bool run_gui(
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
         if (strncmp(gui_cmds[i].command, cmd, strlen(gui_cmds[i].command)) == 0
             && (str_array_length(args) - 1) >= gui_cmds[i].nb_args) {
+            server_log(PROCESS, client->fd, cmd);
             return (gui_cmds[i].ptr.gui_ptr(serv, client, args));
         }
     }
+    server_log(WARNING, 0, "Unknown command");
     server_send_data(client, "suc\n");
     return (true);
 }
@@ -29,9 +32,11 @@ static bool run_ai(
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))
             == 0) {
+            server_log(PROCESS, client->fd, cmd);
             return (ai_cmds[i].ptr.ai_ptr(serv, client, arg));
         }
     }
+    server_log(WARNING, 0, "Unknown command");
     return (false);
 }
 

@@ -40,6 +40,7 @@ static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
     FD_SET(serv->socket, rfds);
 }
 
+// TODO: EVENT DEAD
 static void remove_old_clients(server_t *serv)
 {
     client_t *client = NULL;

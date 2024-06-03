@@ -44,7 +44,8 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/parsing_args.c                \
 		src/server.c                      \
 		src/game_update.c                 \
-		src/time_management.c
+		src/time_management.c             \
+		src/logger.c
 
 OBJ	=	$(SRC:.c=.o)
 
