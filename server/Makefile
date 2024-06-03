@@ -31,13 +31,14 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/gui_comm/player_msg.c         \
 		src/gui_comm/server_msg.c         \
 		src/gui_comm/time_msg.c           \
+		src/map/map.c                     \
+		src/map/egg.c                     \
 		src/teams_tool/teams_tool.c       \
 		src/main.c                        \
 		src/client_handling.c             \
 		src/client.c                      \
 		src/struct_fnc.c                  \
 		src/loop_server.c                 \
-		src/map.c                         \
 		src/networking.c                  \
 		src/command_handler.c             \
 		src/parsing_args.c                \

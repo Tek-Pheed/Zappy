@@ -49,9 +49,9 @@ struct team_s {
     int nb_player;
     list_t *eggs;
 };
-team_t *get_team_client(server_t *serv, client_t *cli);
-int get_free_space_team(team_t *team);
-void destroy_client(client_t *client);
+team_t *team_get_client(server_t *serv, client_t *cli);
+int team_get_free_space(team_t *team);
+void destroy_client(server_t *serv, client_t *client);
 
 struct egg_s {
     int x;
