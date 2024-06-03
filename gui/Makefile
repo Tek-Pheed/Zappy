@@ -7,7 +7,7 @@
 
 NAME    =   zappy_gui
 
-SRC		=	src/main.cpp
+SRC		=
 
 OBJ		=	$(SRC:.cpp=.o)
 
