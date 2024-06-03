@@ -29,7 +29,7 @@ static bool run_gui(
 static bool run_ai(
     server_t *serv, client_t *client, const char *cmd, const char *arg)
 {
-    for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
+    for (size_t i = 0; i != sizeof(ai_cmds) / sizeof(ai_cmds[0]); i++) {
         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))
             == 0) {
             server_log(PROCESS, client->fd, cmd);

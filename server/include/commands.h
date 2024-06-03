@@ -73,7 +73,7 @@ bool ai_turn_right(
 bool ai_turn_left(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
-// look around
+bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 // event_broadcast
@@ -102,8 +102,8 @@ static const struct command_handler_s ai_cmds[] = {
     {.command = "Eject", .nb_args = 0, .ptr = {.ai_ptr = ai_eject}},
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},
+    {.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look_around}},
 };
-//{.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look}},
 //{.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
 //{.command = "Incantation",
 //    .nb_args = 0,

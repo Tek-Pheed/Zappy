@@ -51,6 +51,7 @@ bool team_add_client(server_t *serv, client_t *client)
             list_del_elem_at_back(&team->eggs);
             client->player.x = egg->x;
             client->player.y = egg->y;
+            serv->map[egg->x][egg->y].nb_player_on += 1;
             free(egg);
             return (true);
         }
