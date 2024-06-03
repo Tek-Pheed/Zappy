@@ -18,10 +18,10 @@ int server_log(enum log_level level, int client_fd, const char *data)
             else
                 return (printf("\n"));
         case RECEIVING:
-            return (printf("[RECEIVED] from client %d: %s\n",
+            return (printf("[RECEIVED] from client %d: %s",
                 client_fd, data));
         case SENDING:
-            return (printf("[SENDING] to client %d: %s\n", client_fd, data));
+            return (printf("[SENDING] to client %d: %s", client_fd, data));
         case WARNING:
             return (printf("[WARNING]: %s\n", data));
         case PROCESS:
