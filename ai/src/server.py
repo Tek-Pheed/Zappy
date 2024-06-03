@@ -23,24 +23,7 @@ class Server:
             exit(84)
 
     def receive_message(self, buffer_size=1024):
-        print("test")
-        #if self.socket:
-#            try:
- #               readable, _, _ = select.select([self.socket], [], [], 1)
- #               if self.socket in readable:
- #                   data = self.socket.recv(buffer_size)
-  #                  if data:
- #                       return data.decode('utf-8')
-  #                  else:
-  #                      print("Connection closed by the server !")
-   #                     self.close_connection()
-   #                     return None
-   #         except Exception as e:
-                #print(f"Error: {e}")
-                #self.close_connection()
-                #exit(84)
-   #     else:
-            #print("Error: no connection")
+        return self.socket.recv(buffer_size).decode('utf-8')
 
     def send_message(self, command: str):
         if self.socket:
