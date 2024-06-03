@@ -18,8 +18,9 @@ bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
     if (!buff)
         return false;
     sprintf(buff,
-        "linemate %d, deraumere %d, sibur %d, mendiane %d, phiras %d, "
-        "thystame %d, food %d\n",
+        "[ food %d, linemate %d, deraumere %d, sibur %d, mendiane %d, phiras "
+        "%d, "
+        "thystame %d ]\n",
         cli->player.stone[LINEMATE], cli->player.stone[DERAUMERE],
         cli->player.stone[SIBUR], cli->player.stone[MENDIANE],
         cli->player.stone[PHIRAS], cli->player.stone[THYSTAME],
@@ -39,7 +40,7 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    int value = get_free_space_team(get_team_client(serv, cli));
+    int value = team_get_free_space(team_get_client(serv, cli));
     char str[12];
 
     memset(str, '\0', sizeof(str));
@@ -52,7 +53,7 @@ bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    team_t *tmp = get_team_client(serv, cli);
+    team_t *tmp = team_get_client(serv, cli);
     egg_t *egg = NULL;
 
     if (tmp == NULL)

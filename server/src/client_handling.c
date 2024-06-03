@@ -28,21 +28,16 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-static double get_milliseconds(struct timeval *tv)
-{
-    return (tv->tv_sec) * 1000.0 + (tv->tv_usec) / 1000.0;
-}
-
 static bool is_client_ready(server_t *serv, client_t *client)
 {
     struct timeval current_time;
-    double ready_time = get_milliseconds(&client->last_cmd_time)
+    double ready_time = timeval_get_milliseconds(&client->last_cmd_time)
         + (((double) client->cmd_duration / serv->freq) * 1000.0);
 
     if (client->state == GRAPHICAL)
         return (true);
     gettimeofday(&current_time, NULL);
-    return (ready_time < get_milliseconds(&current_time));
+    return (ready_time < timeval_get_milliseconds(&current_time));
 }
 
 static bool handle_commands(server_t *serv, client_t *client)
