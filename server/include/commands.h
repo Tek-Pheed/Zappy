@@ -103,11 +103,13 @@ static const struct command_handler_s ai_cmds[] = {
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},
     {.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look_around}},
+    {.command = "Incantation", .nb_args = 0, .ptr = {.ai_ptr = ai_elevation}},
+    {.command = "EndIncantationServer",
+        .nb_args = 0,
+        .ptr = {.ai_ptr = ai_end_elevation}},
 };
 //{.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
-//{.command = "Incantation",
-//    .nb_args = 0,
-//    .ptr = {.ai_ptr = ai_start_incantation}}
+//
 
 static const struct command_handler_s gui_cmds[] = {
     {.command = "msz", .nb_args = 0, .ptr = {.gui_ptr = gui_map_size}},

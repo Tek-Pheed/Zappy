@@ -103,6 +103,7 @@ bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
     }
     cli->cmd_duration = 300;
     gettimeofday(&cli->last_cmd_time, NULL);
+    list_add_elem_at_position(&cli->cmds, strdup("EndIncantationServer\n"), 2);
     return val;
 }
 
