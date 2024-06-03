@@ -13,10 +13,6 @@ Zappy::TextInput::TextInput(float x, float y, float width, float height)
 void Zappy::TextInput::UpdateInput() {
     if (CheckCollisionPointRec(GetMousePosition(), bounds)) {
         mouseOnText = true;
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            letterCount = 0;
-            text.clear();
-        }
     } else {
         mouseOnText = false;
     }
@@ -33,7 +29,9 @@ void Zappy::TextInput::UpdateInput() {
 
         if (IsKeyPressed(KEY_BACKSPACE)) {
             letterCount--;
-            if (letterCount < 0) letterCount = 0;
+            if (letterCount < 0) {
+                letterCount = 0;
+            }
             if (!text.empty()) {
                 text.pop_back();
             }
@@ -42,7 +40,8 @@ void Zappy::TextInput::UpdateInput() {
     framesCounter++;
 }
 
-void Zappy::TextInput::DrawInput() {
+void Zappy::TextInput::DrawInput()
+{
     DrawRectangleRec(bounds, LIGHTGRAY);
     if (mouseOnText) {
         DrawRectangleLines(bounds.x, bounds.y, bounds.width, bounds.height, WHITE);
@@ -56,6 +55,7 @@ void Zappy::TextInput::DrawInput() {
         DrawText("_", bounds.x + 5 + textWidth, bounds.y + 7, 40, BLACK);
     }
 }
+
 std::string Zappy::TextInput::GetText() const {
     return text;
 }

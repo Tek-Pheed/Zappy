@@ -10,6 +10,7 @@ NAME    =   zappy_gui
 SRC		=	src/main.cpp	\
 			src/Draw.cpp	\
 			src/Input.cpp	\
+			src/ConfirmButton.cpp	\
 
 OBJ		=	$(SRC:.cpp=.o)
 

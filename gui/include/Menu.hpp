@@ -19,6 +19,11 @@ namespace Zappy {
         SETTINGS,
     };
 
+    enum Shape {
+        RECTANGLE,
+        CIRCLE_SHAPE
+    };
+
 class Menu {
 
 #define MAX_INPUT_CHARS     9
@@ -59,5 +64,10 @@ class TextInput {
         int letterCount;
         bool mouseOnText;
         int framesCounter;
-};
+    };
+
+class ConfirmButton {
+    public:
+        bool createButton(float width, float height, float posX, float posY, float borderThickness, Color borderColor, Color hoverColor, Color pressColor, const char* text, float textSize, Color textColor, Shape shape, bool &clicked);
+    };
 }
