@@ -40,7 +40,6 @@ static void set_fd(server_t *serv, fd_set *rfds, fd_set *wfds)
     FD_SET(serv->socket, rfds);
 }
 
-// TODO: EVENT DEAD
 static void remove_old_clients(server_t *serv)
 {
     client_t *client = NULL;
@@ -52,6 +51,7 @@ static void remove_old_clients(server_t *serv)
         if (client == NULL)
             continue;
         if (client->state == AI && client->player.is_dead){
+            event_player_death(serv, client);
             close(client->fd);
             client->fd = -1;
         }
@@ -63,29 +63,10 @@ static void remove_old_clients(server_t *serv)
     }
 }
 
-static void send_win(server_t *serv, const char *win_msg)
-{
-    size_t client_nb = list_get_size(serv->client);
-    client_t *client = NULL;
-
-    for (size_t i = 0; i != client_nb; i++) {
-        client = list_get_elem_at_position(serv->client, i);
-        if (client == NULL || client->state != GRAPHICAL)
-            continue;
-        server_send_data(client, win_msg);
-    }
-}
-
 static bool check_win(server_t *serv)
 {
-    char *win_buff = NULL;
-
     if (serv->winner != NULL) {
-        win_buff = event_end_game(serv->winner);
-        if (win_buff == NULL)
-            return (false);
-        send_win(serv, win_buff);
-        free(win_buff);
+        event_end_game(serv, serv->winner);
         return (true);
     }
     return (false);

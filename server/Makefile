@@ -25,12 +25,13 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/ai_comm/ai_elevation.c        \
 		src/gui_comm/gui_comm.c           \
 		src/gui_comm/gui_comm2.c          \
-		src/gui_comm/item_msg.c           \
 		src/gui_comm/map_team_msg.c       \
-		src/gui_comm/player_event_msg.c   \
 		src/gui_comm/player_msg.c         \
-		src/gui_comm/server_msg.c         \
 		src/gui_comm/time_msg.c           \
+		src/events/item_msg.c             \
+		src/events/player_event_msg.c     \
+		src/events/player_events.c        \
+		src/events/server_msg.c           \
 		src/map/map.c                     \
 		src/map/egg.c                     \
 		src/teams_tool/teams_tool.c       \

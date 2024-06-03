@@ -19,6 +19,13 @@ struct command_handler_s {
     } ptr;
 };
 
+struct ivect2D_s {
+    int x;
+    int y;
+};
+
+typedef struct ivect2D_s ivect2D_t;
+
 char *tile_content(server_t *serv, int x, int y);
 char *all_content(server_t *serv);
 char *all_name(server_t *serv);
@@ -29,21 +36,23 @@ char *event_conn_new_player(server_t *serv);
 
 char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
-char *event_ressource_drop(int p_index, int r_nb);
-char *event_ressource_collect(int p_index, int r_nb);
-char *event_egg_laying(int p_index);
-char *event_egg_laid(int egg_nb, int p_index, int x, int y);
-char *event_egg_death(int egg_nb);
-char *event_expulsion(int p_index);
-char *event_broadcast(int p_index, char *msg);
-char *event_end_incantation(int x, int y, char *result);
-char *event_player_death(int p_index);
-char *event_player_connection_egg(int p_index);
-char *event_end_game(char *winner);
-char *event_server_message(char *msg);
-char *event_unknow_command(void);
-char *event_command_parameter(void);
-char *event_start_incantation(player_t *player, int *p_nb, int size);
+void event_ressource_drop(server_t *serv, client_t *client, int r_nb);
+void event_ressource_collect(server_t *serv, client_t *client, int r_nb);
+void event_egg_laying(server_t *serv, client_t *client);
+void event_egg_laid(
+    server_t *serv, client_t *client, int egg_nb, const ivect2D_t *pos);
+void event_egg_death(server_t *serv, client_t *client, int egg_nb);
+void event_expulsion(server_t *serv, client_t *client);
+void event_broadcast(server_t *serv, client_t *client, char *msg);
+void event_end_incantation(server_t *serv, client_t *client,
+    const ivect2D_t *pos, const char *result);
+void event_player_death(server_t *serv, client_t *client);
+void event_player_connection_egg(server_t *serv, client_t *client);
+void event_end_game(server_t *serv, const char *winner);
+void event_server_message(server_t *serv, const char *msg);
+void event_unknow_command(client_t *client);
+void event_command_parameter(client_t *client);
+void event_start_incantation(player_t *player, int *p_nb, int size);
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
 bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);
