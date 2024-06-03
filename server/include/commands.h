@@ -93,8 +93,8 @@ static const struct command_handler_s ai_cmds[] = {
     {.command = "Eject", .nb_args = 0, .ptr = {.ai_ptr = ai_eject}},
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},
+    {.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look_around}},
 };
-//{.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look}},
 //{.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
 //{.command = "Incantation",
 //    .nb_args = 0,

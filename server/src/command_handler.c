@@ -26,7 +26,7 @@ static bool run_gui(
 static bool run_ai(
     server_t *serv, client_t *client, const char *cmd, const char *arg)
 {
-    for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
+    for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]) + 1; i++) {
         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))
             == 0) {
             return (ai_cmds[i].ptr.ai_ptr(serv, client, arg));

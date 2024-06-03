@@ -15,7 +15,6 @@ static cell_t *get_case(server_t *serv, int x, int y)
 {
     x = x < 0 ? serv->resX + x : x;
     y = y < 0 ? serv->resY + y : y;
-
     return &serv->map[x % serv->resX][y % serv->resY];
 }
 
@@ -56,7 +55,7 @@ static char *get_items_on_cell(cell_t *cell)
     return strdup(buff);
 }
 
-static char *create_message(server_t *serv, cell_t *cell)
+static char *create_message(cell_t *cell)
 {
     char buff[BUFFER_MAX_SIZE * 49];
     char *ptr = buff;
@@ -73,6 +72,7 @@ static char *create_message(server_t *serv, cell_t *cell)
 
 bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
+    printf("LOOK\n");
     char buff[BUFFER_MAX_SIZE * 50];
     cell_t *cell = NULL;
     char *ptr = buff;
@@ -82,7 +82,7 @@ bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj)
     for (int i = 0; i <= cli->player.level; i++) {
         for (int j = 0; j < i * 2 + 1; j++) {
             cell = get_current_case(serv, cli, i, j - i);
-            items = create_message(serv, cell);
+            items = create_message(cell);
             ptr += sprintf(ptr, "%s, ", items);
             free(items);
         }
