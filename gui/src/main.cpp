@@ -12,13 +12,16 @@
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-bool InitWindowAndResources(int screenWidth, int screenHeight)
+Zappy::Menu::Menu(){}
+Zappy::Menu::~Menu(){}
+
+bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
-void LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
+void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
 {
     model = LoadModel("assets/korok.glb");
     if (model.meshCount == 0) {
@@ -53,7 +56,8 @@ void LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_lea
     }
 }
 
-void ConfigureCamera(Camera &camera) {
+void Zappy::Menu::ConfigureCamera(Camera &camera)
+{
     camera = { 0 };
     camera.position = (Vector3){ 0.0f, 2.0f, 25.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
@@ -62,30 +66,8 @@ void ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void TextBoxForPort(Rectangle textBox, bool mouseOnText, char port[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter)
+void Zappy::Menu::GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds)
 {
-    if (mouseOnText) {
-        framesCounter++;
-    } else {
-        framesCounter = 0;
-    }
-
-    DrawText("Entry port", 1350, 140, 20, GRAY);
-    DrawRectangleRec(textBox, LIGHTGRAY);
-    if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, RED);
-    else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, DARKGRAY);
-    DrawText(port, (int)textBox.x + 5, (int)textBox.y + 8, 40, MAROON);
-
-    if (mouseOnText) {
-        if (letterCount < MAX_INPUT_CHARS) {
-            if (((framesCounter / 20) % 2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(port, 40), (int)textBox.y + 12, 40, MAROON);
-        } else {
-            DrawText("Press BACKSPACE to delete chars...", 230, 300, 20, GRAY);
-        }
-    }
-}
-
-void GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds) {
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     DrawBoundingBox(bounds, GREEN);
@@ -93,42 +75,7 @@ void GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds)
     DrawFPS(10, 10);
 }
 
-void LoopForTextbox(Rectangle textBox, bool &mouseOnText, char name[MAX_INPUT_CHARS + 1], int &letterCount, int &framesCounter)
-{
-    if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
-    else mouseOnText = false;
-
-    if (mouseOnText) {
-        SetMouseCursor(MOUSE_CURSOR_IBEAM);
-
-        int key = GetKeyPressed();
-        while (key > 0) {
-            if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS)) {
-                name[letterCount] = (char)key;
-                name[letterCount + 1] = '\0';
-                letterCount++;
-            }
-            key = GetKeyPressed();
-        }
-
-        if (IsKeyDown(KEY_BACKSPACE)) {
-            framesCounter++;
-            if (framesCounter % 5 == 0) {  // Adjust the delay to your needs
-                letterCount--;
-                if (letterCount < 0) letterCount = 0;
-                name[letterCount] = '\0';
-            }
-        } else {
-            framesCounter = 0;
-        }
-    } else {
-        SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-    }
-
-    TextBoxForPort(textBox, mouseOnText, name, letterCount, framesCounter);
-}
-
-void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
     SetTargetFPS(60);
     bool playClicked = false;
@@ -136,7 +83,7 @@ void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position
     bool exitClicked = false;
     char port[MAX_INPUT_CHARS + 1] = "\0";
     int letterCount = 0;
-    Rectangle textBox = { 1350, 200, 225, 50 };
+    Rectangle textBox = { 1350, 200, 320, 50 };
     bool mouseOnText = false;
     int framesCounter = 0;
 
@@ -182,7 +129,7 @@ void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position
     }
 }
 
-void UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
+void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
 {
     UnloadTexture(texture_body);
     UnloadTexture(texture_leaf);
@@ -196,26 +143,27 @@ int main(void)
     const int screenHeight = 1080;
     Model model;
     Zappy::Draw draw;
+    Zappy::Menu menu;
     Texture2D texture_body, texture_leaf;
 
-    if (!InitWindowAndResources(screenWidth, screenHeight)) {
+    if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les ressources." << std::endl;
         return 1;
     }
 
-    LoadResources(model, texture_body, texture_leaf);
+    menu.LoadResources(model, texture_body, texture_leaf);
 
     Camera camera;
-    ConfigureCamera(camera);
+    menu.ConfigureCamera(camera);
 
     Vector3 position = { 0.0f, 0.0f, 0.0f };
     BoundingBox bounds = GetMeshBoundingBox(model.meshes[0]);
 
     Texture2D background = LoadTexture("assets/background.png");
 
-    MainLoop(model, background, camera, position, bounds, draw);
+    menu.MainLoop(model, background, camera, position, bounds, draw);
 
-    UnloadResources(model, texture_body, texture_leaf);
+    menu.UnloadResources(model, texture_body, texture_leaf);
 
     return 0;
 }
