@@ -7,7 +7,8 @@
 
 NAME    =   zappy_gui
 
-SRC		=	src/main.cpp
+SRC		=	src/main.cpp	\
+			src/Draw.cpp	\
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -26,7 +27,7 @@ $(NAME): $(OBJ)
 all: $(NAME)
 
 clean:
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(OBJ)
 
 fclean: clean
 
