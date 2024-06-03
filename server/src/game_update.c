@@ -14,30 +14,11 @@
 #include "commands.h"
 #include "server.h"
 
-static void notify_clients(
-    server_t *serv, enum client_state type, const char *message)
-{
-    client_t *client = NULL;
-    size_t client_nb = list_get_size(serv->client);
-
-    for (size_t i = 0; i != client_nb; i++) {
-        client = list_get_elem_at_position(serv->client, i);
-        if (client == NULL || client->state != type)
-            continue;
-        server_send_data(client, message);
-    }
-}
-
 static void check_player_death(server_t *serv, client_t *client)
 {
-    char *buff = NULL;
-
     if (client->player.food <= 0) {
-        buff = event_player_death(client->player.number);
-        notify_clients(serv, GRAPHICAL, buff);
+        event_player_death(serv, client);
         client->player.is_dead = true;
-        server_send_data(client, "dead\n");
-        free(buff);
         return;
     }
 }

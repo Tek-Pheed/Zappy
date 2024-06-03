@@ -11,6 +11,7 @@
 #include "list.h"
 #include "server.h"
 
+
 // clang-format off
 enum client_state {
     CREATED,
@@ -59,3 +60,6 @@ struct egg_s {
     team_t *team;
 };
 void check_lvl_player(server_t *serv);
+
+void server_event_send_many(
+    server_t *serv, enum client_state client_target, const char *buff);

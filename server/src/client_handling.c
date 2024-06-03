@@ -12,6 +12,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "commands.h"
 #include "list.h"
 #include "server.h"
 #include "strings_array.h"
@@ -73,10 +74,8 @@ void run_client_commands(server_t *serv)
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
-        if (!handle_commands(serv, client)) {
-            server_send_data(client, "ko\n");
-            server_log(WARNING, 0, "Unable to process command");
-        }
+        if (!handle_commands(serv, client))
+            event_unknow_command(client);
     }
 }
 
