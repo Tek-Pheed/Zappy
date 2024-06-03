@@ -11,6 +11,8 @@ $(NAME):
 	@echo "#!/usr/bin/env python3" > $(NAME)
 	@cat src/ai.py >> $(NAME)
 	@chmod 755 $(NAME)
+	@cp $(NAME) ../
+	@echo "Zappy-ai ✔"
 
 all:	$(NAME)
 
