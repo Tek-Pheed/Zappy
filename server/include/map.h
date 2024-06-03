@@ -18,3 +18,4 @@ struct cell_s {
 cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);
 char *map_size(server_t *serv);
+void create_teams_eggs(server_t *serv);

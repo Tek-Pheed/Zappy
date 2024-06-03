@@ -40,7 +40,7 @@ bool run_command(server_t *serv, client_t *client, const char *cmd)
     bool retval = true;
     char **args = str_to_array(cmd, " ", 4);
 
-    if (client->state == AI) {
+    if (client->state == AI && !client->player.is_dead) {
         retval = run_ai(serv, client, cmd, args[1]);
     } else {
         run_gui(serv, client, cmd, args);
