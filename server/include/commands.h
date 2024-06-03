@@ -32,10 +32,10 @@ char *all_name(server_t *serv);
 char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
 char *player_inventory(server_t *serv, int p_index);
-char *event_conn_new_player(server_t *serv);
 
 char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
+void event_connnew_player(server_t *serv, client_t *client);
 void event_ressource_drop(server_t *serv, client_t *client, int r_nb);
 void event_ressource_collect(server_t *serv, client_t *client, int r_nb);
 void event_egg_laying(server_t *serv, client_t *client);
@@ -44,15 +44,16 @@ void event_egg_laid(
 void event_egg_death(server_t *serv, client_t *client, int egg_nb);
 void event_expulsion(server_t *serv, client_t *client);
 void event_broadcast(server_t *serv, client_t *client, char *msg);
-void event_end_incantation(server_t *serv, client_t *client,
-    const ivect2D_t *pos, const char *result);
 void event_player_death(server_t *serv, client_t *client);
 void event_player_connection_egg(server_t *serv, client_t *client);
 void event_end_game(server_t *serv, const char *winner);
 void event_server_message(server_t *serv, const char *msg);
 void event_unknow_command(client_t *client);
 void event_command_parameter(client_t *client);
-void event_start_incantation(player_t *player, int *p_nb, int size);
+void event_start_incantation(
+    server_t *serv, client_t *client, int *p_nb, int size);
+void event_end_incantation(server_t *serv, client_t *client,
+    const ivect2D_t *pos, const char *result);
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
 bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);

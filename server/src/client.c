@@ -14,6 +14,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
+#include "commands.h"
 #include "define.h"
 #include "list.h"
 #include "server.h"
@@ -74,13 +75,12 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
     }
     if (!create_player(serv, client, player_index)) {
         server_log(WARNING, 0, "Unable to create player in team");
-        client->state = CREATED;
         return (false);
     }
     client->state = AI;
     player_index++;
     send_login_answer(serv, client);
-    server_log(EVENT, client->fd, "logged in as AI");
+    event_connnew_player(serv, client);
     return (true);
 }
 
@@ -99,7 +99,7 @@ bool server_add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
-    server_log(EVENT, user->fd, "connection request");
+    server_log(INFO, user->fd, "user connection request");
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);
