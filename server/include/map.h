@@ -13,6 +13,8 @@ struct cell_s {
     int food;
     int stone[6];
     int nb_player_on;
+    int x;
+    int y;
 };
 
 cell_t **create_map(server_t *serv);
