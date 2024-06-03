@@ -9,8 +9,7 @@ NAME    =   zappy_gui
 
 SRC		=	src/main.cpp	\
 			src/Draw.cpp	\
-			src/PortInput.cpp	\
-			src/IpInput.cpp	\
+			src/Input.cpp	\
 
 OBJ		=	$(SRC:.cpp=.o)
 
