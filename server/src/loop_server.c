@@ -51,7 +51,6 @@ static void remove_old_clients(server_t *serv)
         if (client == NULL)
             continue;
         if (client->state == AI && client->player.is_dead){
-            event_player_death(serv, client);
             close(client->fd);
             client->fd = -1;
         }
