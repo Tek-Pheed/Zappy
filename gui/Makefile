@@ -10,6 +10,7 @@ NAME    =   zappy_gui
 SRC		= src/main.cpp \
 		  src/Utils.cpp \
 		  src/Draw.cpp \
+		  src/Settings.cpp \
 		  src/AItems.cpp \
 		  src/Items/Food.cpp \
 		  src/Items/Deraumere.cpp \
