@@ -10,13 +10,25 @@
 namespace Zappy {
 
     Draw::Draw(){}
+
     Draw::~Draw(){}
-    void Draw::drawRectangle(){}
-    void Draw::drawCircle(){}
+
+    void Draw::drawRectangle(float sizeX, float sizeY, float posX, float posY, Color clr)
+    {
+        Rectangle rect = {posX, posY, sizeX, sizeY};
+        DrawRectangleRec(rect, clr);
+    }
+
+    void Draw::drawCircle(float posX, float posY, int r, Color clr)
+    {
+        Vector2 circle = {posX, posY};
+        DrawCircleV(circle, r, clr);
+    }
+
     void Draw::drawPlateform3d(){}
     void Draw::draw3DModel(){}
 
-    void Draw::createButton(float sizeX, float sizeY, float posX, float posY, int r, Color buttonColor, Color hoverColor, Color clickColor, std::string name, int fontSize, Color txtColor, ButtonShape shape, bool &clicked)
+    void Draw::createButton(float sizeX, float sizeY, float posX, float posY, int r, Color buttonColor, Color hoverColor, Color clickColor, std::string name, int fontSize, Color txtColor, ButtonShape shape, int &clicked)
     {
         Vector2 mousePos = GetMousePosition();
         bool mouseOverButton;
@@ -42,7 +54,7 @@ namespace Zappy {
             if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
                 color = clickColor;
             else if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
-                clicked = !clicked;
+                clicked = (clicked == 1 ? 0 : 1);
             else
                 color = hoverColor;
         } else {
@@ -52,7 +64,39 @@ namespace Zappy {
             DrawCircleV(buttonPosC, r, color);
         else
             DrawRectangleRec(buttonPosR, color);
-        if (name.c_str() != "")
+        if (name != "")
             DrawTextEx(GetFontDefault(), name.c_str(), (Vector2){textX, textY}, fontSize, 1, txtColor);
     }
+}
+
+void Zappy::Draw::createDropdownList(int sizeX, int sizeY, int posX, int posY, Color buttonColor, Color hoverColor, Color clickColor, Color txtColor, int fontSize, std::deque<int> &clickedList, std::queue<std::string> nameList)
+{
+    int newPosX = posX;
+    int newPosY = posY;
+
+    for (size_t i = 0; i < clickedList.size(); i++) {
+        createButton(sizeX, sizeY, newPosX, newPosY, 0, buttonColor, hoverColor, clickColor, nameList.front(), fontSize, txtColor, ButtonShape::RECT, clickedList.at(i));
+        newPosY = newPosY + sizeY;
+        nameList.pop();
+    }
+}
+
+void Zappy::Draw::drawTextClick(float posX, float posY, int fontSize, Color txtClr, Color hoverColor, Color clickColor, std::string txt, int &clicked)
+{
+    bool mouseOverButton;
+    Vector2 txtSizeV = MeasureTextEx(GetFontDefault(), txt.c_str(), fontSize, 1);
+    Rectangle rect = {posX, posY, txtSizeV.x, txtSizeV.y};
+    Color color;
+
+    mouseOverButton = CheckCollisionPointRec(GetMousePosition(), rect);
+    if (mouseOverButton) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+            color = clickColor;
+        else if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+            clicked = (clicked == 1 ? 0 : 1);
+        else
+            color = hoverColor;
+    } else
+        color = txtClr;
+    DrawTextEx(GetFontDefault(), txt.c_str(), (Vector2){posX, posY}, fontSize, 1, color);
 }
