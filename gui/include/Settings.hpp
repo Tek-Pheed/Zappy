@@ -6,26 +6,34 @@
 */
 
 #pragma once
+#include <queue>
+#include "raylib.h"
+#include "Draw.hpp"
 
 namespace Zappy {
-class Settings {
-    public:
-        Settings();
-        ~Settings();
-        void setSound(int sound);
-        int getSound();
-        void setResolution(_resolution resolution);
-        _resolution getResolution();
 
-    protected:
-    private:
-        int _sound;
-};
+    enum Resolution {
+        RES_1920_1080,
+        RES_1280_720,
+        RES_800_600,
+        RES_640_480
+    };
+    class Settings {
+        public:
+            Settings();
+            ~Settings();
+            void setSound(int sound);
+            int getSound();
+            void setResolution(Resolution resolution);
+            void manageSettingsButton(bool &isClick, bool &resIsClick, Music music, double &volume);
+            void manageSoundMusic(Music music, Draw d, double &volume);
+            void changeResolution(std::deque<int> resClick);
+            void manageResolution(Draw d, bool &resIsClick);
+            Resolution getResolution();
+            void openSettingsInterface();
 
-enum _resolution {
-    RES_1920_1080 = 0,
-    RES_1280_720 = 1,
-    RES_800_600 = 2,
-    RES_640_480 = 3
-};
+        private:
+            int _sound;
+            Resolution _resolution;
+    };
 }

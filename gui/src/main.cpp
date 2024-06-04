@@ -7,8 +7,8 @@
 
 #include <iostream>
 #include "raylib.h"
-#include "../include/Menu.hpp"
-#include "../include/Draw.hpp"
+#include "Menu.hpp"
+#include "Draw.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
