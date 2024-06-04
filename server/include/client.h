@@ -58,8 +58,10 @@ struct egg_s {
     int x;
     int y;
     team_t *team;
+    int number;
 };
 void check_lvl_player(server_t *serv);
 
 void server_event_send_many(
     server_t *serv, enum client_state client_target, const char *buff);
+egg_t *create_egg(int x, int y, team_t *team);
