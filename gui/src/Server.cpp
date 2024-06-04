@@ -20,9 +20,7 @@ Zappy::Server::Server(int port, char *ip)
     _sock = socket(AF_INET, SOCK_STREAM, 0);
     _server_addr.sin_family = AF_INET;
     _server_addr.sin_port = htons(port);
-    char buffer[1025];
 
-    _buffer = buffer;
     inet_pton(AF_INET, ip, &_server_addr.sin_addr) <= 0;
     int result = connect(_sock, (struct sockaddr*)&_server_addr, sizeof(_server_addr)); //class error
     printf("%i\n", result);
@@ -46,17 +44,28 @@ std::queue<std::string> Zappy::Server::splitData(std::string data)
     std::stringstream ss(data);
     std::string word;
 
-    printf("%s\n", data);
+    // printf("%s\n", data);
     while (ss >> word) {
         tmpQueue.push(word);
     }
     return tmpQueue;
 }
 
-void Zappy::Server::parseBuffer()
+void Zappy::Server::messConnect()
+{
+    std::string message = "GRAPHIC";
+
+    FD_SET(_sock, &_writefds);
+    int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
+    if (FD_ISSET(_sock, &_writefds)){
+        write(_sock, message.c_str(), message.length());
+    }
+}
+
+void Zappy::Server::parseBuffer(char *buffer)
 {
     // std::string buffer(_buffer);
-    std::stringstream c(_buffer);
+    std::stringstream c(buffer);
     std::string data;
 
     while (std::getline(c, data)) {
@@ -69,13 +78,13 @@ void Zappy::Server::parseBuffer()
 void Zappy::Server::receiveMess()
 {
     int bit_read = 0;
+    char buffer[1024];
 
     FD_SET(_sock, &_readfds);
     int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
     if (FD_ISSET(_sock, &_readfds)){
-        bit_read = read(_sock, _buffer, 1024);
-        printf("%i\n", bit_read);
-        parseBuffer();
+        bit_read = read(_sock, buffer, 1023);
+        parseBuffer(buffer);
     }
 }
 

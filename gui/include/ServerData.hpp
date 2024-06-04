@@ -7,32 +7,33 @@
 
 #pragma once
 
+#include <arpa/inet.h>
+#include <fcntl.h>
 #include <iostream>
+#include <queue>
 #include <string>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <queue>
 
-namespace Zappy {
-class Server
+namespace Zappy
 {
-private:
-    int _sock;
-    char *_buffer;
-    fd_set _readfds;
-    fd_set _writefds;
-    bool _isconnect;
-    struct sockaddr_in _server_addr;
-    std::queue<std::queue<std::string>> _data;
-    void parseBuffer();
-    std::queue<std::string> splitData(std::string data);
-public:
-    Server(int port, char *ip);
-    ~Server();
-    bool getIsconnect();
-    void receiveMess();
-    std::queue<std::queue<std::string>> getData();
-};
-}
+    class Server {
+      private:
+        int _sock;
+        fd_set _readfds;
+        fd_set _writefds;
+        bool _isconnect;
+        struct sockaddr_in _server_addr;
+
+      public:
+        Server(int port, char *ip);
+        ~Server();
+        bool getIsconnect();
+        void receiveMess();
+        void messConnect();
+        void parseBuffer(char *buffer);
+        std::queue<std::string> splitData(std::string data);
+        std::queue<std::queue<std::string>> _data;
+        std::queue<std::queue<std::string>> getData();
+    };
+} // namespace Zappy
