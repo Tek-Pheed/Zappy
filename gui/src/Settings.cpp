@@ -32,20 +32,13 @@ Zappy::Resolution Zappy::Settings::getResolution()
     return _resolution;
 }
 
-void Zappy::Settings::manageSettingsButton(bool &isClick, bool &resIsClick, Music music, double &volume)
+void Zappy::Settings::manageSettingsButton(bool &resIsClick, Music music, double &volume)
 {
     Draw d;
-    int Settingsclick = 0;
-
-    d.createButton(70, 50, 10, 10, 0, GRAY, LIGHTGRAY, DARKGRAY, "Settings", 10, BLACK, ButtonShape::RECT, Settingsclick);
-    if (Settingsclick)
-        isClick = !isClick;
-    if (isClick) {
-        d.drawRectangle(250, 300, 400, 100, GRAY);
-        manageResolution(d, resIsClick);
-        if (!resIsClick)
-            manageSoundMusic(music, d, volume);
-    }
+    d.drawRectangle(250, 300, 400, 100, GRAY);
+    manageResolution(d, resIsClick);
+    if (!resIsClick)
+        manageSoundMusic(music, d, volume);
 }
 
 void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
