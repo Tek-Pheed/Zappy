@@ -42,3 +42,25 @@ void event_player_inventory(server_t *serv, client_t *client)
     server_event_send_many(serv, GRAPHICAL, buff);
     free(buff);
 }
+
+void event_teams_names(server_t *serv, client_t *client)
+{
+    char *buff = all_name(serv);
+
+    if (buff == NULL)
+        return;
+    server_send_data(client, buff);
+    server_log(INFO, client->fd, "Sending team names");
+    free(buff);
+}
+
+void event_tile_update(server_t *serv, int x, int y)
+{
+    char *tile = tile_content(serv, x, y);
+
+    if (tile == NULL)
+        return;
+    server_event_send_many(serv, GRAPHICAL, tile);
+    server_log(INFO, 0, "Send update tile");
+    free(tile);
+}

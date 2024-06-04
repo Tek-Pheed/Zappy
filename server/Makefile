@@ -30,6 +30,7 @@ SRC	=	libs/list/list_generic_del.c      \
 		src/gui_comm/player_msg.c         \
 		src/gui_comm/time_msg.c           \
 		src/events/gui_update.c           \
+		src/events/gui_update2.c          \
 		src/events/item_msg.c             \
 		src/events/player_event_msg.c     \
 		src/events/player_events.c        \

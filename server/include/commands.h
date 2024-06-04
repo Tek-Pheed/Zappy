@@ -58,6 +58,10 @@ void event_end_incantation(server_t *serv, client_t *client,
 void event_player_position(server_t *serv, client_t *client);
 void event_player_level(server_t *serv, client_t *client);
 void event_player_inventory(server_t *serv, client_t *client);
+void event_teams_names(server_t *serv, client_t *client);
+void event_tile_update(server_t *serv, int x, int y);
+void event_update_map(server_t *serv);
+void event_time_modif(server_t *serv);
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
 bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);

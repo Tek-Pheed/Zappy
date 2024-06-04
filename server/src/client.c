@@ -64,6 +64,8 @@ static bool create_player(server_t *serv, client_t *client, int index)
 static void send_initial_gui_data(server_t *serv, client_t *client)
 {
     server_log(EVENT, client->fd, "logged in as GRAPHIC");
+    event_teams_names(serv, client);
+    gui_get_time_unit(serv, client, NULL);
     gui_map_size(serv, client, NULL);
     gui_map_content(serv, client, NULL);
 }
