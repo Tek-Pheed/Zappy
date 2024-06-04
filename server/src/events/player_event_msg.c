@@ -48,7 +48,7 @@ void event_player_death(server_t *serv, client_t *client)
 
     memset(buff, 0, sizeof(buff));
     server_log(EVENT, client->fd, "player dead");
-    sprintf(buff, "pdi %d\n", client->player.number);
+    sprintf(buff, "pdi #%d\n", client->player.number);
     server_send_data(client, "dead\n");
     server_event_send_many(serv, GRAPHICAL, buff);
 }
