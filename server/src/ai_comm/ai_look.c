@@ -36,6 +36,7 @@ static char *get_items_on_cell(cell_t *cell)
     char buff[DEFAULT_BUFFER_SIZE * 5];
     char *ptr = buff;
 
+    memset(buff, 0, sizeof(buff));
     if (cell->food > 0)
         ptr += sprintf(ptr, "food ");
     if (cell->stone[LINEMATE] > 0)
@@ -50,7 +51,7 @@ static char *get_items_on_cell(cell_t *cell)
         ptr += sprintf(ptr, "phiras ");
     if (cell->stone[THYSTAME] > 0)
         ptr += sprintf(ptr, "thystame ");
-    if (strlen(buff) > 1 && buff[strlen(buff) - 1] == ' ')
+    if (buff[strlen(buff) - 1] == ' ')
         buff[strlen(buff) - 1] = '\0';
     return strdup(buff);
 }
