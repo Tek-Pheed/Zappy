@@ -7,13 +7,13 @@
 
 #include <iostream>
 #include "raylib.h"
-#include "Menu.hpp"
-#include "Draw.hpp"
+#include "../include/Menu.hpp"
+#include "../include/Draw.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-Zappy::Menu::Menu(){}
-Zappy::Menu::~Menu(){}
+Zappy::Menu::Menu() {}
+Zappy::Menu::~Menu() {}
 
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
@@ -56,8 +56,7 @@ void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D
     }
 }
 
-void Zappy::Menu::ConfigureCamera(Camera &camera)
-{
+void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera = { 0 };
     camera.position = (Vector3){ 0.0f, 2.0f, 25.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
@@ -81,11 +80,10 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
     bool playClicked = false;
     bool settingsClicked = false;
     bool exitClicked = false;
-    char port[MAX_INPUT_CHARS + 1] = "\0";
-    int letterCount = 0;
-    Rectangle textBox = { 1350, 200, 320, 50 };
-    bool mouseOnText = false;
-    int framesCounter = 0;
+    bool confirmClicked = false;
+
+    TextInput textInputPort(1350, 200, 320, 50);
+    TextInput textInputIP(1350, 100, 320, 50);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -102,6 +100,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             playClicked = false;
             settingsClicked = false;
             exitClicked = false;
+            confirmClicked = false;
 
             if (draw.createButton(400, 75, 300, 700, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked)) {
                 currentScene = Zappy::GAME;
@@ -113,6 +112,17 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 CloseWindow();
                 break;
             }
+            if (draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN, "CONFIRM", 20, WHITE, Zappy::RECT, confirmClicked)) {
+                std::string ip = textInputIP.GetText();
+                std::string port = textInputPort.GetText();
+                std::cout << "IP: " << ip << " Port: " << port << std::endl;
+            }
+
+            textInputPort.UpdateInput();
+            textInputIP.UpdateInput();
+
+            textInputPort.DrawInput();
+            textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
             GameScene(model, camera, position, bounds);
         } else if (currentScene == Zappy::SETTINGS) {
@@ -121,14 +131,9 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             DrawFPS(10, 10);
         }
 
-        if (currentScene == Zappy::MENU) {
-            LoopForTextbox(textBox, mouseOnText, port, letterCount, framesCounter);
-        }
-
         EndDrawing();
     }
 }
-
 void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
 {
     UnloadTexture(texture_body);

@@ -7,9 +7,11 @@
 
 NAME    =   zappy_gui
 
-SRC		= src/main.cpp \
+SRC		=	src/main.cpp	\
+			src/Draw.cpp	\
+			src/Input.cpp	\
+			src/ConfirmButton.cpp	\
 		  src/Utils.cpp \
-		  src/Draw.cpp \
 		  src/Settings.cpp \
 		  src/AItems.cpp \
 		  src/Items/Food.cpp \
@@ -37,7 +39,7 @@ $(NAME): $(OBJ)
 all: $(NAME)
 
 clean:
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(OBJ)
 
 fclean: clean
 
