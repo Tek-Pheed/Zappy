@@ -1,15 +1,40 @@
+from typing import List
+from ai.src.player import Player
 from ai.src.server import Server
 
-def get_food(cases: dict, player: dict, server: Server):
+RESSOURCES = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
+
+LVLS_MANDATORY = {
+    1: {"linemate": 1},
+    2: {"linemate": 1, "deraumere": 1, "sibur": 1},
+    3: {"linemate": 2, "sibur": 1, "phiras": 2},
+    4: {"linemate": 1, "deraumere": 1, "sibur": 2, "phiras": 1},
+    5: {"linemate": 1, "deraumere": 2, "sibur": 1, "mendiane": 3},
+    6: {"linemate": 1, "deraumere": 2, "sibur": 3, "phiras": 1},
+    7: {"linemate": 2, "deraumere": 2, "sibur": 2, "mendiane": 2, "phiras": 2, "thystame": 1},
+}
+
+def take_food(cases: dict, player: Player, server: Server):
+    instruction: List[str] = []
     for i in range (len(cases)):
         if "food" in cases[i]:
-            server.send_message("Take food\n")
+            instruction.append("Take food\n")
         else:
-            server.send_message("Forward\n")
+            instruction.append("Forward\n")
             if i == 1:
-                server.send_message("Right\n")
+                instruction.append("Right\n")
             elif i == 3:
-                server.send_message("Left\n")
+                instruction.append("Left\n")
+    return instruction
+
+def take_minerals(cases: dict, player: Player, server: Server):
+    instruction: List[str] = []
+    for i in range (len(cases)):
+        current_case = cases[i].split(" ")
+        for items in current_case:
+            if items in RESSOURCES:
+                instruction.append(f"Take {items}\n")
+    return instruction
 
 def get_inventory(response: str, inv: dict) -> dict:
     for i in range(len(response)):

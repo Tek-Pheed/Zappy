@@ -41,7 +41,6 @@ class AI:
                     if self.player.logged == False and self.player.team in self.player.data_to_send:
                         self.player.logged = True
                         self.server.send_message(self.player.data_to_send)
-                        self.player.data_to_send = "Inventory\n"
                     else:
                         self.server.send_message(self.player.data_to_send)
 
