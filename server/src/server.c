@@ -66,6 +66,7 @@ bool init_server(server_t *serv)
     }
     if (!start_socket(serv->socket))
         return false;
+    gettimeofday(&serv->last_map_update, NULL);
     return true;
 }
 

@@ -6,14 +6,14 @@
 */
 
 #pragma once
-#include <sys/time.h>
 #include <sys/select.h>
+#include <sys/time.h>
 #include "client.h"
 #include "define.h"
 #include "list.h"
 #include "map.h"
 
-#define ENABLE_LOG  true
+#define ENABLE_LOG true
 
 enum log_level {
     INFO,
@@ -35,6 +35,7 @@ struct server_s {
     list_t *client;
     cell_t **map;
     list_t *teams;
+    struct timeval last_map_update;
     char *winner;
 };
 

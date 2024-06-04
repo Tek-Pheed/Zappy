@@ -21,3 +21,5 @@ cell_t **create_map(server_t *serv);
 void free_map(server_t *serv);
 char *map_size(server_t *serv);
 void create_teams_eggs(server_t *serv);
+void distribute_items(cell_t **map, server_t *serv, int quant, int item_type);
+void calculate_quantity(server_t *serv, float quantity[7]);

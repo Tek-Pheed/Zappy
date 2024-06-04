@@ -31,6 +31,22 @@ static cell_t *get_current_case(server_t *serv, client_t *cli, int i, int j)
     return NULL;
 }
 
+static void get_stone_cell(cell_t *cell, char **ptr)
+{
+    if (cell->stone[LINEMATE] > 0)
+        *ptr += sprintf(*ptr, "linemate ");
+    if (cell->stone[DERAUMERE] > 0)
+        *ptr += sprintf(*ptr, "deraumere ");
+    if (cell->stone[SIBUR] > 0)
+        *ptr += sprintf(*ptr, "sibur ");
+    if (cell->stone[MENDIANE] > 0)
+        *ptr += sprintf(*ptr, "mendiane ");
+    if (cell->stone[PHIRAS] > 0)
+        *ptr += sprintf(*ptr, "phiras ");
+    if (cell->stone[THYSTAME] > 0)
+        *ptr += sprintf(*ptr, "thystame ");
+}
+
 static char *get_items_on_cell(cell_t *cell)
 {
     char buff[DEFAULT_BUFFER_SIZE * 5];
@@ -39,18 +55,7 @@ static char *get_items_on_cell(cell_t *cell)
     memset(buff, 0, sizeof(buff));
     if (cell->food > 0)
         ptr += sprintf(ptr, "food ");
-    if (cell->stone[LINEMATE] > 0)
-        ptr += sprintf(ptr, "linemate ");
-    if (cell->stone[DERAUMERE] > 0)
-        ptr += sprintf(ptr, "deraumere ");
-    if (cell->stone[SIBUR] > 0)
-        ptr += sprintf(ptr, "sibur ");
-    if (cell->stone[MENDIANE] > 0)
-        ptr += sprintf(ptr, "mendiane ");
-    if (cell->stone[PHIRAS] > 0)
-        ptr += sprintf(ptr, "phiras ");
-    if (cell->stone[THYSTAME] > 0)
-        ptr += sprintf(ptr, "thystame ");
+    get_stone_cell(cell, &ptr);
     if (buff[strlen(buff) - 1] == ' ')
         buff[strlen(buff) - 1] = '\0';
     return strdup(buff);
