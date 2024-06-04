@@ -6,7 +6,8 @@
 */
 
 #include <string>
-#include "../include/Settings.hpp"
+#include "Settings.hpp"
+#include <cmath>
 
 Zappy::Settings::Settings(){}
 
@@ -50,7 +51,7 @@ void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
 
     DrawTextEx(GetFontDefault(), "Volume music :", (Vector2) {410, 150}, 20, 1, BLACK);
     d.drawTextClick(550, 145, 40, BLACK, GREEN, PINK, "-", clickVolM);
-    DrawTextEx(GetFontDefault(), std::to_string(static_cast<int>(round(volume * 100))).c_str(), (Vector2){585, 155}, 15, 1, BLACK);
+    DrawTextEx(GetFontDefault(), std::to_string(static_cast<int>(std::round(volume * 100))).c_str(), (Vector2){585, 155}, 15, 1, BLACK);
     d.drawTextClick(620, 145, 40, BLACK, GREEN, PINK, "+", clickVolP);
     if (clickVolM){
         isClickVolM = !isClickVolM;

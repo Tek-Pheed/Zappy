@@ -36,6 +36,7 @@ LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lX11
 
 $(NAME): $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(LDFLAGS)
+	@cp $(NAME) ../
 
 all: $(NAME)
 
