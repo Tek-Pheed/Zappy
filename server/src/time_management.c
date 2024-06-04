@@ -17,7 +17,7 @@ bool time_is_ready(double time_ready)
     return (time_ready < timeval_get_milliseconds(&current_time));
 }
 
-double timeval_get_milliseconds(struct timeval *tv)
+double timeval_get_milliseconds(const struct timeval *tv)
 {
     return (tv->tv_sec) * 1000.0 + (tv->tv_usec) / 1000.0;
 }

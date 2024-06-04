@@ -11,7 +11,7 @@
 #include "list.h"
 #include "server.h"
 
-team_t *team_get_client(server_t *serv, client_t *cli)
+team_t *team_get_client(server_t *serv, const client_t *cli)
 {
     int len = list_get_size(serv->teams);
     team_t *tmp = NULL;
@@ -52,27 +52,37 @@ static egg_t *get_last_egg(list_t *eggs)
     return (NULL);
 }
 
+static bool check_egg(
+    server_t *serv, client_t *client, egg_t *egg, team_t *team)
+{
+    if (team != NULL
+        && strncmp(team->name, client->team_name, strlen(team->name)) == 0
+        && team_can_add_player(serv, team)) {
+        egg = get_last_egg(team->eggs);
+        if (egg != NULL) {
+            team->nb_player++;
+            client->player.x = egg->x;
+            client->player.y = egg->y;
+            serv->map[egg->x][egg->y].nb_player_on += 1;
+            free(egg);
+            return (true);
+        }
+    }
+    return false;
+}
+
 bool team_add_client(server_t *serv, client_t *client)
 {
     size_t nb_teams = list_get_size(serv->teams);
     team_t *team = NULL;
     egg_t *egg = NULL;
+    bool val;
 
     for (size_t i = 0; i != nb_teams; i++) {
         team = list_get_elem_at_position(serv->teams, i);
-        if (team != NULL
-            && strncmp(team->name, client->team_name, strlen(team->name)) == 0
-            && team_can_add_player(serv, team)) {
-            egg = get_last_egg(team->eggs);
-            if (egg != NULL) {
-                team->nb_player++;
-                client->player.x = egg->x;
-                client->player.y = egg->y;
-                serv->map[egg->x][egg->y].nb_player_on += 1;
-                free(egg);
-                return (true);
-            }
-        }
+        val = check_egg(serv, client, egg, team);
+        if (val == true)
+            return val;
     }
     return (false);
 }

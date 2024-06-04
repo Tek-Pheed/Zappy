@@ -9,12 +9,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #include <unistd.h>
 #include "client.h"
 #include "commands.h"
 #include "server.h"
 
-static void check_player_death(server_t *serv, client_t *client)
+static void check_player_death(const server_t *serv, client_t *client)
 {
     if (client->player.food <= 0) {
         event_player_death(serv, client);
@@ -40,6 +41,26 @@ static void update_player(server_t *serv, client_t *client)
     check_player_death(serv, client);
 }
 
+static void update_map(server_t *serv)
+{
+    double target_time = 0;
+    struct timeval tv;
+    float quant[7] = {0};
+
+    if (serv->winner != NULL)
+        return;
+    target_time = timeval_get_milliseconds(&serv->last_map_update)
+        + ((20.0 / serv->freq) * 1000.0);
+    gettimeofday(&tv, NULL);
+    if (target_time <= timeval_get_milliseconds(&tv)) {
+        calculate_quantity(serv, quant);
+        for (int i = 0; i != 7; i++)
+            distribute_items(serv->map, serv, quant[i], i);
+        gettimeofday(&serv->last_map_update, NULL);
+        server_log(INFO, 0, "Adding object on map");
+    }
+}
+
 void game_update(server_t *serv)
 {
     client_t *client = NULL;
@@ -51,4 +72,5 @@ void game_update(server_t *serv)
             continue;
         update_player(serv, client);
     }
+    update_map(serv);
 }

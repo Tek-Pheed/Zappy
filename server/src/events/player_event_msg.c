@@ -11,7 +11,7 @@
 #include "commands.h"
 #include "server.h"
 
-void event_expulsion(server_t *serv, client_t *client)
+void event_expulsion(const server_t *serv, const client_t *client)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -21,7 +21,8 @@ void event_expulsion(server_t *serv, client_t *client)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_broadcast(server_t *serv, client_t *client, char *msg)
+void event_broadcast(
+    const server_t *serv, const client_t *client, const char *msg)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -31,8 +32,8 @@ void event_broadcast(server_t *serv, client_t *client, char *msg)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_end_incantation(
-    server_t *serv, client_t *client, const ivect2D_t *pos, const char *result)
+void event_end_incantation(const server_t *serv, const client_t *client,
+    const ivect2D_t *pos, const char *result)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -42,7 +43,7 @@ void event_end_incantation(
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_player_death(server_t *serv, client_t *client)
+void event_player_death(const server_t *serv, client_t *client)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -53,7 +54,7 @@ void event_player_death(server_t *serv, client_t *client)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_player_connection_egg(server_t *serv, client_t *client)
+void event_player_connection_egg(const server_t *serv, const client_t *client)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 

@@ -10,7 +10,8 @@
 #include "commands.h"
 #include "server.h"
 
-void event_ressource_drop(server_t *serv, client_t *client, int r_nb)
+void event_ressource_drop(
+    const server_t *serv, const client_t *client, int r_nb)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -20,7 +21,8 @@ void event_ressource_drop(server_t *serv, client_t *client, int r_nb)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_ressource_collect(server_t *serv, client_t *client, int r_nb)
+void event_ressource_collect(
+    const server_t *serv, const client_t *client, int r_nb)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -30,7 +32,7 @@ void event_ressource_collect(server_t *serv, client_t *client, int r_nb)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_egg_laying(server_t *serv, client_t *client)
+void event_egg_laying(const server_t *serv, const client_t *client)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -40,8 +42,8 @@ void event_egg_laying(server_t *serv, client_t *client)
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_egg_laid(
-    server_t *serv, client_t *client, int egg_nb, const ivect2D_t *pos)
+void event_egg_laid(const server_t *serv, const client_t *client, int egg_nb,
+    const ivect2D_t *pos)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
@@ -52,7 +54,7 @@ void event_egg_laid(
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
-void event_egg_death(server_t *serv, client_t *client, int egg_nb)
+void event_egg_death(const server_t *serv, const client_t *client, int egg_nb)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 

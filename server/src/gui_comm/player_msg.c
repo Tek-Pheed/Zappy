@@ -12,7 +12,7 @@
 #include "list.h"
 #include "server.h"
 
-void event_connnew_player(server_t *serv, client_t *cl)
+void event_connnew_player(const server_t *serv, client_t *cl)
 {
     char buff[BUFFER_MAX_SIZE * 2];
 
@@ -93,7 +93,7 @@ char *player_inventory(server_t *serv, int p_index)
 }
 
 void event_start_incantation(
-    server_t *serv, client_t *client, int *p_nb, int size)
+    const server_t *serv, const client_t *client, int *p_nb, int size)
 {
     char buff[BUFFER_MAX_SIZE * (size + 1)];
     char str[BUFFER_MAX_SIZE];
