@@ -58,13 +58,13 @@ void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
     }
     if (isClickVolM && volume > 0.1){
         volume -= 0.1;
-        SetMusicVolume(music, volume);
+        //SetMusicVolume(music, volume);
     }
     if (clickVolP)
         isClickVolP = !isClickVolP;
     if (isClickVolP && volume < 0.9) {
         volume += 0.1;
-        SetMusicVolume(music, volume);
+        //SetMusicVolume(music, volume);
     }
 }
 
