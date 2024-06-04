@@ -56,15 +56,21 @@ bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     team_t *tmp = team_get_client(serv, cli);
     egg_t *egg = NULL;
+    struct timeval tv;
+    struct timeval update;
+    double target_time = 0;
 
-    if (tmp == NULL)
-        return false;
     event_egg_laying(serv, cli);
     egg = create_egg(cli->player.x, cli->player.y, tmp);
     cli->cmd_duration = 42;
-    list_add_elem_at_back(&tmp->eggs, egg);
-    event_egg_laid(serv, cli, egg->number, &((ivect2D_t){egg->x, egg->y}));
     gettimeofday(&cli->last_cmd_time, NULL);
+    target_time =
+        timeval_get_milliseconds(&update) + ((42.0 / serv->freq) * 1000.0);
+    gettimeofday(&tv, NULL);
+    while (target_time > timeval_get_milliseconds(&tv))
+        gettimeofday(&tv, NULL);
+    event_egg_laid(serv, cli, egg->number, &((ivect2D_t){egg->x, egg->y}));
+    list_add_elem_at_back(&tmp->eggs, egg);
     server_send_data(cli, "ok\n");
     return true;
 }
