@@ -2,7 +2,6 @@ import subprocess
 from sys import argv as av
 from ai.src.arguments import parse_args
 from ai.src.server import *
-from ai.src.response import *
 from ai.src.action import *
 from ai.src.player import Player
 
@@ -40,9 +39,6 @@ class AI:
                 if mask & selectors.EVENT_WRITE:
                     if self.player.logged == False and self.player.team in self.player.data_to_send:
                         self.player.logged = True
-                        self.server.send_message(self.player.data_to_send)
-                        self.player.data_to_send = "Inventory\n"
-                    else:
                         self.server.send_message(self.player.data_to_send)
 
 if __name__ == "__main__":

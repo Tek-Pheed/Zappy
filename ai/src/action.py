@@ -1,36 +1,78 @@
+from typing import List
+from ai.src.player import Player
 from ai.src.server import Server
 
-def send_request(server: Server, message: str) -> str:
-    server.send_message(f"{message}\n")
-    res = server.receive_message()
-    if "dead" in res:
-        server.close_connection()
-        exit(0)
+RESSOURCES = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
+
+LVLS_MANDATORY = {
+    1: {"linemate": 1},
+    2: {"linemate": 1, "deraumere": 1, "sibur": 1},
+    3: {"linemate": 2, "sibur": 1, "phiras": 2},
+    4: {"linemate": 1, "deraumere": 1, "sibur": 2, "phiras": 1},
+    5: {"linemate": 1, "deraumere": 2, "sibur": 1, "mendiane": 3},
+    6: {"linemate": 1, "deraumere": 2, "sibur": 3, "phiras": 1},
+    7: {"linemate": 2, "deraumere": 2, "sibur": 2, "mendiane": 2, "phiras": 2, "thystame": 1},
+}
+
+def take_food(cases: dict, player: Player, server: Server):
+    instruction: List[str] = []
+    for i in range (len(cases)):
+        if "food" in cases[i]:
+            instruction.append("Take food\n")
+        else:
+            instruction.append("Forward\n")
+            if i == 1:
+                instruction.append("Right\n")
+            elif i == 3:
+                instruction.append("Left\n")
+    return instruction
+
+def take_minerals(cases: dict, player: Player, server: Server):
+    instruction: List[str] = []
+    for i in range (len(cases)):
+        current_case = cases[i].split(" ")
+        for items in current_case:
+            if items in RESSOURCES:
+                instruction.append(f"Take {items}\n")
+    return instruction
+
+def get_inventory(response: str, inv: dict) -> dict:
+    for i in range(len(response)):
+        match response[i]:
+            case "food":
+                inv["food"] = int(response[i].split(" ")[2])
+            case "linemate":
+                inv["linemate"] = int(response[i].split(" ")[2])
+            case "deraumere":
+                inv["deraumere"] = int(response[i].split(" ")[2])
+            case "sibur":
+                inv["sibur"] = int(response[i].split(" ")[2])
+            case "mendiane":
+                inv["mendiane"] = int(response[i].split(" ")[2])
+            case "phiras":
+                inv["phiras"] = int(response[i].split(" ")[2])
+            case "thystame":
+                inv["thystame"] = int(response[i].split(" ")[2])
+    return inv
+
+def get_case_around_player(response: str) -> dict:
+    res = dict()
+
+    for i in range(len(response)):
+        res[i] = response[i]
     return res
 
-def create_team(args, server: Server):
-    server.init_connection()
-    server.receive_message()
-    server.send_message(args.n + "\n")
-    server.receive_message()
+def get_number_of_team_unused(response: str) -> int:
+    return int(response)
 
-def get_food(cases: dict, player: dict, server: Server):
-    for i in range (len(cases)):
-        if "food" in cases[i] and player["inventory"]["food"] <= 5:
-            if i == 0:
-                send_request(server, "Take food")
-            elif i == 1:
-                send_request(server, "Forward")
-                send_request(server, "Right")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 2:
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 3:
-                send_request(server, "Forward")
-                send_request(server, "Left")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-        else:
-            send_request(server, "Forward")
+def get_OK_KO(response: str) -> bool:
+    if "ok" in response:
+        return True
+    else:
+        return False
+
+def get_incantation(response: str):
+    if "ko" in response:
+        return False
+    else:
+        return response
