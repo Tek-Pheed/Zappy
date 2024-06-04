@@ -5,8 +5,8 @@
 ** Settings.cpp
 */
 
+#include <string>
 #include "../include/Settings.hpp"
-#include "../include/Draw.hpp"
 
 Zappy::Settings::Settings(){}
 
@@ -32,10 +32,50 @@ Zappy::Resolution Zappy::Settings::getResolution()
     return _resolution;
 }
 
-void Zappy::Settings::manageSettingsButton(bool &isClick, bool &resIsClick)
+void Zappy::Settings::manageSettingsButton(bool &isClick, bool &resIsClick, Music music, double &volume)
 {
     Draw d;
     int Settingsclick = 0;
+
+    d.createButton(70, 50, 10, 10, 0, GRAY, LIGHTGRAY, DARKGRAY, "Settings", 10, BLACK, ButtonShape::RECT, Settingsclick);
+    if (Settingsclick)
+        isClick = !isClick;
+    if (isClick) {
+        d.drawRectangle(250, 300, 400, 100, GRAY);
+        manageResolution(d, resIsClick);
+        if (!resIsClick)
+            manageSoundMusic(music, d, volume);
+    }
+}
+
+void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
+{
+    int clickVolM = 0;
+    int clickVolP = 0;
+    int isClickVolM = 0;
+    int isClickVolP = 0;
+
+    DrawTextEx(GetFontDefault(), "Volume music :", (Vector2) {410, 150}, 20, 1, BLACK);
+    d.drawTextClick(550, 145, 40, BLACK, GREEN, PINK, "-", clickVolM);
+    DrawTextEx(GetFontDefault(), std::to_string(static_cast<int>(round(volume * 100))).c_str(), (Vector2){585, 155}, 15, 1, BLACK);
+    d.drawTextClick(620, 145, 40, BLACK, GREEN, PINK, "+", clickVolP);
+    if (clickVolM){
+        isClickVolM = !isClickVolM;
+    }
+    if (isClickVolM && volume > 0.1){
+        volume -= 0.1;
+        SetMusicVolume(music, volume);
+    }
+    if (clickVolP)
+        isClickVolP = !isClickVolP;
+    if (isClickVolP && volume < 0.9) {
+        volume += 0.1;
+        SetMusicVolume(music, volume);
+    }
+}
+
+void Zappy::Settings::manageResolution(Draw d, bool &resIsClick)
+{
     int resolutionClick = 0;
     std::queue<std::string> resolutionName;
     std::deque<int> resolutionChoose;
@@ -50,19 +90,13 @@ void Zappy::Settings::manageSettingsButton(bool &isClick, bool &resIsClick)
     for (int i = 0; i < resolutionName.size(); i++)
         resolutionChoose.push_back(0);
 
-    d.createButton(70, 50, 10, 10, 0, GRAY, LIGHTGRAY, DARKGRAY, "Settings", 10, BLACK, ButtonShape::RECT, Settingsclick);
-    if (Settingsclick)
-        isClick = !isClick;
-    if (isClick) {
-        d.drawRectangle(250, 300, 400, 100, GRAY);
-        DrawTextEx(GetFontDefault(), "Resolution :", (Vector2) {410, 110}, 20, 1, BLACK);
-        d.createButton(100, 30, 530, 105, 0, WHITE, GREEN, PINK, "Change resolution", 10, BLACK, ButtonShape::RECT, resolutionClick);
-        if (resolutionClick)
-            resIsClick = !resIsClick;
-        if (resIsClick) {
-            d.createDropdownList(100, 30, 530, 135, WHITE, GREEN, PINK, BLACK, 10, resolutionChoose, resolutionName);
-            changeResolution(resolutionChoose);
-        }
+    DrawTextEx(GetFontDefault(), "Resolution :", (Vector2) {410, 110}, 20, 1, BLACK);
+    d.createButton(100, 30, 530, 105, 0, WHITE, GREEN, PINK, "Change resolution", 10, BLACK, ButtonShape::RECT, resolutionClick);
+    if (resolutionClick)
+        resIsClick = !resIsClick;
+    if (resIsClick) {
+        d.createDropdownList(100, 30, 530, 135, WHITE, GREEN, PINK, BLACK, 10, resolutionChoose, resolutionName);
+        changeResolution(resolutionChoose);
     }
 }
 
@@ -72,9 +106,8 @@ void Zappy::Settings::changeResolution(std::deque<int> resClick)
 
     for(size_t i = 0; i < resClick.size(); i++) {
         if (resClick.at(i)) {
-            if (i == 0) {
+            if (i == 0)
                 SetWindowSize(1280, 720);
-            }
             if (i == 1)
                 SetWindowSize(1366, 768);
             if (i == 2)
@@ -83,9 +116,8 @@ void Zappy::Settings::changeResolution(std::deque<int> resClick)
                 SetWindowSize(1920, 1080);
             if (i == 4)
                 SetWindowSize(2560, 1440);
-            if (i == 5) {
+            if (i == 5)
                 SetWindowSize(3840, 2160);
-            }
         }
     }
 }
