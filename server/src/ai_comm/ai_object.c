@@ -53,6 +53,7 @@ static bool take_stone(server_t *serv, client_t *cli, int id)
             serv->map[cli->player.x][cli->player.y].stone[id] -= 1;
             event_ressource_collect(serv, cli, id + 1);
             server_send_data(cli, "ok\n");
+            event_player_inventory(serv, cli);
             return true;
         }
     }
@@ -72,6 +73,7 @@ bool ai_take_object(server_t *serv, client_t *cli, const char *obj)
             serv->map[cli->player.x][cli->player.x].food -= 1;
             event_ressource_collect(serv, cli, 0);
             server_send_data(cli, "ok\n");
+            event_player_inventory(serv, cli);
             return true;
         } else {
             server_send_data(cli, "ko\n");
@@ -93,11 +95,13 @@ bool ai_set_object(server_t *serv, client_t *cli, const char *obj)
         cli->player.food -= 1;
         serv->map[cli->player.x][cli->player.y].food += 1;
         server_send_data(cli, "ok\n");
+        event_player_inventory(serv, cli);
         return true;
     } else if (id != -1 && cli->player.stone[id] > 0) {
         cli->player.stone[id] -= 1;
         serv->map[cli->player.x][cli->player.y].stone[id] += 1;
         server_send_data(cli, "ok\n");
+        event_player_inventory(serv, cli);
         return true;
     }
     server_send_data(cli, "ko\n");

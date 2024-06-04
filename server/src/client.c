@@ -61,6 +61,13 @@ static bool create_player(server_t *serv, client_t *client, int index)
     return (team_add_client(serv, client));
 }
 
+static void send_initial_gui_data(server_t *serv, client_t *client)
+{
+    server_log(EVENT, client->fd, "logged in as GRAPHIC");
+    gui_map_size(serv, client, NULL);
+    gui_map_content(serv, client, NULL);
+}
+
 bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
 {
     static int player_index = 0;
@@ -70,7 +77,7 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
     strcpy(client->team_name, cmd);
     if (strncmp(cmd, "GRAPHIC", 7) == 0) {
         client->state = GRAPHICAL;
-        server_log(EVENT, client->fd, "logged in as GRAPHIC");
+        send_initial_gui_data(serv, client);
         return (true);
     }
     if (!create_player(serv, client, player_index)) {

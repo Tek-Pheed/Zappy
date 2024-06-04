@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "commands.h"
+#include "list.h"
 #include "server.h"
 #include "strings_array.h"
 
@@ -26,14 +27,31 @@ static bool run_gui(
     return (true);
 }
 
+static void broadcast_map_content(server_t *serv)
+{
+    size_t size = list_get_size(serv->client);
+    client_t *cli = NULL;
+
+    for (size_t i = 0; i != size; i++) {
+        cli = list_get_elem_at_position(serv->client, i);
+        if (cli == NULL || cli->fd == -1 || cli->state != GRAPHICAL)
+            continue;
+        gui_map_content(serv, cli, NULL);
+    }
+}
+
 static bool run_ai(
     server_t *serv, client_t *client, const char *cmd, const char *arg)
 {
+    bool ret = true;
+
     for (size_t i = 0; i != sizeof(ai_cmds) / sizeof(ai_cmds[0]); i++) {
         if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))
             == 0) {
             server_log(PROCESS, client->fd, cmd);
-            return (ai_cmds[i].ptr.ai_ptr(serv, client, arg));
+            ret = ai_cmds[i].ptr.ai_ptr(serv, client, arg);
+            broadcast_map_content(serv);
+            return (ret);
         }
     }
     server_log(WARNING, 0, "Unknown command");

@@ -45,6 +45,7 @@ bool gui_map_content(server_t *server, client_t *client, UNUSED char **args)
     if (buff == NULL)
         return (false);
     server_send_data(client, buff);
+    free(buff);
     return (true);
 }
 
