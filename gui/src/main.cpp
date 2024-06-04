@@ -6,16 +6,24 @@
 */
 
 #include "Draw.hpp"
+#include "Settings.hpp"
 #include "raylib.h"
 
 int main()
 {
-    Zappy::Draw u;
+    Zappy::Settings s;
     const int screenWidth = 800;
     const int screenHeight = 450;
     bool btnClick = false;
+    bool resIsClick = false;
+    double volume = 0.5;
 
     InitWindow(screenWidth, screenHeight, "Raylib [core] example - basic window");
+    InitAudioDevice();
+    Music music = LoadMusicStream("test.mp3");
+    SetMusicVolume(music, volume);
+    PlayMusicStream(music);
+    
 
     SetTargetFPS(60);
 
@@ -23,11 +31,11 @@ int main()
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-        u.createButton(70, 50, 400,100, 40, BLACK, GREEN, PINK, "bouton", 10, WHITE, Zappy::ButtonShape::RECT, btnClick);
+        s.manageSettingsButton(btnClick, resIsClick, music, volume);
+        UpdateMusicStream(music);
         EndDrawing();
     }
-
+    UnloadMusicStream(music);
     CloseWindow();
 
     return 0;

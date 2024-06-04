@@ -23,7 +23,7 @@ OBJ		=	$(SRC:.cpp=.o)
 
 all:	$(NAME)
 
-CFLAGS = -W -Wall -Wextra -I./include
+CFLAGS = -W -Wall -Wextra -I./include -std=c++20
 
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
