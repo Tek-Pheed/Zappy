@@ -36,13 +36,17 @@ char *tile_content(server_t *serv, int x, int y)
 
 char *all_content(server_t *serv)
 {
+    char *tmp = NULL;
     char *buff = calloc(serv->resX * serv->resY * 50, sizeof(char));
 
     if (!buff)
         return NULL;
     for (int i = 0; i != serv->resX; i++) {
-        for (int j = 0; j != serv->resY; j++)
-            strcat(buff, tile_content(serv, i, j));
+        for (int j = 0; j != serv->resY; j++) {
+            tmp = tile_content(serv, i, j);
+            strcat(buff, tmp);
+            free(tmp);
+        }
     }
     return buff;
 }

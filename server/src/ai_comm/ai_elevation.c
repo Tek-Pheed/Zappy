@@ -47,7 +47,7 @@ static bool check_stone(server_t *serv, client_t *cli)
     return true;
 }
 
-static void level_up_all(server_t *serv, UNUSED client_t *cli)
+static void level_up_all(server_t *serv, client_t *cli)
 {
     int client_len = 0;
     client_t *tmp;
@@ -58,6 +58,7 @@ static void level_up_all(server_t *serv, UNUSED client_t *cli)
         if (tmp->player.elevating == true) {
             tmp->player.level += 1;
             tmp->player.elevating = false;
+            event_player_level(serv, cli);
         }
     }
 }
