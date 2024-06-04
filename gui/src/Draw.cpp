@@ -5,10 +5,10 @@
 ** Draw.cpp
 */
 
-#include "../include/Draw.hpp"
+#include "Draw.hpp"
 
 namespace Zappy {
-    
+
     Draw::Draw(){}
     Draw::~Draw(){}
     void Draw::drawRectangle(){}
@@ -47,7 +47,7 @@ namespace Zappy {
                 color = hoverColor;
         } else {
             color = buttonColor;
-        } 
+        }
         if (shape == ButtonShape::CIRCLE)
             DrawCircleV(buttonPosC, r, color);
         else

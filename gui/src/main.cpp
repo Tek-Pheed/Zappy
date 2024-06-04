@@ -5,7 +5,7 @@
 ** main.cpp
 */
 
-#include "gui/include/Draw.hpp"
+#include "Draw.hpp"
 #include "raylib.h"
 
 int main()
