@@ -56,8 +56,6 @@ static char *get_items_on_cell(cell_t *cell)
     if (cell->food > 0)
         ptr += sprintf(ptr, "food ");
     get_stone_cell(cell, &ptr);
-    if (buff[strlen(buff) - 1] == ' ')
-        buff[strlen(buff) - 1] = '\0';
     return strdup(buff);
 }
 
