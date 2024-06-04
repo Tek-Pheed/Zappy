@@ -10,7 +10,7 @@
 #include <time.h>
 #include "server.h"
 
-void calculate_quantity(server_t *serv, float quantity[7])
+void calculate_quantity(const server_t *serv, float quantity[7])
 {
     float total = serv->resX * serv->resY;
 
@@ -33,7 +33,8 @@ static void create_cell(cell_t *cell, int x, int y)
         cell->stone[i] = 0;
 }
 
-void distribute_items(cell_t **map, server_t *serv, int quant, int item_type)
+void distribute_items(
+    cell_t **map, const server_t *serv, int quant, int item_type)
 {
     int x = 0;
     int y = 0;

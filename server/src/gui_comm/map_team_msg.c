@@ -10,7 +10,7 @@
 #include <string.h>
 #include "server.h"
 
-char *map_size(server_t *serv)
+char *map_size(const server_t *serv)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
@@ -20,7 +20,7 @@ char *map_size(server_t *serv)
     return buff;
 }
 
-char *tile_content(server_t *serv, int x, int y)
+char *tile_content(const server_t *serv, int x, int y)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE * 2, sizeof(char));
 
@@ -34,7 +34,7 @@ char *tile_content(server_t *serv, int x, int y)
     return buff;
 }
 
-char *all_content(server_t *serv)
+char *all_content(const server_t *serv)
 {
     char *tmp = NULL;
     char *buff = calloc(serv->resX * serv->resY * 50, sizeof(char));
@@ -51,7 +51,7 @@ char *all_content(server_t *serv)
     return buff;
 }
 
-static char *team_name(server_t *serv, int ind)
+static char *team_name(const server_t *serv, int ind)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 

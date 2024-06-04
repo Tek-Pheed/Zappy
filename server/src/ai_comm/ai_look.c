@@ -18,7 +18,8 @@ static cell_t *get_case(server_t *serv, int x, int y)
     return &serv->map[x % serv->resY][y % serv->resX];
 }
 
-static cell_t *get_current_case(server_t *serv, client_t *cli, int i, int j)
+static cell_t *get_current_case(
+    server_t *serv, const client_t *cli, int i, int j)
 {
     if (cli->player.orient == NORTH)
         return get_case(serv, cli->player.x + j, cli->player.y - i);
@@ -31,7 +32,7 @@ static cell_t *get_current_case(server_t *serv, client_t *cli, int i, int j)
     return NULL;
 }
 
-static void get_stone_cell(cell_t *cell, char **ptr)
+static void get_stone_cell(const cell_t *cell, char **ptr)
 {
     if (cell->stone[LINEMATE] > 0)
         *ptr += sprintf(*ptr, "linemate ");
@@ -47,7 +48,7 @@ static void get_stone_cell(cell_t *cell, char **ptr)
         *ptr += sprintf(*ptr, "thystame ");
 }
 
-static char *get_items_on_cell(cell_t *cell)
+static char *get_items_on_cell(const cell_t *cell)
 {
     char buff[DEFAULT_BUFFER_SIZE * 5];
     char *ptr = buff;
@@ -59,7 +60,7 @@ static char *get_items_on_cell(cell_t *cell)
     return strdup(buff);
 }
 
-static char *create_message(cell_t *cell)
+static char *create_message(const cell_t *cell)
 {
     char buff[BUFFER_MAX_SIZE * 49];
     char *tmp = NULL;
@@ -74,7 +75,7 @@ static char *create_message(cell_t *cell)
     return strdup(buff);
 }
 
-static void add_to_str(server_t *serv, client_t *cli, char **ptr, int i)
+static void add_to_str(server_t *serv, const client_t *cli, char **ptr, int i)
 {
     cell_t *cell = NULL;
     char *items;

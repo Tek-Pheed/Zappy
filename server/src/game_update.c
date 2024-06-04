@@ -15,7 +15,7 @@
 #include "commands.h"
 #include "server.h"
 
-static void check_player_death(server_t *serv, client_t *client)
+static void check_player_death(const server_t *serv, client_t *client)
 {
     if (client->player.food <= 0) {
         event_player_death(serv, client);

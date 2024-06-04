@@ -43,7 +43,7 @@ static void check_opt(int opt, server_t *serv, int flags[6])
         parse_freq(serv, flags);
 }
 
-static int parse_args(int argc, char *argv[], server_t *serv)
+static int parse_args(int argc, char *const argv[], server_t *serv)
 {
     int opt = getopt(argc, argv, "p:x:y:n:c:f:");
     int flags[6] = {0};
@@ -75,7 +75,7 @@ static int check_args(int argc, char *argv[], server_t *serv)
     return parse_args(argc, argv, serv);
 }
 
-static void print_serv(server_t *serv)
+static void print_serv(const server_t *serv)
 {
     printf("P: %d\n", serv->port);
     printf("X: %d\n", serv->resX);

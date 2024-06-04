@@ -29,7 +29,7 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-static bool is_client_ready(server_t *serv, client_t *client)
+static bool is_client_ready(const server_t *serv, client_t *client)
 {
     struct timeval current_time;
     double ready_time = timeval_get_milliseconds(&client->last_cmd_time)

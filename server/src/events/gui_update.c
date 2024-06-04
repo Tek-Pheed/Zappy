@@ -10,7 +10,7 @@
 #include "define.h"
 #include "server.h"
 
-void event_player_position(server_t *serv, client_t *client)
+void event_player_position(server_t *serv, const client_t *client)
 {
     char *buff = player_position(serv, client->player.number);
 
@@ -21,7 +21,7 @@ void event_player_position(server_t *serv, client_t *client)
     free(buff);
 }
 
-void event_player_level(server_t *serv, client_t *client)
+void event_player_level(server_t *serv, const client_t *client)
 {
     char *buff = player_level(serv, client->player.number);
 
@@ -32,7 +32,7 @@ void event_player_level(server_t *serv, client_t *client)
     free(buff);
 }
 
-void event_player_inventory(server_t *serv, client_t *client)
+void event_player_inventory(server_t *serv, const client_t *client)
 {
     char *buff = player_inventory(serv, client->player.number);
 

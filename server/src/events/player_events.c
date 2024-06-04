@@ -13,7 +13,7 @@
 #include "server.h"
 
 void server_event_send_many(
-    server_t *serv, enum client_state client_target, const char *buff)
+    const server_t *serv, enum client_state client_target, const char *buff)
 {
     size_t clients = list_get_size(serv->client);
     client_t *client = NULL;
