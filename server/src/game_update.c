@@ -9,11 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #include <unistd.h>
 #include "client.h"
 #include "commands.h"
 #include "server.h"
-#include <bits/types/struct_timeval.h>
 
 static void check_player_death(server_t *serv, client_t *client)
 {
