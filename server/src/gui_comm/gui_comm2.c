@@ -78,5 +78,6 @@ bool gui_set_time_unit(server_t *server, client_t *client, char **args)
         return (false);
     server_send_data(client, buff);
     free(buff);
+    event_time_modif(server);
     return (true);
 }

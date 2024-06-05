@@ -24,3 +24,6 @@ void create_teams_eggs(server_t *serv);
 void distribute_items(
     cell_t **map, const server_t *serv, int quant, int item_type);
 void calculate_quantity(const server_t *serv, float quantity[7]);
+void calculate_quantity_after(const server_t *serv, float *quantity);
+void distribute_items_after(
+    cell_t **map, const server_t *serv, int quant, int item_type);

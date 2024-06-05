@@ -5,22 +5,24 @@
 ** map
 */
 
+#include "map.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "commands.h"
 #include "server.h"
 
 void calculate_quantity(const server_t *serv, float quantity[7])
 {
     float total = serv->resX * serv->resY;
 
-    quantity[LINEMATE] = total * LINEMATE_R;
-    quantity[DERAUMERE] = total * DERAUMERE_R;
-    quantity[SIBUR] = total * SIBUR_R;
-    quantity[MENDIANE] = total * MENDIANE_R;
-    quantity[PHIRAS] = total * PHIRAS_R;
-    quantity[THYSTAME] = total * THYSTAME_R;
-    quantity[6] = total * FOOD_R;
+    quantity[LINEMATE] = (total * LINEMATE_R);
+    quantity[DERAUMERE] = (total * DERAUMERE_R);
+    quantity[SIBUR] = (total * SIBUR_R);
+    quantity[MENDIANE] = (total * MENDIANE_R);
+    quantity[PHIRAS] = (total * PHIRAS_R);
+    quantity[THYSTAME] = (total * THYSTAME_R);
+    quantity[6] = (total * FOOD_R);
 }
 
 static void create_cell(cell_t *cell, int x, int y)

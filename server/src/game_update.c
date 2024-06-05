@@ -36,6 +36,7 @@ static void update_player(server_t *serv, client_t *client)
     gettimeofday(&tv, NULL);
     if (target_time <= timeval_get_milliseconds(&tv)) {
         client->player.food--;
+        event_player_inventory(serv, client);
         gettimeofday(&client->player.last_food_update, NULL);
     }
     check_player_death(serv, client);
@@ -53,11 +54,11 @@ static void update_map(server_t *serv)
         + ((20.0 / serv->freq) * 1000.0);
     gettimeofday(&tv, NULL);
     if (target_time <= timeval_get_milliseconds(&tv)) {
-        calculate_quantity(serv, quant);
+        calculate_quantity_after(serv, quant);
         for (int i = 0; i != 7; i++)
-            distribute_items(serv->map, serv, quant[i], i);
+            distribute_items_after(serv->map, serv, quant[i], i);
         gettimeofday(&serv->last_map_update, NULL);
-        server_log(INFO, 0, "Adding object on map");
+        server_log(serv, INFO, 0, "Adding object on map");
     }
 }
 

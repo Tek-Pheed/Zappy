@@ -51,21 +51,23 @@ void event_player_death(const server_t *serv, client_t *client);
 void event_player_connection_egg(const server_t *serv, const client_t *client);
 void event_end_game(const server_t *serv, const char *winner);
 void event_server_message(server_t *serv, const char *msg);
-void event_unknow_command(client_t *client);
-void event_command_parameter(client_t *client);
+void event_unknow_command(server_t *serv, client_t *client);
+void event_command_parameter(server_t *serv, client_t *client);
 void event_start_incantation(
     const server_t *serv, client_t *client, int *p_nb, int size);
 void event_end_incantation(const server_t *serv, const client_t *client,
     const ivect2D_t *pos, const char *result);
 
+void event_teams_names(server_t *serv, client_t *client);
+void event_tile_update(const server_t *serv, int x, int y);
+void event_update_map(server_t *serv);
+void event_time_modif(server_t *serv);
 void event_player_position(server_t *serv, const client_t *client);
 void event_player_level(server_t *serv, const client_t *client);
 void event_player_inventory(server_t *serv, const client_t *client);
 
-bool gui_map_size(
-    server_t *server, client_t *client, UNUSED char **args);
-bool gui_tile_content(
-    server_t *server, client_t *client, UNUSED char **args);
+bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
+bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);
 bool gui_map_content(server_t *server, client_t *client, char **args);
 bool gui_all_name(server_t *server, client_t *client, UNUSED char **args);
 bool gui_player_position(server_t *server, client_t *client, char **args);
@@ -90,6 +92,7 @@ bool ai_inventory(
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_end_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
@@ -109,6 +112,7 @@ static const struct command_handler_s ai_cmds[] = {
         .nb_args = 0,
         .ptr = {.ai_ptr = ai_connect_nbr}},
     {.command = "Fork", .nb_args = 0, .ptr = {.ai_ptr = ai_fork}},
+    {.command = "EndForkServer", .nb_args = 0, .ptr = {.ai_ptr = ai_end_fork}},
     {.command = "Eject", .nb_args = 0, .ptr = {.ai_ptr = ai_eject}},
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},

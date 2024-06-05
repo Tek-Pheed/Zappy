@@ -5,8 +5,8 @@
 ** init_struct
 */
 
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "server.h"
 
 server_t *init_struct(void)
@@ -21,6 +21,7 @@ server_t *init_struct(void)
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
+    tmp->verbose = false;
     tmp->client = calloc(1, sizeof(list_t));
     tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
