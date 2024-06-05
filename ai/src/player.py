@@ -45,3 +45,6 @@ class Player:
             if "food" in self.inventory and self.inventory["food"] < 35:
                 self.action = take_food(self.cases_arround)
                 self.step = 0
+            else:
+                self.action = take_minerals(self.cases_arround)
+                self.step = 0

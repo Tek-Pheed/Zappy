@@ -21,7 +21,7 @@ class AI:
         message = ""
         running = 0
         while True:
-            event = self.server.selectors.select(timeout=None)
+            event = self.server.selectors.select(timeout=10)
             for _, mask in event:
                 if mask & selectors.EVENT_READ:
                     data = self.server.receive_message()
