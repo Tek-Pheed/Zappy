@@ -25,17 +25,16 @@ class Player:
 
     def incantation_possible(self):
         required_ressources = LVLS_MANDATORY[self.level].copy()
-        #print_verbose(self.verbose, self.inventory)
 
     def take_action(self):
         if self.step == 0:
             if self.action:
                 self.data_to_send = self.action[0]
                 self.action = self.action[1:]
-                print_verbose(self.verbose, self.data_to_send)
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
+            print_verbose(self.verbose, f"Action: {self.data_to_send}")
         elif self.step == 1:
             self.incantation_possible()
             self.step += 1
