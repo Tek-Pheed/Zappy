@@ -19,7 +19,7 @@ void event_connnew_player(const server_t *serv, client_t *cl)
     memset(buff, 0, sizeof(buff));
     sprintf(buff, "pnw %d %d %d %d %d %s\n", cl->player.number, cl->player.x,
         cl->player.y, cl->player.orient, cl->player.level, cl->team_name);
-    server_log(EVENT, cl->fd, "new player connected");
+    server_log(serv, EVENT, cl->fd, "new player connected");
     server_event_send_many(serv, GRAPHICAL, buff);
 }
 
@@ -106,6 +106,6 @@ void event_start_incantation(
         strcat(buff, str);
     }
     strcat(buff, "\n");
-    server_log(EVENT, client->fd, buff);
+    server_log(serv, EVENT, client->fd, buff);
     server_event_send_many(serv, GRAPHICAL, buff);
 }

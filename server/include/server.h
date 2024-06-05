@@ -32,6 +32,7 @@ struct server_s {
     int clientNb;
     int freq;
     int socket;
+    bool verbose;
     list_t *client;
     cell_t **map;
     list_t *teams;
@@ -67,4 +68,5 @@ double timeval_get_milliseconds(const struct timeval *tv);
 bool time_is_ready(double time_ready);
 bool team_remove_client(server_t *serv, const client_t *client);
 bool team_add_client(server_t *serv, client_t *client);
-int server_log(enum log_level level, int client_fd, const char *data);
+int server_log(const server_t *serv, enum log_level level, int client_fd,
+    const char *data);

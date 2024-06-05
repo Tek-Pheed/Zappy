@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "server.h"
 
-int server_log(enum log_level level, int client_fd, const char *data)
+static int logger_case(enum log_level level, int client_fd, const char *data)
 {
     switch (level) {
         case EVENT:
@@ -18,8 +18,7 @@ int server_log(enum log_level level, int client_fd, const char *data)
             else
                 return (printf("\n"));
         case RECEIVING:
-            return (printf("[RECEIVED] from client %d: %s",
-                client_fd, data));
+            return (printf("[RECEIVED] from client %d: %s", client_fd, data));
         case SENDING:
             return (printf("[SENDING] to client %d: %s", client_fd, data));
         case WARNING:
@@ -29,5 +28,15 @@ int server_log(enum log_level level, int client_fd, const char *data)
         default:
             break;
     }
-    return (printf("[INFO]: %s\n", data));
+    return -1;
+}
+
+int server_log(const server_t *serv, enum log_level level, int client_fd,
+    const char *data)
+{
+    if (serv->verbose == false)
+        return 0;
+    if (logger_case(level, client_fd, data) == -1)
+        return (printf("[INFO]: %s\n", data));
+    return 0;
 }
