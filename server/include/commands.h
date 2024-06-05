@@ -58,6 +58,10 @@ void event_start_incantation(
 void event_end_incantation(const server_t *serv, const client_t *client,
     const ivect2D_t *pos, const char *result);
 
+void event_teams_names(server_t *serv, client_t *client);
+void event_tile_update(server_t *serv, int x, int y);
+void event_update_map(server_t *serv);
+void event_time_modif(server_t *serv);
 void event_player_position(server_t *serv, const client_t *client);
 void event_player_level(server_t *serv, const client_t *client);
 void event_player_inventory(server_t *serv, const client_t *client);
