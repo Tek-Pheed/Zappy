@@ -7,4 +7,4 @@ def clean_str(str: str) -> str:
 
 def print_verbose(verbose: bool, str) -> None:
     if verbose:
-        print(f"{str}")
+        print(f"{str}", end="")
