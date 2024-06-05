@@ -6,7 +6,8 @@
 */
 
 #include <string>
-#include "../include/Settings.hpp"
+#include "Settings.hpp"
+#include <cmath>
 
 Zappy::Settings::Settings(){}
 
@@ -32,20 +33,13 @@ Zappy::Resolution Zappy::Settings::getResolution()
     return _resolution;
 }
 
-void Zappy::Settings::manageSettingsButton(bool &isClick, bool &resIsClick, Music music, double &volume)
+void Zappy::Settings::manageSettingsButton(bool &resIsClick, Music music, double &volume)
 {
     Draw d;
-    int Settingsclick = 0;
-
-    d.createButton(70, 50, 10, 10, 0, GRAY, LIGHTGRAY, DARKGRAY, "Settings", 10, BLACK, ButtonShape::RECT, Settingsclick);
-    if (Settingsclick)
-        isClick = !isClick;
-    if (isClick) {
-        d.drawRectangle(250, 300, 400, 100, GRAY);
-        manageResolution(d, resIsClick);
-        if (!resIsClick)
-            manageSoundMusic(music, d, volume);
-    }
+    d.drawRectangle(250, 300, 400, 100, GRAY);
+    manageResolution(d, resIsClick);
+    if (!resIsClick)
+        manageSoundMusic(music, d, volume);
 }
 
 void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
@@ -57,20 +51,20 @@ void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume)
 
     DrawTextEx(GetFontDefault(), "Volume music :", (Vector2) {410, 150}, 20, 1, BLACK);
     d.drawTextClick(550, 145, 40, BLACK, GREEN, PINK, "-", clickVolM);
-    DrawTextEx(GetFontDefault(), std::to_string(static_cast<int>(round(volume * 100))).c_str(), (Vector2){585, 155}, 15, 1, BLACK);
+    DrawTextEx(GetFontDefault(), std::to_string(static_cast<int>(std::round(volume * 100))).c_str(), (Vector2){585, 155}, 15, 1, BLACK);
     d.drawTextClick(620, 145, 40, BLACK, GREEN, PINK, "+", clickVolP);
     if (clickVolM){
         isClickVolM = !isClickVolM;
     }
     if (isClickVolM && volume > 0.1){
         volume -= 0.1;
-        SetMusicVolume(music, volume);
+        //SetMusicVolume(music, volume);
     }
     if (clickVolP)
         isClickVolP = !isClickVolP;
     if (isClickVolP && volume < 0.9) {
         volume += 0.1;
-        SetMusicVolume(music, volume);
+        //SetMusicVolume(music, volume);
     }
 }
 
