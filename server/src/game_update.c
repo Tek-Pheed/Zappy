@@ -36,6 +36,7 @@ static void update_player(server_t *serv, client_t *client)
     gettimeofday(&tv, NULL);
     if (target_time <= timeval_get_milliseconds(&tv)) {
         client->player.food--;
+        event_player_inventory(serv, client);
         gettimeofday(&client->player.last_food_update, NULL);
     }
     check_player_death(serv, client);
