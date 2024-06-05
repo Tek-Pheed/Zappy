@@ -1,5 +1,7 @@
+import re
 from ai.src.action import *
 from ai.src.utils import print_verbose
+from ai.src.utils import *
 
 LVLS_MANDATORY = {
     1: {"linemate": 1},
@@ -26,6 +28,16 @@ class Player:
     def incantation_possible(self):
         required_ressources = LVLS_MANDATORY[self.level].copy()
 
+    def parse_look_command(self, data: str) -> List:
+        tmp = data.split(",")
+        list = []
+        for i in range(len(tmp)):
+            list.append(' '.join(re.split(r'\W+', tmp[i])[1:]))
+        data = list
+        map = generate_empty_map()
+        map = fill_map_with_data(map, data)
+        print_verbose(self.verbose, f"Map: {map}\n")
+
     def take_action(self):
         if self.step == 0:
             if self.action:
@@ -34,7 +46,7 @@ class Player:
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
-            print_verbose(self.verbose, f"Action: {self.data_to_send}")
+            print_verbose(self.verbose, f"Action: {self.data_to_send}\n")
         elif self.step == 1:
             self.incantation_possible()
             self.step += 1
@@ -49,5 +61,7 @@ class Player:
                 self.action = take_minerals(self.cases_arround)
                 self.step += 1
         elif self.step == 4:
-            self.data_to_send = "Inventory\n"
+            self.step += 1
+        elif self.step == 5:
+            self.data_to_send = ""
             self.step = 0
