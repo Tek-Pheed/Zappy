@@ -53,8 +53,8 @@ bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
     return true;
 }
 
-static void eject_destroy_eggs(
-    server_t *serv, client_t *cli, team_t *tmp_team, ivect2D_t *iy)
+static void eject_destroy_eggs(const server_t *serv, const client_t *cli,
+    team_t *tmp_team, const ivect2D_t *iy)
 {
     egg_t *tmp_eggs = NULL;
 
@@ -68,7 +68,8 @@ static void eject_destroy_eggs(
     }
 }
 
-static void eject_player(int i, client_t *cli, server_t *serv, char msg[20])
+static void eject_player(
+    int i, const client_t *cli, server_t *serv, const char msg[20])
 {
     client_t *tcli = NULL;
 

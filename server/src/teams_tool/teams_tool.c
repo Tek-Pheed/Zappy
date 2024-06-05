@@ -11,7 +11,7 @@
 #include "list.h"
 #include "server.h"
 
-team_t *team_get_client(server_t *serv, client_t *cli)
+team_t *team_get_client(server_t *serv, const client_t *cli)
 {
     int len = list_get_size(serv->teams);
     team_t *tmp = NULL;

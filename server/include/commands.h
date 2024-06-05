@@ -26,8 +26,8 @@ struct ivect2D_s {
 
 typedef struct ivect2D_s ivect2D_t;
 
-char *tile_content(server_t *serv, int x, int y);
-char *all_content(server_t *serv);
+char *tile_content(const server_t *serv, int x, int y);
+char *all_content(const server_t *serv);
 char *all_name(server_t *serv);
 char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
@@ -35,32 +35,41 @@ char *player_inventory(server_t *serv, int p_index);
 
 char *time_unit_request(server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
-void event_connnew_player(server_t *serv, client_t *client);
-void event_ressource_drop(server_t *serv, client_t *client, int r_nb);
-void event_ressource_collect(server_t *serv, client_t *client, int r_nb);
-void event_egg_laying(server_t *serv, client_t *client);
-void event_egg_laid(
-    server_t *serv, client_t *client, int egg_nb, const ivect2D_t *pos);
-void event_egg_death(server_t *serv, client_t *client, int egg_nb);
-void event_expulsion(server_t *serv, client_t *client);
-void event_broadcast(server_t *serv, client_t *client, char *msg);
-void event_player_death(server_t *serv, client_t *client);
-void event_player_connection_egg(server_t *serv, client_t *client);
-void event_end_game(server_t *serv, const char *winner);
+void event_connnew_player(const server_t *serv, client_t *client);
+void event_ressource_drop(
+    const server_t *serv, const client_t *client, int r_nb);
+void event_ressource_collect(
+    const server_t *serv, const client_t *client, int r_nb);
+void event_egg_laying(const server_t *serv, const client_t *client);
+void event_egg_laid(const server_t *serv, const client_t *client, int egg_nb,
+    const ivect2D_t *pos);
+void event_egg_death(const server_t *serv, const client_t *client, int egg_nb);
+void event_expulsion(const server_t *serv, const client_t *client);
+void event_broadcast(
+    const server_t *serv, const client_t *client, const char *msg);
+void event_player_death(const server_t *serv, client_t *client);
+void event_player_connection_egg(const server_t *serv, const client_t *client);
+void event_end_game(const server_t *serv, const char *winner);
 void event_server_message(server_t *serv, const char *msg);
 void event_unknow_command(client_t *client);
 void event_command_parameter(client_t *client);
 void event_start_incantation(
-    server_t *serv, client_t *client, int *p_nb, int size);
-void event_end_incantation(server_t *serv, client_t *client,
+    const server_t *serv, client_t *client, int *p_nb, int size);
+void event_end_incantation(const server_t *serv, const client_t *client,
     const ivect2D_t *pos, const char *result);
 
-void event_player_position(server_t *serv, client_t *client);
-void event_player_level(server_t *serv, client_t *client);
-void event_player_inventory(server_t *serv, client_t *client);
+void event_teams_names(server_t *serv, client_t *client);
+void event_tile_update(server_t *serv, int x, int y);
+void event_update_map(server_t *serv);
+void event_time_modif(server_t *serv);
+void event_player_position(server_t *serv, const client_t *client);
+void event_player_level(server_t *serv, const client_t *client);
+void event_player_inventory(server_t *serv, const client_t *client);
 
-bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
-bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);
+bool gui_map_size(
+    server_t *server, client_t *client, UNUSED char **args);
+bool gui_tile_content(
+    server_t *server, client_t *client, UNUSED char **args);
 bool gui_map_content(server_t *server, client_t *client, char **args);
 bool gui_all_name(server_t *server, client_t *client, UNUSED char **args);
 bool gui_player_position(server_t *server, client_t *client, char **args);

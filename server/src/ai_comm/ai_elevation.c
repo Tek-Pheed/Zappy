@@ -16,7 +16,7 @@ static const int s_required[7][6] = {{1, 0, 0, 0, 0, 0}, {1, 1, 1, 0, 0, 0},
     {1, 2, 3, 0, 1, 0}, {2, 2, 2, 2, 2, 1}};
 static const int p_required[7] = {1, 2, 2, 4, 4, 6, 6};
 
-static bool check_nb_players(server_t *serv, client_t *cli)
+static bool check_nb_players(server_t *serv, const client_t *cli)
 {
     int client_len = 0;
     int count = 0;
@@ -37,7 +37,7 @@ static bool check_nb_players(server_t *serv, client_t *cli)
     return true;
 }
 
-static bool check_stone(server_t *serv, client_t *cli)
+static bool check_stone(const server_t *serv, const client_t *cli)
 {
     for (int i = 0; i != 6; i++) {
         if (serv->map[cli->player.x][cli->player.y].stone[i]
@@ -47,7 +47,7 @@ static bool check_stone(server_t *serv, client_t *cli)
     return true;
 }
 
-static void level_up_all(server_t *serv, client_t *cli)
+static void level_up_all(server_t *serv, const client_t *cli)
 {
     int client_len = 0;
     client_t *tmp;
@@ -71,7 +71,7 @@ static void remove_stone_used(server_t *serv, client_t *cli)
     }
 }
 
-static int mark_player_elevating(server_t *serv, client_t *cli)
+static int mark_player_elevating(server_t *serv, const client_t *cli)
 {
     int count = 0;
     int client_len = 0;

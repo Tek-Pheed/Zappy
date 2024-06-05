@@ -13,7 +13,7 @@
 #include "define.h"
 #include "server.h"
 
-void event_end_game(server_t *serv, const char *winner)
+void event_end_game(const server_t *serv, const char *winner)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
