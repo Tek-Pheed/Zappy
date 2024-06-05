@@ -17,7 +17,7 @@ void event_connnew_player(const server_t *serv, client_t *cl)
     char buff[BUFFER_MAX_SIZE * 2];
 
     memset(buff, 0, sizeof(buff));
-    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number, cl->player.x,
+    sprintf(buff, "pnw %d %d %d %d %d %s\n", cl->player.number, cl->player.x,
         cl->player.y, cl->player.orient, cl->player.level, cl->team_name);
     server_log(EVENT, cl->fd, "new player connected");
     server_event_send_many(serv, GRAPHICAL, buff);
@@ -37,7 +37,7 @@ char *player_position(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "ppo #%d %d %d %d\n", p_index, tmp->player.x,
+            sprintf(buff, "ppo %d %d %d %d\n", p_index, tmp->player.x,
                 tmp->player.y, tmp->player.orient);
             return buff;
         }
@@ -60,7 +60,7 @@ char *player_level(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "plv #%d %d\n", p_index, tmp->player.level);
+            sprintf(buff, "plv %d %d\n", p_index, tmp->player.level);
             return buff;
         }
         buff = NULL;
@@ -82,7 +82,7 @@ char *player_inventory(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "pin #%d %d %d %d %d %d %d %d %d %d\n", p_index,
+            sprintf(buff, "pin %d %d %d %d %d %d %d %d %d %d\n", p_index,
                 tmp->player.x, tmp->player.y, tmp->player.food,
                 tmp->player.stone[LINEMATE], tmp->player.stone[DERAUMERE],
                 tmp->player.stone[SIBUR], tmp->player.stone[MENDIANE],
@@ -99,10 +99,10 @@ void event_start_incantation(
     char str[BUFFER_MAX_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    sprintf(buff, "pic %d %d %d #%d", client->player.x, client->player.y,
+    sprintf(buff, "pic %d %d %d %d", client->player.x, client->player.y,
         client->player.level, client->player.number);
     for (int i = 0; p_nb[i] != -1 && i != size; i++) {
-        sprintf(str, " #%d", p_nb[i]);
+        sprintf(str, " %d", p_nb[i]);
         strcat(buff, str);
     }
     strcat(buff, "\n");
