@@ -6,6 +6,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "client.h"
 #include "commands.h"
@@ -24,12 +25,12 @@ void event_expulsion(const server_t *serv, const client_t *client)
 void event_broadcast(
     const server_t *serv, const client_t *client, const char *msg)
 {
-    char buff[DEFAULT_BUFFER_SIZE];
+    char *buff = calloc(strlen(msg) + DEFAULT_BUFFER_SIZE, sizeof(char));
 
-    memset(buff, 0, sizeof(buff));
     server_log(serv, EVENT, client->fd, "broadcast");
     sprintf(buff, "pbc %d %s\n", client->player.number, msg);
     server_event_send_many(serv, GRAPHICAL, buff);
+    free(buff);
 }
 
 void event_end_incantation(const server_t *serv, const client_t *client,

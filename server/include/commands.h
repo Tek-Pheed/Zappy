@@ -19,13 +19,6 @@ struct command_handler_s {
     } ptr;
 };
 
-struct ivect2D_s {
-    int x;
-    int y;
-};
-
-typedef struct ivect2D_s ivect2D_t;
-
 char *tile_content(const server_t *serv, int x, int y);
 char *all_content(const server_t *serv);
 char *all_name(server_t *serv);
@@ -88,7 +81,7 @@ bool ai_turn_left(
 bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
-// event_broadcast
+bool ai_broadcast(server_t *serv, client_t *cli, const char *obj);
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
@@ -121,9 +114,8 @@ static const struct command_handler_s ai_cmds[] = {
     {.command = "EndIncantationServer",
         .nb_args = 0,
         .ptr = {.ai_ptr = ai_end_elevation}},
+    {.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
 };
-//{.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
-//
 
 static const struct command_handler_s gui_cmds[] = {
     {.command = "msz", .nb_args = 0, .ptr = {.gui_ptr = gui_map_size}},

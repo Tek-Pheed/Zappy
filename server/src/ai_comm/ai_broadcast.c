@@ -6,97 +6,114 @@
 */
 
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 #include <time.h>
+#include "commands.h"
+#include "define.h"
 #include "server.h"
 
-// Wait follow-ip todo
-
-static int map_to_local_player_direction(ivect2D_t *pos, player_t *player)
+// printf("Dir: %d\nAngle: %f\n", dir, angle);
+static int map_to_local_player_direction(
+    const ivect2D_t *pos, const player_t *player)
 {
+    int dir = 0;
+    float angle = 0.0f;
     fvect2D_t vect = {(float) player->x - (float) pos->x,
         (float) player->y - (float) pos->y};
 
     if (vect.x == 0.0f && vect.y == 0.0f)
         return (0);
-
-    float angle = atan2f(vect.y, vect.x) * 180.0f / M_PI;
+    angle = atan2f(vect.y, vect.x) * 180.0f / M_PI;
     angle += (player->orient - 1) * 90.0f;
-    int dir = (angle / 45.0f) + 1;
+    dir = (angle / 45.0f) + 1;
     if (angle < 0.0f)
         dir = 8 - dir;
-    return (dir);
+    return (dir % 8);
 }
 
-static bool is_out_of_bounds(server_t *serv, ivect2D_t *pos)
+static int get_orient(
+    const ivect2D_t *offsets, const client_t *a, const client_t *b)
 {
-    if (pos->x >= serv->resX || pos->y >= serv->resY)
-        return (true);
-    return (false);
-}
+    ivect2D_t tile_pos = {0, 0};
 
-static ivect2D_t get_pos_in_bounds(server_t *serv, ivect2D_t *pos)
-{
-    return ((ivect2D_t){pos->x % (serv->resX), pos->y % (serv->resY)});
-}
-
-list_t get_players_on_cell(server_t *serv, ivect2D_t *world_pos)
-{
-    list_t lst = {NULL, NULL};
-    list_t *lptr = &lst;
-    client_t *client = NULL;
-    size_t clients = list_get_size(serv->client);
-
-    for (size_t i = 0; i != clients; i++) {
-        client = list_get_elem_at_position(serv->client, i);
-        if (client == NULL || client->state != AI)
-            continue;
-        if (client->player.x == world_pos->x
-            && client->player.y == world_pos->y)
-            list_add_elem_at_back(&lptr, &client);
+    if (offsets->x == 0 && offsets->y == 0) {
+        tile_pos.x = a->player.x;
+        tile_pos.y = a->player.y;
+    } else {
+        tile_pos.x = b->player.x + offsets->x;
+        tile_pos.y = b->player.y + offsets->y;
     }
-    return (lst);
+    return (map_to_local_player_direction(&tile_pos, &b->player));
 }
 
-static bool broadcast_cell(
-    server_t *serv, client_t *cli, ivect2D_t *cell_pos, ivect2D_t *prev_pos)
+static int get_x_offset(
+    const server_t *serv, const client_t *a, const client_t *b)
 {
-    ivect2D_t position = get_pos_in_bounds(serv, cell_pos);
-    list_t player_lst = get_players_on_cell(serv, &position);
-    size_t players = list_get_size(&player_lst);
-    client_t *client = NULL;
+    int tmp = 0;
+    int offset = 0;
+    int dist = serv->resX * 2 + serv->resY * 2;
 
-    if (players == 0)
-        return (false);
-    for (size_t i = 0; i != players; i++) {
-        client = list_get_elem_at_position(&player_lst, i);
-        if (client == NULL)
-            continue;
-        server_send_data();
+    for (int i = -1; i != 2; i++) {
+        tmp = abs((b->player.x + i * serv->resX) - a->player.x)
+            + abs((b->player.y) - a->player.y);
+        if (tmp < dist) {
+            dist = tmp;
+            offset = i;
+        }
     }
-    return (true);
+    return (offset);
 }
 
-bool trace_square(server_t *serv, client_t *cli, const char *obj)
+static int get_tile_orient(
+    const server_t *serv, const client_t *a, const client_t *b)
 {
-    size_t square_size = 0;
+    int tmp = 0;
+    int dist = serv->resX * 2 + serv->resY * 2;
+    ivect2D_t offsets = {0, 0};
 
-    for (square_size = 0; square_size < serv->resX || square_size < serv->resY;
-         square_size++) {
-        /* code */
+    offsets.x = get_x_offset(serv, a, b);
+    for (int i = -1; i != 2; i++) {
+        tmp = abs((b->player.x + offsets.x) - a->player.x)
+            + abs((b->player.y + i * serv->resY) - a->player.y);
+        if (tmp < dist) {
+            dist = tmp;
+            offsets.y = i;
+        }
     }
+    return (get_orient(&offsets, a, b));
+}
+
+static void send_broadcast(client_t *target, const char *msg, int tile)
+{
+    char *tmp = calloc(strlen(msg) + 32, sizeof(char));
+
+    sprintf(tmp, "message %d, %s\n", tile, msg);
+    server_send_data(target, tmp);
+    free(tmp);
 }
 
 bool ai_broadcast(server_t *serv, client_t *cli, const char *obj)
 {
-    // calulate all paths and get the shortest
+    size_t players = list_get_size(serv->client);
+    client_t *client = NULL;
 
-    // send: message tile text
-
-    if (cli->player.x)
-
-        cli->cmd_duration = 7;
+    for (size_t i = 0; i != players; i++) {
+        client = list_get_elem_at_position(serv->client, i);
+        if (client == NULL || client->state != AI || client == cli)
+            continue;
+        if (client->player.x == cli->player.x
+            && client->player.y == cli->player.y) {
+            send_broadcast(client, obj, 0);
+            continue;
+        }
+        send_broadcast(client, obj, get_tile_orient(serv, cli, client));
+    }
+    event_broadcast(serv, cli, obj);
+    cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
+    server_send_data(cli, "ok\n");
     return (true);
 }
