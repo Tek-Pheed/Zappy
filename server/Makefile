@@ -39,6 +39,7 @@ SRC	=	src/ai_comm/ai_move.c             \
 		src/events/server_msg.c           \
 		src/map/map.c                     \
 		src/map/egg.c                     \
+		src/map/update_map.c              \
 		src/teams_tool/teams_tool.c       \
 		src/main.c                        \
 		src/client_handling.c             \
