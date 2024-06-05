@@ -54,7 +54,7 @@ void event_teams_names(server_t *serv, client_t *client)
     free(buff);
 }
 
-void event_tile_update(server_t *serv, int x, int y)
+void event_tile_update(const server_t *serv, int x, int y)
 {
     char *tile = tile_content(serv, x, y);
 

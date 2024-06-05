@@ -27,21 +27,25 @@ char *to_lower_case(const char *str)
 
 static int get_id_from_str(const char *str)
 {
-    if (strcmp(to_lower_case(str), "linemate") == 0)
-        return 0;
-    if (strcmp(to_lower_case(str), "deraumere") == 0)
-        return 1;
-    if (strcmp(to_lower_case(str), "sibur") == 0)
-        return 2;
-    if (strcmp(to_lower_case(str), "mendiane") == 0)
-        return 3;
-    if (strcmp(to_lower_case(str), "phiras") == 0)
-        return 4;
-    if (strcmp(to_lower_case(str), "thystame") == 0)
-        return 5;
-    if (strcmp(to_lower_case(str), "food") == 0)
-        return 6;
-    return -1;
+    char *stone = to_lower_case(str);
+    int val = -1;
+
+    if (strcmp(stone, "linemate") == 0)
+        val = 0;
+    if (strcmp(stone, "deraumere") == 0)
+        val = 1;
+    if (strcmp(stone, "sibur") == 0)
+        val = 2;
+    if (strcmp(stone, "mendiane") == 0)
+        val = 3;
+    if (strcmp(stone, "phiras") == 0)
+        val = 4;
+    if (strcmp(stone, "thystame") == 0)
+        val = 5;
+    if (strcmp(stone, "food") == 0)
+        val = 6;
+    free(stone);
+    return val;
 }
 
 static bool take_stone(server_t *serv, client_t *cli, int id)

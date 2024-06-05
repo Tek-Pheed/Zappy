@@ -35,6 +35,7 @@ void destroy_client(server_t *serv, client_t *client)
             continue;
         free(cmd);
     }
+    list_clear(&client->cmds);
     team_remove_client(serv, client);
     free(client);
 }
