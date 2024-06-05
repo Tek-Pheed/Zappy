@@ -44,7 +44,10 @@ class Player:
         elif self.step == 3:
             if "food" in self.inventory and self.inventory["food"] < 35:
                 self.action = take_food(self.cases_arround)
-                self.step = 0
+                self.step += 1
             else:
                 self.action = take_minerals(self.cases_arround)
-                self.step = 0
+                self.step += 1
+        elif self.step == 4:
+            self.data_to_send = "Inventory\n"
+            self.step = 0
