@@ -29,7 +29,7 @@
 #define EAST                  2
 #define SOUTH                 3
 #define WEST                  4
-#define DEFAULT_BUFFER_SIZE   25
+#define DEFAULT_BUFFER_SIZE   100
 
 typedef struct server_s server_t;
 typedef struct cell_s cell_t;

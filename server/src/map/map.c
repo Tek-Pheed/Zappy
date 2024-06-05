@@ -10,7 +10,7 @@
 #include <time.h>
 #include "server.h"
 
-static void calculate_quantity(server_t *serv, float quantity[7])
+void calculate_quantity(const server_t *serv, float quantity[7])
 {
     float total = serv->resX * serv->resY;
 
@@ -23,16 +23,18 @@ static void calculate_quantity(server_t *serv, float quantity[7])
     quantity[6] = total * FOOD_R;
 }
 
-static void create_cell(cell_t *cell)
+static void create_cell(cell_t *cell, int x, int y)
 {
     cell->nb_player_on = 0;
     cell->food = 0;
+    cell->x = x;
+    cell->y = y;
     for (int i = 0; i < 6; ++i)
         cell->stone[i] = 0;
 }
 
-static void distribute_items(
-    cell_t **map, server_t *serv, int quant, int item_type)
+void distribute_items(
+    cell_t **map, const server_t *serv, int quant, int item_type)
 {
     int x = 0;
     int y = 0;
@@ -69,7 +71,7 @@ cell_t **create_map(server_t *serv)
     for (int i = 0; i != serv->resX; i++) {
         map[i] = calloc(serv->resY, sizeof(cell_t));
         for (int y = 0; y != serv->resY; y++)
-            create_cell(&map[i][y]);
+            create_cell(&map[i][y], i, y);
     }
     for (int i = 0; i != 7; i++)
         distribute_items(map, serv, quant[i], i);

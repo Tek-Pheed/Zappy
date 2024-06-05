@@ -28,7 +28,8 @@ static void create_team(server_t *serv, int flags[6])
     flags[3] = 1;
 }
 
-void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
+void parse_team_name(
+    server_t *serv, int flags[6], int argc, char *const argv[])
 {
     size_t allocated_size = 2;
     size_t current_size = 0;

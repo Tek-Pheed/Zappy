@@ -6,8 +6,8 @@
 */
 
 #include <stdlib.h>
-#include "server.h"
 #include "commands.h"
+#include "server.h"
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args)
 {
@@ -45,6 +45,7 @@ bool gui_map_content(server_t *server, client_t *client, UNUSED char **args)
     if (buff == NULL)
         return (false);
     server_send_data(client, buff);
+    free(buff);
     return (true);
 }
 

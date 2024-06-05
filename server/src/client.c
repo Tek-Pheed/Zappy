@@ -14,16 +14,20 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
+#include "commands.h"
+#include "define.h"
 #include "list.h"
 #include "server.h"
 
-void destroy_client(client_t *client)
+void destroy_client(server_t *serv, client_t *client)
 {
     size_t nb_cmds = 0;
     char *cmd = NULL;
 
     if (client == NULL)
         return;
+    if (client->fd != -1)
+        close(client->fd);
     nb_cmds = list_get_size(client->cmds);
     for (size_t i = 0; i != nb_cmds; i++) {
         cmd = list_get_elem_at_position(client->cmds, i);
@@ -31,18 +35,37 @@ void destroy_client(client_t *client)
             continue;
         free(cmd);
     }
+    team_remove_client(serv, client);
     free(client);
 }
 
 static void send_login_answer(server_t *serv, client_t *client)
 {
     char buffer[128];
-    team_t *team = get_team_client(serv, client);
-    int free_space = get_free_space_team(team);
+    team_t *team = team_get_client(serv, client);
+    int free_space = team_get_free_space(team);
 
     memset(buffer, '\0', sizeof(buffer));
     sprintf(buffer, "%d\n%d %d\n", free_space, serv->resX, serv->resY);
     server_send_data(client, buffer);
+}
+
+static bool create_player(server_t *serv, client_t *client, int index)
+{
+    client->player.food = 10;
+    client->player.elevating = false;
+    client->player.level = 1;
+    client->player.number = index;
+    client->player.orient = 1;
+    gettimeofday(&client->player.last_food_update, NULL);
+    return (team_add_client(serv, client));
+}
+
+static void send_initial_gui_data(server_t *serv, client_t *client)
+{
+    server_log(EVENT, client->fd, "logged in as GRAPHIC");
+    gui_map_size(serv, client, NULL);
+    gui_map_content(serv, client, NULL);
 }
 
 bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
@@ -51,19 +74,21 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
 
     if (cmd[0] == '\0')
         return (false);
-    strcpy(client->team_name, client->read_buffer);
+    strcpy(client->team_name, cmd);
     if (strncmp(cmd, "GRAPHIC", 7) == 0) {
         client->state = GRAPHICAL;
-        return (true);
-    } else {
-        client->state = AI;
-        client->player.number = player_index;
-        client->player.orient = 1;
-        player_index++;
-        send_login_answer(serv, client);
+        send_initial_gui_data(serv, client);
         return (true);
     }
-    return (false);
+    if (!create_player(serv, client, player_index)) {
+        server_log(WARNING, 0, "Unable to create player in team");
+        return (false);
+    }
+    client->state = AI;
+    player_index++;
+    send_login_answer(serv, client);
+    event_connnew_player(serv, client);
+    return (true);
 }
 
 bool server_add_client(server_t *serv)
@@ -81,21 +106,38 @@ bool server_add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
+    server_log(INFO, user->fd, "user connection request");
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);
+}
+
+static void check_win_team(server_t *serv)
+{
+    int len_team = list_get_size(serv->teams);
+    team_t *tmp = NULL;
+
+    for (int i = 0; i != len_team; i++) {
+        tmp = list_get_elem_at_position(serv->teams, i);
+        if (tmp->nb_level_max >= 6) {
+            serv->winner = strdup(tmp->name);
+            return;
+        }
+    }
 }
 
 void check_lvl_player(server_t *serv)
 {
     int len = list_get_size(serv->client);
     client_t *tmp;
+    team_t *team_tmp;
 
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp && tmp->state == AI && tmp->player.level == 8) {
-            serv->winner = strdup(tmp->player.team_name);
-            return;
+            team_tmp = team_get_client(serv, tmp);
+            team_tmp->nb_level_max += 1;
         }
     }
+    check_win_team(serv);
 }

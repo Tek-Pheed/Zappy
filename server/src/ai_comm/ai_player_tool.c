@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include "commands.h"
 #include "server.h"
 
 bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
@@ -18,12 +19,13 @@ bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
     if (!buff)
         return false;
     sprintf(buff,
-        "linemate %d, deraumere %d, sibur %d, mendiane %d, phiras %d, "
-        "thystame %d, food %d\n",
-        cli->player.stone[LINEMATE], cli->player.stone[DERAUMERE],
-        cli->player.stone[SIBUR], cli->player.stone[MENDIANE],
-        cli->player.stone[PHIRAS], cli->player.stone[THYSTAME],
-        cli->player.food);
+        "[ food %d, linemate %d, deraumere %d, sibur %d, mendiane %d, phiras "
+        "%d, "
+        "thystame %d ]\n",
+        cli->player.food, cli->player.stone[LINEMATE],
+        cli->player.stone[DERAUMERE], cli->player.stone[SIBUR],
+        cli->player.stone[MENDIANE], cli->player.stone[PHIRAS],
+        cli->player.stone[THYSTAME]);
     cli->cmd_duration = 1;
     gettimeofday(&cli->last_cmd_time, NULL);
     server_send_data(cli, buff);
@@ -39,7 +41,7 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    int value = get_free_space_team(get_team_client(serv, cli));
+    int value = team_get_free_space(team_get_client(serv, cli));
     char str[12];
 
     memset(str, '\0', sizeof(str));
@@ -52,40 +54,46 @@ bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    team_t *tmp = get_team_client(serv, cli);
+    team_t *tmp = team_get_client(serv, cli);
     egg_t *egg = NULL;
 
     if (tmp == NULL)
         return false;
-    egg = calloc(1, sizeof(egg_t));
-    egg->team = tmp;
-    egg->x = cli->player.x;
-    egg->y = cli->player.y;
+    event_egg_laying(serv, cli);
+    egg = create_egg(cli->player.x, cli->player.y, tmp);
     cli->cmd_duration = 42;
     list_add_elem_at_back(&tmp->eggs, egg);
+    event_egg_laid(serv, cli, egg->number, &((ivect2D_t){egg->x, egg->y}));
     gettimeofday(&cli->last_cmd_time, NULL);
     server_send_data(cli, "ok\n");
     return true;
 }
 
-static void eject_destroy_eggs(client_t *cli, team_t *tmp_team, int i, int y)
+static void eject_destroy_eggs(const server_t *serv, const client_t *cli,
+    team_t *tmp_team, const ivect2D_t *iy)
 {
     egg_t *tmp_eggs = NULL;
 
-    tmp_eggs = list_get_elem_at_position(tmp_team->eggs, i);
+    tmp_eggs = list_get_elem_at_position(tmp_team->eggs, iy->x);
+    if (tmp_eggs == NULL)
+        return;
+    event_egg_death(serv, cli, tmp_eggs->number);
     if (tmp_eggs->x == cli->player.x && tmp_eggs->y == cli->player.y) {
-        free(list_get_elem_at_position(tmp_team->eggs, y));
-        list_del_elem_at_position(&tmp_team->eggs, y);
+        free(list_get_elem_at_position(tmp_team->eggs, iy->y));
+        list_del_elem_at_position(&tmp_team->eggs, iy->y);
     }
 }
 
-static void eject_player(int i, client_t *cli, server_t *serv, char msg[20])
+static void eject_player(
+    int i, const client_t *cli, server_t *serv, const char msg[20])
 {
     client_t *tcli = NULL;
 
     tcli = list_get_elem_at_position(serv->client, i);
-    if (tcli->player.x == cli->player.x && tcli->player.y == cli->player.y)
+    if (tcli->player.x == cli->player.x && tcli->player.y == cli->player.y) {
         server_send_data(tcli, msg);
+        event_expulsion(serv, cli);
+    }
 }
 
 bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj)
@@ -104,7 +112,7 @@ bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj)
         tteam = list_get_elem_at_position(serv->teams, i);
         len_eggs = list_get_size(tteam->eggs);
         for (int y = 0; y != len_eggs; y++) {
-            eject_destroy_eggs(cli, tteam, i, y);
+            eject_destroy_eggs(serv, cli, tteam, &((ivect2D_t){i, y}));
         }
     }
     cli->cmd_duration = 7;
