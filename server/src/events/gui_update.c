@@ -16,7 +16,7 @@ void event_player_position(server_t *serv, const client_t *client)
 
     if (buff == NULL)
         return;
-    server_log(EVENT, client->fd, "player position changed");
+    server_log(serv, EVENT, client->fd, "player position changed");
     server_event_send_many(serv, GRAPHICAL, buff);
     free(buff);
 }
@@ -27,7 +27,7 @@ void event_player_level(server_t *serv, const client_t *client)
 
     if (buff == NULL)
         return;
-    server_log(EVENT, client->fd, "player changed level");
+    server_log(serv, EVENT, client->fd, "player changed level");
     server_event_send_many(serv, GRAPHICAL, buff);
     free(buff);
 }
@@ -38,7 +38,7 @@ void event_player_inventory(server_t *serv, const client_t *client)
 
     if (buff == NULL)
         return;
-    server_log(EVENT, client->fd, "player inventory changed");
+    server_log(serv, EVENT, client->fd, "player inventory changed");
     server_event_send_many(serv, GRAPHICAL, buff);
     free(buff);
 }
@@ -50,7 +50,7 @@ void event_teams_names(server_t *serv, client_t *client)
     if (buff == NULL)
         return;
     server_send_data(client, buff);
-    server_log(INFO, client->fd, "Sending team names");
+    server_log(serv, INFO, client->fd, "Sending team names");
     free(buff);
 }
 
@@ -61,6 +61,6 @@ void event_tile_update(const server_t *serv, int x, int y)
     if (tile == NULL)
         return;
     server_event_send_many(serv, GRAPHICAL, tile);
-    server_log(INFO, 0, "Send update tile");
+    server_log(serv, INFO, 0, "Send update tile");
     free(tile);
 }

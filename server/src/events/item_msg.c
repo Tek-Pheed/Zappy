@@ -16,7 +16,7 @@ void event_ressource_drop(
     char buff[DEFAULT_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    server_log(EVENT, client->fd, "ressource drop");
+    server_log(serv, EVENT, client->fd, "ressource drop");
     sprintf(buff, "pdr %d %d\n", client->player.number, r_nb);
     server_event_send_many(serv, GRAPHICAL, buff);
 }
@@ -27,7 +27,7 @@ void event_ressource_collect(
     char buff[DEFAULT_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    server_log(EVENT, client->fd, "ressource collected");
+    server_log(serv, EVENT, client->fd, "ressource collected");
     sprintf(buff, "pgt %d %d\n", client->player.number, r_nb);
     server_event_send_many(serv, GRAPHICAL, buff);
 }
@@ -37,7 +37,7 @@ void event_egg_laying(const server_t *serv, const client_t *client)
     char buff[DEFAULT_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    server_log(EVENT, client->fd, "egg laying");
+    server_log(serv, EVENT, client->fd, "egg laying");
     sprintf(buff, "pfk %d\n", client->player.number);
     server_event_send_many(serv, GRAPHICAL, buff);
 }
@@ -48,7 +48,7 @@ void event_egg_laid(const server_t *serv, const client_t *client, int egg_nb,
     char buff[DEFAULT_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    server_log(EVENT, client->fd, "egg laid by player");
+    server_log(serv, EVENT, client->fd, "egg laid by player");
     sprintf(buff, "enw %d %d %d %d\n", egg_nb, client->player.number, pos->x,
         pos->y);
     server_event_send_many(serv, GRAPHICAL, buff);
@@ -59,7 +59,7 @@ void event_egg_death(const server_t *serv, const client_t *client, int egg_nb)
     char buff[DEFAULT_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
-    server_log(EVENT, client->fd, "egg death");
+    server_log(serv, EVENT, client->fd, "egg death");
     sprintf(buff, "edi %d\n", egg_nb);
     server_event_send_many(serv, GRAPHICAL, buff);
 }

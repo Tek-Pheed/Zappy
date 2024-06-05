@@ -58,7 +58,7 @@ static void update_map(server_t *serv)
         for (int i = 0; i != 7; i++)
             distribute_items_after(serv->map, serv, quant[i], i);
         gettimeofday(&serv->last_map_update, NULL);
-        server_log(INFO, 0, "Adding object on map");
+        server_log(serv, INFO, 0, "Adding object on map");
     }
 }
 

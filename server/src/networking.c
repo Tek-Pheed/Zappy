@@ -32,10 +32,10 @@ void handle_destroyed_clients(server_t *server)
         list_del_elem_at_position(&server->client, to_remove[i]);
 }
 
-static void disable_client(client_t *client, int write_ret)
+static void disable_client(server_t *serv, client_t *client, int write_ret)
 {
     if (write_ret == -1) {
-        server_log(EVENT, client->fd, "client disconnected");
+        server_log(serv, EVENT, client->fd, "client disconnected");
         close(client->fd);
         client->fd = -1;
     }
@@ -55,9 +55,9 @@ void send_buffered_data(server_t *server, fd_set *write_fds)
         if (FD_ISSET(client->fd, write_fds)) {
             write_ret = write(client->fd, client->write_buffer,
                 strlen(client->write_buffer));
-            server_log(SENDING, client->fd, client->write_buffer);
+            server_log(server, SENDING, client->fd, client->write_buffer);
         }
-        disable_client(client, write_ret);
+        disable_client(server, client, write_ret);
         memset(client->write_buffer, '\0', sizeof(client->write_buffer));
     }
 }

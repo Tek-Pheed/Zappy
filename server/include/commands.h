@@ -51,8 +51,8 @@ void event_player_death(const server_t *serv, client_t *client);
 void event_player_connection_egg(const server_t *serv, const client_t *client);
 void event_end_game(const server_t *serv, const char *winner);
 void event_server_message(server_t *serv, const char *msg);
-void event_unknow_command(client_t *client);
-void event_command_parameter(client_t *client);
+void event_unknow_command(server_t *serv, client_t *client);
+void event_command_parameter(server_t *serv, client_t *client);
 void event_start_incantation(
     const server_t *serv, client_t *client, int *p_nb, int size);
 void event_end_incantation(const server_t *serv, const client_t *client,
