@@ -94,6 +94,7 @@ bool ai_inventory(
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_end_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
@@ -113,6 +114,7 @@ static const struct command_handler_s ai_cmds[] = {
         .nb_args = 0,
         .ptr = {.ai_ptr = ai_connect_nbr}},
     {.command = "Fork", .nb_args = 0, .ptr = {.ai_ptr = ai_fork}},
+    {.command = "EndForkServer", .nb_args = 0, .ptr = {.ai_ptr = ai_end_fork}},
     {.command = "Eject", .nb_args = 0, .ptr = {.ai_ptr = ai_eject}},
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},

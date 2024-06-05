@@ -24,6 +24,7 @@ SRC	=	src/ai_comm/ai_move.c             \
 		src/ai_comm/ai_object.c           \
 		src/ai_comm/ai_player_tool.c      \
 		src/ai_comm/ai_elevation.c        \
+		src/ai_comm/ai_fork.c             \
 		src/ai_comm/ai_look.c             \
 		src/gui_comm/gui_comm.c           \
 		src/gui_comm/gui_comm2.c          \
