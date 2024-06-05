@@ -21,7 +21,7 @@ class AI:
         message = ""
         running = 0
         while True:
-            event = self.server.selectors.select(timeout=10)
+            event = self.server.selectors.select(timeout=None)
             for _, mask in event:
                 if mask & selectors.EVENT_READ:
                     data = self.server.receive_message()
@@ -36,13 +36,21 @@ class AI:
                             print("I'm dead")
                             self.server.close_connection()
                             exit(0)
-                        if self.player.data_to_send == "Inventory\n":
+                        if "Elevation underway" in elem:
+                            self.player.step = -1
+                        elif "Current level:" in elem:
+                            self.player.level = int(''.join(filter(str.isdigit, elem)))
+                            if self.player.level == 8:
+                                exit(0)
+                            print(elem)
+                        elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
                             except ValueError:
                                 print_verbose(self.player.verbose, f"Error {elem}")
                                 pass
                         elif self.player.data_to_send == "Look\n":
+                            self.player.parse_look_command(elem)
                             self.player.cases_arround = get_case_around_player(elem)
                         message = message.split("\n")[-1]
                         running = 1
@@ -50,10 +58,9 @@ class AI:
                 if mask & selectors.EVENT_WRITE:
                     if self.player.logged and running == 1:
                         self.player.take_action()
-                    if self.player.logged == False and self.player.team in self.player.data_to_send:
-                        self.player.logged = True
-                        self.server.send_message(self.player.data_to_send)
                     if running != 0 and self.player.data_to_send:
+                        if self.player.logged == False and self.player.team in self.player.data_to_send:
+                            self.player.logged = True
                         self.server.send_message(self.player.data_to_send)
                         running = 0
 
