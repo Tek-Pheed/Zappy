@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include "commands.h"
 #include "server.h"
 
 char *to_lower_case(const char *str)
@@ -50,7 +51,10 @@ static bool take_stone(server_t *serv, client_t *cli, int id)
         if (serv->map[cli->player.x][cli->player.y].stone[id] > 0) {
             cli->player.stone[id] += 1;
             serv->map[cli->player.x][cli->player.y].stone[id] -= 1;
+            event_ressource_collect(serv, cli, id + 1);
             server_send_data(cli, "ok\n");
+            event_player_inventory(serv, cli);
+            event_tile_update(serv, cli->player.x, cli->player.y);
             return true;
         }
     }
@@ -58,17 +62,25 @@ static bool take_stone(server_t *serv, client_t *cli, int id)
     return false;
 }
 
+static void set_duration(client_t *cli)
+{
+    cli->cmd_duration = 7;
+    gettimeofday(&cli->last_cmd_time, NULL);
+}
+
 bool ai_take_object(server_t *serv, client_t *cli, const char *obj)
 {
     int id = get_id_from_str(obj);
 
-    cli->cmd_duration = 7;
-    gettimeofday(&cli->last_cmd_time, NULL);
+    set_duration(cli);
     if (id == 6) {
-        if (serv->map[cli->player.x][cli->player.x].food > 0) {
+        if (serv->map[cli->player.x][cli->player.y].food > 0) {
             cli->player.food += 1;
-            serv->map[cli->player.x][cli->player.x].food -= 1;
+            serv->map[cli->player.x][cli->player.y].food -= 1;
+            event_ressource_collect(serv, cli, 0);
             server_send_data(cli, "ok\n");
+            event_player_inventory(serv, cli);
+            event_tile_update(serv, cli->player.x, cli->player.y);
             return true;
         } else {
             server_send_data(cli, "ko\n");
@@ -84,17 +96,20 @@ bool ai_set_object(server_t *serv, client_t *cli, const char *obj)
 {
     int id = get_id_from_str(obj);
 
-    cli->cmd_duration = 7;
-    gettimeofday(&cli->last_cmd_time, NULL);
+    set_duration(cli);
     if (id == 6 && cli->player.food > 0) {
         cli->player.food -= 1;
         serv->map[cli->player.x][cli->player.y].food += 1;
         server_send_data(cli, "ok\n");
+        event_player_inventory(serv, cli);
+        event_tile_update(serv, cli->player.x, cli->player.y);
         return true;
     } else if (id != -1 && cli->player.stone[id] > 0) {
         cli->player.stone[id] -= 1;
         serv->map[cli->player.x][cli->player.y].stone[id] += 1;
         server_send_data(cli, "ok\n");
+        event_player_inventory(serv, cli);
+        event_tile_update(serv, cli->player.x, cli->player.y);
         return true;
     }
     server_send_data(cli, "ko\n");

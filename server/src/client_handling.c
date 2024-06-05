@@ -12,6 +12,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "commands.h"
 #include "list.h"
 #include "server.h"
 #include "strings_array.h"
@@ -28,7 +29,7 @@ void server_send_data(client_t *client, const char *data)
     }
 }
 
-static bool is_client_ready(server_t *serv, client_t *client)
+static bool is_client_ready(const server_t *serv, client_t *client)
 {
     struct timeval current_time;
     double ready_time = timeval_get_milliseconds(&client->last_cmd_time)
@@ -74,7 +75,7 @@ void run_client_commands(server_t *serv)
         if (client == NULL)
             continue;
         if (!handle_commands(serv, client))
-            server_send_data(client, "ko\n");
+            event_unknow_command(client);
     }
 }
 
@@ -96,8 +97,10 @@ static void read_client(client_t *client)
     int ret =
         read(client->fd, client->read_buffer, sizeof(client->read_buffer));
 
+    server_log(RECEIVING, client->fd, client->read_buffer);
     if (ret < 1) {
         close(client->fd);
+        server_log(EVENT, client->fd, "logged out");
         client->fd = -1;
     }
 }

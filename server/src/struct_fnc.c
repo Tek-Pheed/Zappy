@@ -28,7 +28,7 @@ server_t *init_struct(void)
     return tmp;
 }
 
-int get_team_nb(server_t *serv)
+int get_team_nb(const server_t *serv)
 {
     int index = 0;
 
