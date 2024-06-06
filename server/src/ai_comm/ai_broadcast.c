@@ -15,23 +15,37 @@
 #include "define.h"
 #include "server.h"
 
-// printf("Dir: %d\nAngle: %f\n", dir, angle);
+static fvect2d_t get_multiplier(int dir)
+{
+    switch (dir) {
+        case NORTH:
+            return ((fvect2d_t){0, -1});
+        case WEST:
+            return ((fvect2d_t){-1, 0});
+        case SOUTH:
+            return ((fvect2d_t){0, 1});
+        case EAST:
+            return ((fvect2d_t){1, 0});
+        default:
+            break;
+    }
+    return ((fvect2d_t){0, 1});
+}
+
 static int map_to_local_player_direction(
     const ivect2D_t *pos, const player_t *player)
 {
     int dir = 0;
-    float angle = 0.0f;
-    fvect2D_t vect = {(float) player->x - (float) pos->x,
-        (float) player->y - (float) pos->y};
+    fvect2d_t vect = {(float) pos->x - (float) player->x,
+        (float) pos->y - (float) player->y};
+    fvect2d_t orient = get_multiplier(player->orient);
+    float angle = atan2f(orient.y, orient.x) - atan2f(vect.y, vect.x);
 
-    if (vect.x == 0.0f && vect.y == 0.0f)
-        return (0);
-    angle = atan2f(vect.y, vect.x) * 180.0f / M_PI;
-    angle += (player->orient - 1) * 90.0f;
-    dir = (angle / 45.0f) + 1;
+    angle = angle * 360.0f / (2.0f * M_PI);
     if (angle < 0.0f)
-        dir = 8 - dir;
-    return (dir % 8);
+        angle += 360;
+    dir = roundf(angle / 45.0f) + 1;
+    return (dir);
 }
 
 static int get_orient(
@@ -86,10 +100,13 @@ static int get_tile_orient(
     return (get_orient(&offsets, a, b));
 }
 
-static void send_broadcast(client_t *target, const char *msg, int tile)
+void send_broadcast(client_t *target, const char *msg, int tile)
 {
-    char *tmp = calloc(strlen(msg) + 32, sizeof(char));
+    char *tmp = NULL;
 
+    if (msg == NULL)
+        return;
+    tmp = calloc(strlen(msg) + 32, sizeof(char));
     sprintf(tmp, "message %d, %s\n", tile, msg);
     server_send_data(target, tmp);
     free(tmp);

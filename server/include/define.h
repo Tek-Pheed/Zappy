@@ -38,7 +38,7 @@ typedef struct player_s player_t;
 typedef struct team_s team_t;
 typedef struct egg_s egg_t;
 typedef struct ivect2D_s ivect2D_t;
-typedef struct fvect2D_s fvect2D_t;
+typedef struct fvect2D_s fvect2d_t;
 
 struct ivect2D_s {
     int x;
