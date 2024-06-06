@@ -99,6 +99,7 @@ static void read_client(server_t *serv, client_t *client)
 
     server_log(serv, RECEIVING, client->fd, client->read_buffer);
     if (ret < 1) {
+        event_player_death(serv, client);
         close(client->fd);
         server_log(serv, EVENT, client->fd, "logged out");
         client->fd = -1;

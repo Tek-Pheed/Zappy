@@ -26,8 +26,11 @@ void destroy_client(server_t *serv, client_t *client)
 
     if (client == NULL)
         return;
-    if (client->fd != -1)
+    if (client->fd != -1) {
+        if (client->state == AI && !client->player.is_dead)
+            event_player_death(serv, client);
         close(client->fd);
+    }
     nb_cmds = list_get_size(client->cmds);
     for (size_t i = 0; i != nb_cmds; i++) {
         cmd = list_get_elem_at_position(client->cmds, i);

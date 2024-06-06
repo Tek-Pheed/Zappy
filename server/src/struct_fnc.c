@@ -82,6 +82,7 @@ void destroy_server(server_t *serv)
     size_t clients_nb = list_get_size(serv->client);
     size_t team_nb = list_get_size(serv->teams);
 
+    server_log(serv, INFO, 0, "Stopping server...");
     close(serv->socket);
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(serv->client, i);
