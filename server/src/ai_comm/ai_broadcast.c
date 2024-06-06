@@ -45,10 +45,6 @@ static int map_to_local_player_direction(
     if (angle < 0.0f)
         angle += 360;
     dir = roundf(angle / 45.0f) + 1;
-    printf("Position: %d %d\n", pos->x, pos->y);
-    printf("Vect: %f %f\n", vect.x, vect.y);
-    printf("Orient: %f %f\n", orient.x, orient.y);
-    printf("Dir: %d\nAngle: %f\n", dir, angle);
     return (dir);
 }
 
@@ -77,9 +73,7 @@ static int get_x_offset(
     for (int i = -1; i != 2; i++) {
         tmp = abs((b->player.x + i * serv->resX) - a->player.x)
             + abs((b->player.y) - a->player.y);
-        printf("Compute offset %d: %d\n", i, tmp);
         if (tmp < dist) {
-            printf("This is the smallest: %d\n", i);
             dist = tmp;
             offset = i;
         }
