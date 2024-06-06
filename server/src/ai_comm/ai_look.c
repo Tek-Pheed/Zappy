@@ -32,30 +32,49 @@ static cell_t *get_current_case(
     return NULL;
 }
 
+static void get_stone_cell_next(const cell_t *cell, char **ptr)
+{
+    if (cell->stone[PHIRAS] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "phiras ");
+    }
+    if (cell->stone[THYSTAME] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "thystame ");
+    }
+}
+
 static void get_stone_cell(const cell_t *cell, char **ptr)
 {
-    if (cell->stone[LINEMATE] > 0)
-        *ptr += sprintf(*ptr, "linemate ");
-    if (cell->stone[DERAUMERE] > 0)
-        *ptr += sprintf(*ptr, "deraumere ");
-    if (cell->stone[SIBUR] > 0)
-        *ptr += sprintf(*ptr, "sibur ");
-    if (cell->stone[MENDIANE] > 0)
-        *ptr += sprintf(*ptr, "mendiane ");
-    if (cell->stone[PHIRAS] > 0)
-        *ptr += sprintf(*ptr, "phiras ");
-    if (cell->stone[THYSTAME] > 0)
-        *ptr += sprintf(*ptr, "thystame ");
+    if (cell->stone[LINEMATE] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "linemate ");
+    }
+    if (cell->stone[DERAUMERE] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "deraumere ");
+    }
+    if (cell->stone[SIBUR] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "sibur ");
+    }
+    if (cell->stone[MENDIANE] > 0) {
+        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+            *ptr += sprintf(*ptr, "mendiane ");
+    }
+    get_stone_cell_next(cell, ptr);
 }
 
 static char *get_items_on_cell(const cell_t *cell)
 {
-    char buff[DEFAULT_BUFFER_SIZE * 5];
+    char buff[DEFAULT_BUFFER_SIZE * 10];
     char *ptr = buff;
 
     memset(buff, 0, sizeof(buff));
-    if (cell->food > 0)
-        ptr += sprintf(ptr, "food ");
+    if (cell->food > 0) {
+        for (int i = 0; i != cell->food; i++)
+            ptr += sprintf(ptr, "food ");
+    }
     get_stone_cell(cell, &ptr);
     return strdup(buff);
 }

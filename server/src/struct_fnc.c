@@ -5,8 +5,8 @@
 ** init_struct
 */
 
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "server.h"
 
 server_t *init_struct(void)
@@ -21,6 +21,7 @@ server_t *init_struct(void)
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
+    tmp->verbose = false;
     tmp->client = calloc(1, sizeof(list_t));
     tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
@@ -81,6 +82,7 @@ void destroy_server(server_t *serv)
     size_t clients_nb = list_get_size(serv->client);
     size_t team_nb = list_get_size(serv->teams);
 
+    server_log(serv, INFO, 0, "Stopping server...");
     close(serv->socket);
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(serv->client, i);

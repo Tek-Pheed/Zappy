@@ -45,16 +45,18 @@ static void check_opt(int opt, server_t *serv, int flags[6])
 
 static int parse_args(int argc, char *const argv[], server_t *serv)
 {
-    int opt = getopt(argc, argv, "p:x:y:n:c:f:");
+    int opt = getopt(argc, argv, "p:x:y:n:c:f:v");
     int flags[6] = {0};
 
     while (opt != -1) {
         if (opt == 'n')
             parse_team_name(serv, flags, argc, argv);
+        if (opt == 'v')
+            serv->verbose = true;
         if (opt == '?')
             return 84;
         check_opt(opt, serv, flags);
-        opt = getopt(argc, argv, "p:x:y:n:c:f:");
+        opt = getopt(argc, argv, "p:x:y:n:c:f:v");
     }
     return check_all_args(flags);
 }
@@ -62,7 +64,7 @@ static int parse_args(int argc, char *const argv[], server_t *serv)
 static int display_help(void)
 {
     printf("USAGE: ./zappy_server -p port -x width -y height -n name1 name2");
-    printf(" ... -c clientsNb -f freq\n");
+    printf(" ... -c clientsNb -f freq [-v verbose true|false]\n");
     return 1;
 }
 
@@ -85,6 +87,7 @@ static void print_serv(const server_t *serv)
     }
     printf("C: %d\n", serv->clientNb);
     printf("F: %d\n", serv->freq);
+    printf("Verbose: %s\n", serv->verbose ? "true" : "false");
 }
 
 int main(int argc, char *argv[])

@@ -26,8 +26,11 @@ void destroy_client(server_t *serv, client_t *client)
 
     if (client == NULL)
         return;
-    if (client->fd != -1)
+    if (client->fd != -1) {
+        if (client->state == AI && !client->player.is_dead)
+            event_player_death(serv, client);
         close(client->fd);
+    }
     nb_cmds = list_get_size(client->cmds);
     for (size_t i = 0; i != nb_cmds; i++) {
         cmd = list_get_elem_at_position(client->cmds, i);
@@ -35,6 +38,7 @@ void destroy_client(server_t *serv, client_t *client)
             continue;
         free(cmd);
     }
+    list_clear(&client->cmds);
     team_remove_client(serv, client);
     free(client);
 }
@@ -63,7 +67,7 @@ static bool create_player(server_t *serv, client_t *client, int index)
 
 static void send_initial_gui_data(server_t *serv, client_t *client)
 {
-    server_log(EVENT, client->fd, "logged in as GRAPHIC");
+    server_log(serv, EVENT, client->fd, "logged in as GRAPHIC");
     event_teams_names(serv, client);
     gui_get_time_unit(serv, client, NULL);
     gui_map_size(serv, client, NULL);
@@ -83,7 +87,7 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
         return (true);
     }
     if (!create_player(serv, client, player_index)) {
-        server_log(WARNING, 0, "Unable to create player in team");
+        server_log(serv, WARNING, 0, "Unable to create player in team");
         return (false);
     }
     client->state = AI;
@@ -108,7 +112,7 @@ bool server_add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
-    server_log(INFO, user->fd, "user connection request");
+    server_log(serv, INFO, user->fd, "user connection request");
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);

@@ -64,11 +64,14 @@ static char *team_name(const server_t *serv, int ind)
 char *all_name(server_t *serv)
 {
     char *buff = calloc(get_team_nb(serv) * DEFAULT_BUFFER_SIZE, sizeof(char));
+    char *team = NULL;
 
     if (!buff)
         return NULL;
     for (int i = 0; serv->tName[i] != NULL; i++) {
-        strcat(buff, team_name(serv, i));
+        team = team_name(serv, i);
+        strcat(buff, team);
+        free(team);
     }
     return buff;
 }

@@ -75,7 +75,7 @@ void run_client_commands(server_t *serv)
         if (client == NULL)
             continue;
         if (!handle_commands(serv, client))
-            event_unknow_command(client);
+            event_unknow_command(serv, client);
     }
 }
 
@@ -92,15 +92,16 @@ static void add_client_command(client_t *client)
     memset(client->read_buffer, 0, sizeof(client->read_buffer));
 }
 
-static void read_client(client_t *client)
+static void read_client(server_t *serv, client_t *client)
 {
     int ret =
         read(client->fd, client->read_buffer, sizeof(client->read_buffer));
 
-    server_log(RECEIVING, client->fd, client->read_buffer);
+    server_log(serv, RECEIVING, client->fd, client->read_buffer);
     if (ret < 1) {
+        event_player_death(serv, client);
         close(client->fd);
-        server_log(EVENT, client->fd, "logged out");
+        server_log(serv, EVENT, client->fd, "logged out");
         client->fd = -1;
     }
 }
@@ -117,7 +118,7 @@ void read_client_data(server_t *serv, fd_set *read_set)
             continue;
         if (FD_ISSET(client->fd, read_set)) {
             memset(client->read_buffer, 0, sizeof(client->read_buffer));
-            read_client(client);
+            read_client(serv, client);
             add_client_command(client);
         }
     }

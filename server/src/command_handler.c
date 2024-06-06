@@ -18,11 +18,11 @@ static bool run_gui(
     for (size_t i = 0; i != sizeof(gui_cmds) / sizeof(gui_cmds[0]); i++) {
         if (strncmp(gui_cmds[i].command, cmd, strlen(gui_cmds[i].command)) == 0
             && (str_array_length(args) - 1) >= gui_cmds[i].nb_args) {
-            server_log(PROCESS, client->fd, cmd);
+            server_log(serv, PROCESS, client->fd, cmd);
             return (gui_cmds[i].ptr.gui_ptr(serv, client, args));
         }
     }
-    server_log(WARNING, 0, "Unknown command");
+    server_log(serv, WARNING, 0, "Unknown command");
     server_send_data(client, "suc\n");
     return (true);
 }
@@ -40,21 +40,30 @@ static void broadcast_map_content(server_t *serv)
     }
 }
 
+static bool check_cmd(int i, const char *cmd, const char *arg)
+{
+    if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command)) == 0) {
+        if (ai_cmds[i].nb_args > 0 && arg == NULL)
+            return (false);
+        return (true);
+    }
+    return (false);
+}
+
 static bool run_ai(
     server_t *serv, client_t *client, const char *cmd, const char *arg)
 {
     bool ret = true;
 
     for (size_t i = 0; i != sizeof(ai_cmds) / sizeof(ai_cmds[0]); i++) {
-        if (strncmp(ai_cmds[i].command, cmd, strlen(ai_cmds[i].command))
-            == 0) {
-            server_log(PROCESS, client->fd, cmd);
+        if (check_cmd(i, cmd, arg)) {
+            server_log(serv, PROCESS, client->fd, cmd);
             ret = ai_cmds[i].ptr.ai_ptr(serv, client, arg);
             broadcast_map_content(serv);
             return (ret);
         }
     }
-    server_log(WARNING, 0, "Unknown command");
+    server_log(serv, WARNING, 0, "Unknown command");
     return (false);
 }
 
