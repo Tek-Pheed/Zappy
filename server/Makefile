@@ -10,7 +10,7 @@ NAME	=	../zappy_server
 LIBNAME=	libs/libmy.a
 
 INCFLAGS	=	-I include -I libs/list/ -I libs/strings
-LDFLAGS	=	-Llibs -lmy
+LDFLAGS	=	-Llibs -lmy -lm
 
 CFLAGS	=	$(INCFLAGS) -Wall -Wextra -Werror -O2
 
@@ -26,6 +26,7 @@ SRC	=	src/ai_comm/ai_move.c             \
 		src/ai_comm/ai_elevation.c        \
 		src/ai_comm/ai_fork.c             \
 		src/ai_comm/ai_look.c             \
+		src/ai_comm/ai_broadcast.c        \
 		src/gui_comm/gui_comm.c           \
 		src/gui_comm/gui_comm2.c          \
 		src/gui_comm/map_team_msg.c       \
