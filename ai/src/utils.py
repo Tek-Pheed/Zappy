@@ -18,7 +18,6 @@ def generate_empty_map() -> List:
     for _ in range(4):
         res.append([[] for j in range(nbCase)])
         nbCase += 2
-    print(res)
     return res
 
 def get_nb_of_line_in_array(array: List) -> int:
