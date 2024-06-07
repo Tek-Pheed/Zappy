@@ -10,10 +10,12 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <iostream>
+#include <list>
 #include <queue>
 #include <string>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "Items.hpp"
 
 namespace Zappy
 {
@@ -41,7 +43,13 @@ namespace Zappy
     class Parser {
       private:
       public:
-        void createItems();
-        void createmap();
+        Parser();
+        ~Parser();
+        std::list<IItems> createItems(std::queue<std::string> items);
+        void createBloc(std::queue<std::string> bloc);
+        void createMap(std::queue<std::string> size);
+        void createTeams(std::queue<std::string> teams);
+        void createFrequ(std::queue<std::string> freq);
+        void parsing(std::queue<std::queue<std::string>> data);
     };
 } // namespace Zappy
