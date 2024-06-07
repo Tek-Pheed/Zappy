@@ -14,7 +14,7 @@
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-static int check_all_args(int flags[6])
+static int check_all_args(const int flags[6])
 {
     for (int i = 0; i != 6; i++) {
         if (flags[i] != 1)

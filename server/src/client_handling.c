@@ -92,7 +92,7 @@ static void add_client_command(client_t *client)
     memset(client->read_buffer, 0, sizeof(client->read_buffer));
 }
 
-static void read_client(server_t *serv, client_t *client)
+static void read_client(const server_t *serv, client_t *client)
 {
     int ret =
         read(client->fd, client->read_buffer, sizeof(client->read_buffer));

@@ -28,12 +28,12 @@ typedef struct ivect2D_s ivect2D_t;
 
 char *tile_content(const server_t *serv, int x, int y);
 char *all_content(const server_t *serv);
-char *all_name(server_t *serv);
+char *all_name(const server_t *serv);
 char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
 char *player_inventory(server_t *serv, int p_index);
 
-char *time_unit_request(server_t *serv);
+char *time_unit_request(const server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
 void event_connnew_player(const server_t *serv, client_t *client);
 void event_ressource_drop(
