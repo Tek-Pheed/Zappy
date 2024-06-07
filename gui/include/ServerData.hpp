@@ -24,6 +24,7 @@ namespace Zappy
         fd_set _writefds;
         bool _isconnect;
         struct sockaddr_in _server_addr;
+        std::queue<std::queue<std::string>> _data;
 
       public:
         Server(int port, char *ip);
@@ -33,7 +34,14 @@ namespace Zappy
         void messConnect();
         void parseBuffer(char *buffer);
         std::queue<std::string> splitData(std::string data);
-        std::queue<std::queue<std::string>> _data;
         std::queue<std::queue<std::string>> getData();
+        void popData();
+    };
+
+    class Parser {
+      private:
+      public:
+        void createItems();
+        void createmap();
     };
 } // namespace Zappy

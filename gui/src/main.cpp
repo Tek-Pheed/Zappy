@@ -15,17 +15,16 @@ int main(int ac, char **av)
     serv.messConnect();
     while (true) {
         serv.receiveMess();
-        // std::queue<std::queue<std::string>> result = serv.getData();
-        while (!serv._data.empty()) {
-            // printf("coucou\n");
-            std::queue<std::string> lineQueue = serv._data.front();
+        std::queue<std::queue<std::string>> result = serv.getData();
+        while (!result.empty()) {
+            std::queue<std::string> lineQueue = result.front();
             while (!lineQueue.empty()) {
-                // printf("lol\n");
                 std::cout << lineQueue.front() << " ";
                 lineQueue.pop();
             }
             std::cout << std::endl;
-            serv._data.pop();
+            result.pop();
+            serv.popData();
         }
     }
     return 0;
