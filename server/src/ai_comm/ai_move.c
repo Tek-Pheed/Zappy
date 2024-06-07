@@ -16,8 +16,7 @@ static void send_update(server_t *serv, client_t *cli)
     event_player_position(serv, cli);
 }
 
-bool ai_move_forward(
-    server_t *serv, client_t *cli, UNUSED const char *obj)
+bool ai_move_forward(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     serv->map[cli->player.x][cli->player.y].nb_player_on -= 1;
     if (cli->player.orient == NORTH)
@@ -65,7 +64,7 @@ bool ai_turn_right(
     return true;
 }
 
-bool ai_turn_left(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+bool ai_turn_left(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     switch (cli->player.orient) {
         case NORTH:

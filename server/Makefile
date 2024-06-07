@@ -69,6 +69,10 @@ clean:
 	rm -f $(OBJ)
 	rm -f $(OBJ:.o=.gcno)
 	rm -f $(OBJ:.o=.gcda)
+	rm -f $(TEST_NAME)
+	rm -f $(TEST_OBJ)
+	rm -f $(TEST_GCDA)
+	rm -f $(TEST_GCNO)
 	rm -f $(LIB_OBJ)
 	rm -f coding-style-reports.log
 	rm -f vgcore*
@@ -87,4 +91,21 @@ asan:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic -fsanitize=address\
 	-fsanitize=undefined
 asan:	re
 
-.PHONY:	clean fclean re all debug asan
+TEST_SRC    =   tests/test_ai_move.c         \
+				tests/test_ai_turn_right.c   \
+				tests/test_ai_turn_left.c
+
+TEST_OBJ    =   $(TEST_SRC:.c=.o)
+TEST_GCDA   =   $(TEST_SRC:.c=.gcda)
+TEST_GCNO   =   $(TEST_SRC:.c=.gcno)
+
+TEST_NAME   =   test_run
+
+CFLAGS +=    --coverage -lcriterion
+
+test_run:	re	clean	$(TEST_OBJ)
+	$(CC) $(CFLAGS) $(TEST_OBJ) -o $(TEST_NAME) -Wl,-rpath=.
+	./$(TEST_NAME)	|| true
+	gcovr
+
+.PHONY:	clean fclean re all debug asan test_run
