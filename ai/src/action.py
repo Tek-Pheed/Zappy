@@ -3,19 +3,6 @@ from ai.src.utils import clean_str
 
 RESSOURCES = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
 
-def take_food(cases: dict) -> List[str]:
-    instruction: List[str] = []
-    for i in range (len(cases)):
-        if "food" in cases[i]:
-            instruction.append("Take food\n")
-        else:
-            instruction.append("Forward\n")
-            if i == 1:
-                instruction.append("Right\n")
-            elif i == 3:
-                instruction.append("Left\n")
-    return instruction
-
 def take_minerals(cases: dict):
     instruction: List[str] = []
     for i in range (len(cases)):
@@ -35,7 +22,7 @@ def get_inventory(response: str, inv: dict) -> dict:
         if elem:
             inv[elem.split()[0]] = int(elem.split()[1])
     return inv
-    
+
 
 def get_case_around_player(response: str) -> dict:
     res = dict()
