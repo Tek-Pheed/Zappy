@@ -1,4 +1,5 @@
 import re
+import random
 from ai.src.action import *
 from ai.src.utils import print_verbose
 from ai.src.utils import *
@@ -31,24 +32,68 @@ class Player:
         required_ressources = LVLS_MANDATORY[self.level].copy()
         print_verbose(self.verbose, f"Incantation --> {self.level} --> {required_ressources}\n")
 
+    def what_i_search(self) -> str:
+        list = []
+
+        required_ressources = LVLS_MANDATORY[self.level].copy()
+        for r in required_ressources:
+            if r not in self.inventory or required_ressources[r] > self.inventory[r]
+                list.append(r)
+        if len(list) == 0:
+            list.append("food")
+        return random.choice(list)
+
     def find_collectible(self, object: str):
         for i in range(len(self.map[0])):
             for y in range (len(self.map[0][i])):
                 if object in self.map[0][i][y]:
                     print_verbose(self.verbose, f"{object} found in {(i, y)} !\n")
-                    return (i, y)
+                    return [i, y]
+        return None
 
-    def parse_look_command(self, data: str) -> List:
+
+    def parse_look_command(self, data: str, object: str) -> List:
         tmp = data.split(",")
         list = []
         for i in range(len(tmp)):
             list.append(' '.join(re.split(r'\W+', tmp[i])[1:]))
         data = list
-        map = generate_empty_map()
-        map = fill_map_with_data(map, data)
-        self.map = map
+        self.map = generate_empty_map()
+        self.map = fill_map_with_data(self.map, data)
         print_verbose(self.verbose, f"Map: {self.map}\n")
-        self.find_collectible("food")
+        coord = self.find_collectible(object)
+        action = []
+        if coord == None:
+            action.append(random.choice(["Forward\n", "Right\n", "Left\n"]))
+            action.append(random.choice(["Forward\n", "Right\n", "Left\n"]))
+            action.append(random.choice(["Forward\n", "Right\n", "Left\n"]))
+            return action
+        elif coord[0] == 0 and coord[1] == 0:
+            action.append(f"Take {object}\n")
+            return action
+        else:
+            for i in range(coord[0]):
+                action.append("Forward\n")
+            if coord[0] == 0:
+                action.append(f"Take {object}\n")
+            if coord[1] == 0:
+                for i in range(coord[1]):
+                    action.append("Forward\n")
+                action.append(f"Take {object}\n")
+                action.append(f"Inventory\n")
+            if coord[1] < len(self.map[0][coord[0]]) / 2:
+                action.append("Right\n")
+                for i in range(int((len(self.map[0][coord[0]]) / 2) - coord[1])):
+                    action.append("Forward\n")
+                action.append(f"Take {object}\n")
+                action.append(f"Inventory\n")
+            if coord[1] > len(self.map[0][coord[0]]) / 2:
+                action.append("Right\n")
+                for i in range(int(coord[1] - (len(self.map[0][coord[0]]) / 2))):
+                    action.append("Forward\n")
+                action.append(f"Take {object}\n")
+                action.append(f"Inventory\n")
+        return action
 
     def take_action(self):
         if self.step == 0:
@@ -66,10 +111,12 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 3:
-            if self.inventory["food"] < 35:
-                self.parse_look_command(self.look_arround)
+            if "food" in self.inventory and self.inventory["food"] < 35:
+                self.action = self.parse_look_command(self.look_arround, "food")
                 self.step += 1
             else:
+                self.object_to_go = self.what_i_search()
+                self.action = self.parse_look_command(self.look_arround, self.object_to_go)
                 self.step += 1
         elif self.step == 4:
             self.step += 1
