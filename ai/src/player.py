@@ -19,14 +19,24 @@ class Player:
         self.logged = False
         self.data_to_send = f"{team_name}\n"
         self.inventory = {"food": 0, "linemate": 0, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
-        self.cases_arround = {}
+        self.map = []
+        self.look_arround: str = ""
         self.level = 1
         self.step = 0
         self.action = []
+        self.object_to_go = ""
         self.verbose = False
 
     def incantation_possible(self):
         required_ressources = LVLS_MANDATORY[self.level].copy()
+        print_verbose(self.verbose, f"Incantation --> {self.level} --> {required_ressources}\n")
+
+    def find_collectible(self, object: str):
+        for i in range(len(self.map[0])):
+            for y in range (len(self.map[0][i])):
+                if object in self.map[0][i][y]:
+                    print_verbose(self.verbose, f"{object} found in {(i, y)} !\n")
+                    return (i, y)
 
     def parse_look_command(self, data: str) -> List:
         tmp = data.split(",")
@@ -36,7 +46,9 @@ class Player:
         data = list
         map = generate_empty_map()
         map = fill_map_with_data(map, data)
-        print_verbose(self.verbose, f"Map: {map}\n")
+        self.map = map
+        print_verbose(self.verbose, f"Map: {self.map}\n")
+        self.find_collectible("food")
 
     def take_action(self):
         if self.step == 0:
@@ -46,7 +58,7 @@ class Player:
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
-            print_verbose(self.verbose, f"Action: {self.data_to_send}\n")
+            print_verbose(self.verbose, f"Action: {self.data_to_send}")
         elif self.step == 1:
             self.incantation_possible()
             self.step += 1
@@ -54,14 +66,13 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 3:
-            if "food" in self.inventory and self.inventory["food"] < 35:
-                self.action = take_food(self.cases_arround)
+            if self.inventory["food"] < 35:
+                self.parse_look_command(self.look_arround)
                 self.step += 1
             else:
-                self.action = take_minerals(self.cases_arround)
                 self.step += 1
         elif self.step == 4:
             self.step += 1
         elif self.step == 5:
-            self.data_to_send = ""
+            self.data_to_send = "Look\n"
             self.step = 0
