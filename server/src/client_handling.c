@@ -26,6 +26,10 @@ void server_send_data(client_t *client, const char *data)
     } else if (strlen(client->write_buffer) + strlen(client->read_buffer)
         < BUFFER_MAX_SIZE) {
         strcat(client->write_buffer, data);
+    } else {
+        write(client->fd, client->write_buffer, strlen(client->write_buffer));
+        memset(client->write_buffer, 0, sizeof(client->write_buffer));
+        strcat(client->write_buffer, data);
     }
 }
 
