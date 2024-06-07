@@ -75,21 +75,29 @@ static void free_struct(server_t *serv)
     free(serv);
 }
 
-void destroy_server(server_t *serv)
+static void del_clients(server_t *serv)
 {
-    client_t *client = NULL;
-    team_t *team = NULL;
     size_t clients_nb = list_get_size(serv->client);
-    size_t team_nb = list_get_size(serv->teams);
+    client_t *client = NULL;
 
-    server_log(serv, INFO, 0, "Stopping server...");
-    close(serv->socket);
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
         destroy_client(serv, client);
+        list_del_elem_at_position(&serv->client, i);
+        i--;
     }
+}
+
+void destroy_server(server_t *serv)
+{
+    team_t *team = NULL;
+    size_t team_nb = list_get_size(serv->teams);
+
+    server_log(serv, INFO, 0, "Stopping server...");
+    close(serv->socket);
+    del_clients(serv);
     for (size_t i = 0; i != team_nb; i++) {
         team = list_get_elem_at_position(serv->teams, i);
         if (team == NULL)
