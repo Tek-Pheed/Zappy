@@ -50,8 +50,7 @@ class AI:
                                 print_verbose(self.player.verbose, f"Error {elem}")
                                 pass
                         elif self.player.data_to_send == "Look\n":
-                            self.player.parse_look_command(elem)
-                            self.player.cases_arround = get_case_around_player(elem)
+                            self.player.look_arround = elem
                         message = message.split("\n")[-1]
                         running = 1
 
