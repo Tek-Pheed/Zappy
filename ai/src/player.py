@@ -37,20 +37,28 @@ class Player:
 
         required_ressources = LVLS_MANDATORY[self.level].copy()
         for r in required_ressources:
-            if r not in self.inventory or required_ressources[r] > self.inventory[r]
+            if r not in self.inventory or required_ressources[r] > self.inventory[r]:
                 list.append(r)
         if len(list) == 0:
             list.append("food")
         return random.choice(list)
 
+    def size_of_look(self, map: list) -> int:
+        nb: int = 0
+
+        for case in map:
+            if case == []:
+                return nb
+            nb += 1
+        return nb
+
     def find_collectible(self, object: str):
-        for i in range(len(self.map[0])):
-            for y in range (len(self.map[0][i])):
-                if object in self.map[0][i][y]:
+        for i in range(len(self.map)):
+            for y in range(self.size_of_look(self.map[i])):
+                if object in self.map[i][y][0]:
                     print_verbose(self.verbose, f"{object} found in {(i, y)} !\n")
                     return [i, y]
         return None
-
 
     def parse_look_command(self, data: str, object: str) -> List:
         tmp = data.split(",")
@@ -58,9 +66,10 @@ class Player:
         for i in range(len(tmp)):
             list.append(' '.join(re.split(r'\W+', tmp[i])[1:]))
         data = list
-        self.map = generate_empty_map()
-        self.map = fill_map_with_data(self.map, data)
+        map = generate_empty_map()
+        map = fill_map_with_data(map, data)
         print_verbose(self.verbose, f"Map: {self.map}\n")
+        self.map = map
         coord = self.find_collectible(object)
         action = []
         if coord == None:
@@ -81,15 +90,15 @@ class Player:
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")
-            if coord[1] < len(self.map[0][coord[0]]) / 2:
+            if coord[1] < len(self.map[coord[0]]) / 2:
                 action.append("Right\n")
-                for i in range(int((len(self.map[0][coord[0]]) / 2) - coord[1])):
+                for i in range(int((len(self.map[coord[0]]) / 2) - coord[1])):
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")
-            if coord[1] > len(self.map[0][coord[0]]) / 2:
+            if coord[1] > len(self.map[coord[0]]) / 2:
                 action.append("Right\n")
-                for i in range(int(coord[1] - (len(self.map[0][coord[0]]) / 2))):
+                for i in range(int(coord[1] - (len(self.map[coord[0]]) / 2))):
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")
