@@ -51,5 +51,25 @@ namespace Zappy
         void createTeams(std::queue<std::string> teams);
         void createFrequ(std::queue<std::string> freq);
         void parsing(std::queue<std::queue<std::string>> data);
+        void newPlayer(std::queue<std::string> player);
+        void positionPlayer(std::queue<std::string> player);
+        void levelPlayer(std::queue<std::string> player);
+        void inventoryPlayer(std::queue<std::string> player);
+        void expulsion(std::queue<std::string> exp);
+        void broadcast(std::queue<std::string> broad);
+        void startInc(std::queue<std::string> inc);
+        void endInc(std::queue<std::string> inc);
+        void layingEgg(std::queue<std::string> egg);
+        void dropRess(std::queue<std::string> ress);
+        void collectRess(std::queue<std::string> ress);
+        void death(std::queue<std::string> player);
+        void laidEgg(std::queue<std::string> egg);
+        void connectEgg(std::queue<std::string> egg);
+        void deathEgg(std::queue<std::string> egg);
+        void frequModification(std::queue<std::string> freq);
+        void endGame(std::queue<std::string> team);
+        void messServer(std::queue<std::string> mess);
+        void unknowCommand();
+        //sbp
     };
 } // namespace Zappy
