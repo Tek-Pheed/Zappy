@@ -30,6 +30,9 @@ fclean: clean
 	@make fclean -C ./server/
 	@make fclean -C ./ai/
 	@make fclean -C ./gui/
+	@rm -rf "zappy_ai"
+	@rm -rf "zappy_server"
+	@rm -rf "zappy_gui"
 	@echo "FClean ✔"
 
 debug:
