@@ -28,9 +28,13 @@ class Player:
         self.object_to_go = ""
         self.verbose = False
 
-    def incantation_possible(self):
+    def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
-        print_verbose(self.verbose, f"Incantation --> {self.level} --> {required_ressources}\n")
+        print_verbose(self.verbose, f"Checking Incantation --> {self.level} --> {required_ressources}\n")
+        for r in required_ressources:
+            if required_ressources[r] > self.inventory[r]:
+                return False
+        return True
 
     def what_i_search(self) -> str:
         list = []
@@ -83,22 +87,22 @@ class Player:
         else:
             for i in range(coord[0]):
                 action.append("Forward\n")
-            if coord[0] == 0:
-                action.append(f"Take {object}\n")
             if coord[1] == 0:
+                action.append(f"Take {object}\n")
+            if coord[0] == 0:
                 for i in range(coord[1]):
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")
             if coord[1] < len(self.map[coord[0]]) / 2:
                 action.append("Right\n")
-                for i in range(int((len(self.map[coord[0]]) / 2) - coord[1])):
+                for i in range(int((len(self.map[coord[0]]) / 2)) - coord[1]):
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")
             if coord[1] > len(self.map[coord[0]]) / 2:
                 action.append("Right\n")
-                for i in range(int(coord[1] - (len(self.map[coord[0]]) / 2))):
+                for i in range(coord[1] - int((len(self.map[coord[0]]) / 2))):
                     action.append("Forward\n")
                 action.append(f"Take {object}\n")
                 action.append(f"Inventory\n")

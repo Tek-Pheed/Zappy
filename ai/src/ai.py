@@ -46,6 +46,7 @@ class AI:
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
+                                print_verbose(self.player.verbose, f"{self.player.inventory}\n")
                             except ValueError:
                                 print_verbose(self.player.verbose, f"Error {elem}")
                                 pass
