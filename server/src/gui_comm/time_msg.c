@@ -10,7 +10,7 @@
 #include <string.h>
 #include "server.h"
 
-char *time_unit_request(server_t *serv)
+char *time_unit_request(const server_t *serv)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 

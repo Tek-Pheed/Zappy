@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#define BUFFER_MAX_SIZE        2048
+#define BUFFER_MAX_SIZE        8192
 #define MAX_CONCURENT_COMMANDS 10
 
 #define OFFSET_ARGS           8
@@ -29,7 +29,9 @@
 #define EAST                  2
 #define SOUTH                 3
 #define WEST                  4
-#define DEFAULT_BUFFER_SIZE   25
+#define DEFAULT_BUFFER_SIZE   100
+#define TEST_MAPX             10
+#define TEST_MAPY             10
 
 typedef struct server_s server_t;
 typedef struct cell_s cell_t;
@@ -37,3 +39,15 @@ typedef struct client_s client_t;
 typedef struct player_s player_t;
 typedef struct team_s team_t;
 typedef struct egg_s egg_t;
+typedef struct ivect2D_s ivect2D_t;
+typedef struct fvect2D_s fvect2d_t;
+
+struct ivect2D_s {
+    int x;
+    int y;
+};
+
+struct fvect2D_s {
+    float x;
+    float y;
+};

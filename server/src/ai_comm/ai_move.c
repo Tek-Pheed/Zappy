@@ -7,10 +7,16 @@
 
 #include <sys/time.h>
 #include <time.h>
+#include "commands.h"
 #include "server.h"
 
-bool ai_move_forward(
-    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+static void send_update(server_t *serv, client_t *cli)
+{
+    server_send_data(cli, "ok\n");
+    event_player_position(serv, cli);
+}
+
+bool ai_move_forward(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     serv->map[cli->player.x][cli->player.y].nb_player_on -= 1;
     if (cli->player.orient == NORTH)
@@ -27,14 +33,14 @@ bool ai_move_forward(
             cli->player.x == 0 ? serv->resX - 1 : cli->player.x - 1;
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
-    server_send_data(cli, "ok\n");
     serv->map[cli->player.x][cli->player.y].nb_player_on += 1;
+    send_update(serv, cli);
     return true;
 }
 
 // clang-format off
 bool ai_turn_right(
-    UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+    server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     switch (cli->player.orient) {
         case NORTH:
@@ -54,11 +60,11 @@ bool ai_turn_right(
     }
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
-    server_send_data(cli, "ok\n");
+    send_update(serv, cli);
     return true;
 }
 
-bool ai_turn_left(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
+bool ai_turn_left(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     switch (cli->player.orient) {
         case NORTH:
@@ -78,6 +84,6 @@ bool ai_turn_left(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
     }
     cli->cmd_duration = 7;
     gettimeofday(&cli->last_cmd_time, NULL);
-    server_send_data(cli, "ok\n");
+    send_update(serv, cli);
     return true;
 }

@@ -10,7 +10,7 @@
 #include <string.h>
 #include "server.h"
 
-char *map_size(server_t *serv)
+char *map_size(const server_t *serv)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
@@ -20,7 +20,7 @@ char *map_size(server_t *serv)
     return buff;
 }
 
-char *tile_content(server_t *serv, int x, int y)
+char *tile_content(const server_t *serv, int x, int y)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE * 2, sizeof(char));
 
@@ -34,20 +34,24 @@ char *tile_content(server_t *serv, int x, int y)
     return buff;
 }
 
-char *all_content(server_t *serv)
+char *all_content(const server_t *serv)
 {
+    char *tmp = NULL;
     char *buff = calloc(serv->resX * serv->resY * 50, sizeof(char));
 
     if (!buff)
         return NULL;
     for (int i = 0; i != serv->resX; i++) {
-        for (int j = 0; j != serv->resY; j++)
-            strcat(buff, tile_content(serv, i, j));
+        for (int j = 0; j != serv->resY; j++) {
+            tmp = tile_content(serv, i, j);
+            strcat(buff, tmp);
+            free(tmp);
+        }
     }
     return buff;
 }
 
-static char *team_name(server_t *serv, int ind)
+static char *team_name(const server_t *serv, int ind)
 {
     char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
@@ -57,14 +61,17 @@ static char *team_name(server_t *serv, int ind)
     return buff;
 }
 
-char *all_name(server_t *serv)
+char *all_name(const server_t *serv)
 {
     char *buff = calloc(get_team_nb(serv) * DEFAULT_BUFFER_SIZE, sizeof(char));
+    char *team = NULL;
 
     if (!buff)
         return NULL;
     for (int i = 0; serv->tName[i] != NULL; i++) {
-        strcat(buff, team_name(serv, i));
+        team = team_name(serv, i);
+        strcat(buff, team);
+        free(team);
     }
     return buff;
 }

@@ -19,31 +19,45 @@ struct command_handler_s {
     } ptr;
 };
 
-char *tile_content(server_t *serv, int x, int y);
-char *all_content(server_t *serv);
-char *all_name(server_t *serv);
+char *tile_content(const server_t *serv, int x, int y);
+char *all_content(const server_t *serv);
+char *all_name(const server_t *serv);
 char *player_position(server_t *serv, int p_index);
 char *player_level(server_t *serv, int p_index);
 char *player_inventory(server_t *serv, int p_index);
-char *event_conn_new_player(server_t *serv);
 
-char *time_unit_request(server_t *serv);
+char *time_unit_request(const server_t *serv);
 char *time_unit_modif(server_t *serv, int freq);
-char *event_ressource_drop(int p_index, int r_nb);
-char *event_ressource_collect(int p_index, int r_nb);
-char *event_egg_laying(int p_index);
-char *event_egg_laid(int egg_nb, int p_index, int x, int y);
-char *event_egg_death(int egg_nb);
-char *event_expulsion(int p_index);
-char *event_broadcast(int p_index, char *msg);
-char *event_end_incantation(int x, int y, char *result);
-char *event_player_death(int p_index);
-char *event_player_connection_egg(int p_index);
-char *event_end_game(char *winner);
-char *event_server_message(char *msg);
-char *event_unknow_command(void);
-char *event_command_parameter(void);
-char *event_start_incantation(player_t *player, int *p_nb, int size);
+void event_connnew_player(const server_t *serv, client_t *client);
+void event_ressource_drop(
+    const server_t *serv, const client_t *client, int r_nb);
+void event_ressource_collect(
+    const server_t *serv, const client_t *client, int r_nb);
+void event_egg_laying(const server_t *serv, const client_t *client);
+void event_egg_laid(const server_t *serv, const client_t *client, int egg_nb,
+    const ivect2D_t *pos);
+void event_egg_death(const server_t *serv, const client_t *client, int egg_nb);
+void event_expulsion(const server_t *serv, const client_t *client);
+void event_broadcast(
+    const server_t *serv, const client_t *client, const char *msg);
+void event_player_death(const server_t *serv, client_t *client);
+void event_player_connection_egg(const server_t *serv, const client_t *client);
+void event_end_game(const server_t *serv, const char *winner);
+void event_server_message(server_t *serv, const char *msg);
+void event_unknow_command(server_t *serv, client_t *client);
+void event_command_parameter(server_t *serv, client_t *client);
+void event_start_incantation(
+    const server_t *serv, client_t *client, int *p_nb, int size);
+void event_end_incantation(server_t *serv, const client_t *client,
+    const ivect2D_t *pos, const char *result);
+
+void event_teams_names(server_t *serv, client_t *client);
+void event_tile_update(const server_t *serv, int x, int y);
+void event_update_map(server_t *serv);
+void event_time_modif(server_t *serv);
+void event_player_position(server_t *serv, const client_t *client);
+void event_player_level(server_t *serv, const client_t *client);
+void event_player_inventory(server_t *serv, const client_t *client);
 
 bool gui_map_size(server_t *server, client_t *client, UNUSED char **args);
 bool gui_tile_content(server_t *server, client_t *client, UNUSED char **args);
@@ -64,13 +78,14 @@ bool ai_turn_right(
 bool ai_turn_left(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
-// look around
+bool ai_look_around(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_inventory(
     UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
-// event_broadcast
+bool ai_broadcast(server_t *serv, client_t *cli, const char *obj);
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
+bool ai_end_fork(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_eject(server_t *serv, client_t *cli, UNUSED const char *obj);
 bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj);
 
@@ -90,15 +105,17 @@ static const struct command_handler_s ai_cmds[] = {
         .nb_args = 0,
         .ptr = {.ai_ptr = ai_connect_nbr}},
     {.command = "Fork", .nb_args = 0, .ptr = {.ai_ptr = ai_fork}},
+    {.command = "EndForkServer", .nb_args = 0, .ptr = {.ai_ptr = ai_end_fork}},
     {.command = "Eject", .nb_args = 0, .ptr = {.ai_ptr = ai_eject}},
     {.command = "Take", .nb_args = 1, .ptr = {.ai_ptr = ai_take_object}},
     {.command = "Set", .nb_args = 1, .ptr = {.ai_ptr = ai_set_object}},
+    {.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look_around}},
+    {.command = "Incantation", .nb_args = 0, .ptr = {.ai_ptr = ai_elevation}},
+    {.command = "EndIncantationServer",
+        .nb_args = 0,
+        .ptr = {.ai_ptr = ai_end_elevation}},
+    {.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
 };
-//{.command = "Look", .nb_args = 0, .ptr = {.ai_ptr = ai_look}},
-//{.command = "Broadcast", .nb_args = 1, .ptr = {.ai_ptr = ai_broadcast}},
-//{.command = "Incantation",
-//    .nb_args = 0,
-//    .ptr = {.ai_ptr = ai_start_incantation}}
 
 static const struct command_handler_s gui_cmds[] = {
     {.command = "msz", .nb_args = 0, .ptr = {.gui_ptr = gui_map_size}},

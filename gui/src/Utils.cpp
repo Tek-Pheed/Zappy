@@ -5,7 +5,7 @@
 ** Utils.cpp
 */
 
-#include "../include/Utils.hpp"
+#include "Utils.hpp"
 
 Zappy::Utils::Utils()
 {
@@ -14,7 +14,7 @@ Zappy::Utils::Utils()
 Zappy::Utils::~Utils()
 {
 }
-  
+
 Model Zappy::Utils::createModel(const char *model, const char *texture)
 {
    Model model_body = LoadModel(model);

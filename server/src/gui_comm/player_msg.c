@@ -8,25 +8,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "client.h"
 #include "list.h"
 #include "server.h"
 
-char *event_conn_new_player(server_t *serv)
+void event_connnew_player(const server_t *serv, client_t *cl)
 {
-    char *buff = calloc(BUFFER_MAX_SIZE * 2, sizeof(char));
-    client_t *cl;
+    char buff[BUFFER_MAX_SIZE * 2];
 
-    if (!buff)
-        return NULL;
-    cl = list_get_elem_at_back(serv->client);
-    if (cl == NULL || cl->state != AI) {
-        free(buff);
-        return NULL;
-    }
-    sprintf(buff, "pnw #%d %d %d %d %d %s\n", cl->player.number, cl->player.x,
-        cl->player.y, cl->player.orient, cl->player.level,
-        cl->team_name);
-    return buff;
+    memset(buff, 0, sizeof(buff));
+    sprintf(buff, "pnw %d %d %d %d %d %s\n", cl->player.number, cl->player.x,
+        cl->player.y, cl->player.orient, cl->player.level, cl->team_name);
+    server_log(serv, EVENT, cl->fd, "new player connected");
+    server_event_send_many(serv, GRAPHICAL, buff);
 }
 
 char *player_position(server_t *serv, int p_index)
@@ -43,7 +37,7 @@ char *player_position(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "ppo #%d %d %d %d\n", p_index, tmp->player.x,
+            sprintf(buff, "ppo %d %d %d %d\n", p_index, tmp->player.x,
                 tmp->player.y, tmp->player.orient);
             return buff;
         }
@@ -66,7 +60,7 @@ char *player_level(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "plv #%d %d\n", p_index, tmp->player.level);
+            sprintf(buff, "plv %d %d\n", p_index, tmp->player.level);
             return buff;
         }
         buff = NULL;
@@ -88,7 +82,7 @@ char *player_inventory(server_t *serv, int p_index)
         if (tmp == NULL || tmp->state != AI)
             continue;
         if (tmp->player.number == p_index) {
-            sprintf(buff, "pin #%d %d %d %d %d %d %d %d %d %d\n", p_index,
+            sprintf(buff, "pin %d %d %d %d %d %d %d %d %d %d\n", p_index,
                 tmp->player.x, tmp->player.y, tmp->player.food,
                 tmp->player.stone[LINEMATE], tmp->player.stone[DERAUMERE],
                 tmp->player.stone[SIBUR], tmp->player.stone[MENDIANE],
@@ -98,19 +92,20 @@ char *player_inventory(server_t *serv, int p_index)
     return buff;
 }
 
-char *event_start_incantation(player_t *player, int *p_nb, int size)
+void event_start_incantation(
+    const server_t *serv, const client_t *client, int *p_nb, int size)
 {
-    char *buff = calloc(BUFFER_MAX_SIZE, sizeof(char));
+    char buff[BUFFER_MAX_SIZE * (size + 1)];
     char str[BUFFER_MAX_SIZE];
 
-    if (!buff)
-        return NULL;
-    sprintf(buff, "pic %d %d %d #%d", player->x, player->y, player->level,
-        player->number);
+    memset(buff, 0, sizeof(buff));
+    sprintf(buff, "pic %d %d %d %d", client->player.x, client->player.y,
+        client->player.level, client->player.number);
     for (int i = 0; p_nb[i] != -1 && i != size; i++) {
-        sprintf(str, " #%d", p_nb[i]);
+        sprintf(str, " %d", p_nb[i]);
         strcat(buff, str);
     }
     strcat(buff, "\n");
-    return buff;
+    server_log(serv, EVENT, client->fd, buff);
+    server_event_send_many(serv, GRAPHICAL, buff);
 }

@@ -5,8 +5,8 @@
 ** init_struct
 */
 
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "server.h"
 
 server_t *init_struct(void)
@@ -21,6 +21,7 @@ server_t *init_struct(void)
     tmp->tName = NULL;
     tmp->clientNb = -1;
     tmp->freq = 100;
+    tmp->verbose = false;
     tmp->client = calloc(1, sizeof(list_t));
     tmp->teams = calloc(1, sizeof(list_t));
     tmp->map = NULL;
@@ -28,7 +29,7 @@ server_t *init_struct(void)
     return tmp;
 }
 
-int get_team_nb(server_t *serv)
+int get_team_nb(const server_t *serv)
 {
     int index = 0;
 
@@ -74,20 +75,29 @@ static void free_struct(server_t *serv)
     free(serv);
 }
 
-void destroy_server(server_t *serv)
+static void del_clients(server_t *serv)
 {
-    client_t *client = NULL;
-    team_t *team = NULL;
     size_t clients_nb = list_get_size(serv->client);
-    size_t team_nb = list_get_size(serv->teams);
+    client_t *client = NULL;
 
-    close(serv->socket);
     for (size_t i = 0; i != clients_nb; i++) {
         client = list_get_elem_at_position(serv->client, i);
         if (client == NULL)
             continue;
         destroy_client(serv, client);
+        list_del_elem_at_position(&serv->client, i);
+        i--;
     }
+}
+
+void destroy_server(server_t *serv)
+{
+    team_t *team = NULL;
+    size_t team_nb = list_get_size(serv->teams);
+
+    server_log(serv, INFO, 0, "Stopping server...");
+    close(serv->socket);
+    del_clients(serv);
     for (size_t i = 0; i != team_nb; i++) {
         team = list_get_elem_at_position(serv->teams, i);
         if (team == NULL)

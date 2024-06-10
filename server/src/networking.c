@@ -6,6 +6,7 @@
 */
 
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/select.h>
 #include <unistd.h>
@@ -22,7 +23,7 @@ void handle_destroyed_clients(server_t *server)
     memset(to_remove, -1, clients);
     for (size_t i = 0; i != clients; i++) {
         client = list_get_elem_at_position(server->client, i);
-        if (client->fd == -1) {
+        if (client != NULL && client->fd == -1) {
             to_remove[index] = (int) i;
             index++;
         }
@@ -31,10 +32,19 @@ void handle_destroyed_clients(server_t *server)
         list_del_elem_at_position(&server->client, to_remove[i]);
 }
 
+static void disable_client(
+    const server_t *serv, client_t *client, int write_ret)
+{
+    if (write_ret == -1) {
+        server_log(serv, EVENT, client->fd, "client disconnected");
+        close(client->fd);
+        client->fd = -1;
+    }
+}
+
 void send_buffered_data(server_t *server, fd_set *write_fds)
 {
     int write_ret;
-    size_t data_size = 0;
     client_t *client = NULL;
     size_t size = list_get_size(server->client);
 
@@ -44,13 +54,11 @@ void send_buffered_data(server_t *server, fd_set *write_fds)
         if (client == NULL || client->write_buffer[0] == '\0')
             continue;
         if (FD_ISSET(client->fd, write_fds)) {
-            data_size = strlen(client->write_buffer);
-            write_ret = write(client->fd, client->write_buffer, data_size);
+            write_ret = write(client->fd, client->write_buffer,
+                strlen(client->write_buffer));
+            server_log(server, SENDING, client->fd, client->write_buffer);
         }
-        if (write_ret == -1) {
-            close(client->fd);
-            client->fd = -1;
-        }
+        disable_client(server, client, write_ret);
         memset(client->write_buffer, '\0', sizeof(client->write_buffer));
     }
 }

@@ -14,6 +14,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
+#include "commands.h"
 #include "define.h"
 #include "list.h"
 #include "server.h"
@@ -25,8 +26,11 @@ void destroy_client(server_t *serv, client_t *client)
 
     if (client == NULL)
         return;
-    if (client->fd != -1)
+    if (client->fd != -1) {
+        if (client->state == AI && !client->player.is_dead)
+            event_player_death(serv, client);
         close(client->fd);
+    }
     nb_cmds = list_get_size(client->cmds);
     for (size_t i = 0; i != nb_cmds; i++) {
         cmd = list_get_elem_at_position(client->cmds, i);
@@ -34,6 +38,7 @@ void destroy_client(server_t *serv, client_t *client)
             continue;
         free(cmd);
     }
+    list_clear(&client->cmds);
     team_remove_client(serv, client);
     free(client);
 }
@@ -60,6 +65,15 @@ static bool create_player(server_t *serv, client_t *client, int index)
     return (team_add_client(serv, client));
 }
 
+static void send_initial_gui_data(server_t *serv, client_t *client)
+{
+    server_log(serv, EVENT, client->fd, "logged in as GRAPHIC");
+    event_teams_names(serv, client);
+    gui_get_time_unit(serv, client, NULL);
+    gui_map_size(serv, client, NULL);
+    gui_map_content(serv, client, NULL);
+}
+
 bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
 {
     static int player_index = 0;
@@ -69,16 +83,17 @@ bool handle_client_login(server_t *serv, client_t *client, const char *cmd)
     strcpy(client->team_name, cmd);
     if (strncmp(cmd, "GRAPHIC", 7) == 0) {
         client->state = GRAPHICAL;
+        send_initial_gui_data(serv, client);
         return (true);
     }
     if (!create_player(serv, client, player_index)) {
-        printf("Unable to create player in team: %s\n", client->team_name);
-        client->state = CREATED;
+        server_log(serv, WARNING, 0, "Unable to create player in team");
         return (false);
     }
     client->state = AI;
     player_index++;
     send_login_answer(serv, client);
+    event_connnew_player(serv, client);
     return (true);
 }
 
@@ -97,21 +112,42 @@ bool server_add_client(server_t *serv)
         return false;
     }
     list_add_elem_at_back(&serv->client, user);
+    server_log(serv, INFO, user->fd, "user connection request");
     strcpy(user->write_buffer, "WELCOME\n");
     user->state = CREATED;
     return (true);
+}
+
+static void check_win_team(server_t *serv)
+{
+    int len_team = list_get_size(serv->teams);
+    team_t *tmp = NULL;
+
+    for (int i = 0; i != len_team; i++) {
+        tmp = list_get_elem_at_position(serv->teams, i);
+        if (tmp == NULL)
+            continue;
+        if (tmp->nb_level_max >= 6) {
+            serv->winner = strdup(tmp->name);
+            return;
+        }
+    }
 }
 
 void check_lvl_player(server_t *serv)
 {
     int len = list_get_size(serv->client);
     client_t *tmp;
+    team_t *team_tmp;
 
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
+        if (tmp == NULL)
+            continue;
         if (tmp && tmp->state == AI && tmp->player.level == 8) {
-            serv->winner = strdup(tmp->team_name);
-            return;
+            team_tmp = team_get_client(serv, tmp);
+            team_tmp->nb_level_max += 1;
         }
     }
+    check_win_team(serv);
 }

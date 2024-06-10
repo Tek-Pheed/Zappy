@@ -1,36 +1,53 @@
-from ai.src.server import Server
+from typing import List
+from ai.src.utils import clean_str
 
-def send_request(server: Server, message: str) -> str:
-    server.send_message(f"{message}\n")
-    res = server.receive_message()
-    if "dead" in res:
-        server.close_connection()
-        exit(0)
+RESSOURCES = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
+
+def take_minerals(cases: dict):
+    instruction: List[str] = []
+    for i in range (len(cases)):
+        current_case = cases[i].split(" ")
+        for items in current_case:
+            if items in RESSOURCES:
+                instruction.append(f"Take {items}\n")
+    return instruction
+
+def get_inventory(response: str, inv: dict) -> dict:
+    for char in "[]":
+        response = response.replace(char, "")
+    response = response.split(",")
+    for i in range(len(response)):
+        response[i] = response[i][1:]
+    for elem in response:
+        if elem:
+            inv[elem.split()[0]] = int(elem.split()[1])
+    return inv
+
+
+def get_case_around_player(response: str) -> dict:
+    res = dict()
+
+    response = clean_str(response)
+    response = response.split(",")
+    for i in range(len(response)):
+        if i != 0:
+            response[i] = response[i][1:]
+        if i == len(response) - 1:
+            response[i] = response[i].rstrip()
+        res[i] = response[i]
     return res
 
-def create_team(args, server: Server):
-    server.init_connection()
-    server.receive_message()
-    server.send_message(args.n + "\n")
-    server.receive_message()
+def get_number_of_team_unused(response: str) -> int:
+    return int(response)
 
-def get_food(cases: dict, player: dict, server: Server):
-    for i in range (len(cases)):
-        if "food" in cases[i] and player["inventory"]["food"] <= 5:
-            if i == 0:
-                send_request(server, "Take food")
-            elif i == 1:
-                send_request(server, "Forward")
-                send_request(server, "Right")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 2:
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-            elif i == 3:
-                send_request(server, "Forward")
-                send_request(server, "Left")
-                send_request(server, "Forward")
-                send_request(server, "Take food")
-        else:
-            send_request(server, "Forward")
+def get_OK_KO(response: str) -> bool:
+    if "ok" in response:
+        return True
+    else:
+        return False
+
+def get_incantation(response: str):
+    if "ko" in response:
+        return False
+    else:
+        return response

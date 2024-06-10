@@ -62,29 +62,10 @@ static void remove_old_clients(server_t *serv)
     }
 }
 
-static void send_win(server_t *serv, const char *win_msg)
+static bool check_win(const server_t *serv)
 {
-    size_t client_nb = list_get_size(serv->client);
-    client_t *client = NULL;
-
-    for (size_t i = 0; i != client_nb; i++) {
-        client = list_get_elem_at_position(serv->client, i);
-        if (client == NULL || client->state != GRAPHICAL)
-            continue;
-        server_send_data(client, win_msg);
-    }
-}
-
-static bool check_win(server_t *serv)
-{
-    char *win_buff = NULL;
-
     if (serv->winner != NULL) {
-        win_buff = event_end_game(serv->winner);
-        if (win_buff == NULL)
-            return (false);
-        send_win(serv, win_buff);
-        free(win_buff);
+        event_end_game(serv, serv->winner);
         return (true);
     }
     return (false);

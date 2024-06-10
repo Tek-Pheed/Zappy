@@ -66,6 +66,7 @@ bool init_server(server_t *serv)
     }
     if (!start_socket(serv->socket))
         return false;
+    gettimeofday(&serv->last_map_update, NULL);
     return true;
 }
 
@@ -76,6 +77,7 @@ int run_server(server_t *serv)
         return 84;
     }
     signal(SIGINT, stop_server);
+    server_log(serv, INFO, 0, "Server ready to accept clients");
     while (is_on(0))
         if (server_loop(serv))
             break;
