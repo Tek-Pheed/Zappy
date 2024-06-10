@@ -37,12 +37,16 @@ class AI:
                             self.server.close_connection()
                             exit(0)
                         if "Elevation underway" in elem:
-                            self.player.step = -1
+                            self.player.step = 7
                         elif "Current level:" in elem:
+                            print(int(''.join(filter(str.isdigit, elem))))
                             self.player.level = int(''.join(filter(str.isdigit, elem)))
                             if self.player.level == 8:
                                 exit(0)
                             print(elem)
+                            print(self.player.level)
+                            self.player.step = 0
+                            print(self.player.step)
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
