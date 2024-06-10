@@ -87,9 +87,6 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
     Music music;
     double volume = 0.5f;
 
-    TextInput textInputPort(1350, 200, 320, 50);
-    TextInput textInputIP(1350, 100, 320, 50);
-
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -121,17 +118,6 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 break;
             }
             draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN, "CONFIRM", 20, WHITE, Zappy::RECT, confirmClicked);
-            if (confirmClicked == 1) {
-                std::string ip = textInputIP.GetText();
-                std::string port = textInputPort.GetText();
-                std::cout << "IP: " << ip << " Port: " << port << std::endl;
-            }
-
-            textInputPort.UpdateInput();
-            textInputIP.UpdateInput();
-
-            textInputPort.DrawInput();
-            textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
             GameScene(model, camera, position, bounds);
         } else if (currentScene == Zappy::SETTINGS) {
