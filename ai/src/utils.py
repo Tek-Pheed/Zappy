@@ -18,6 +18,7 @@ def generate_empty_map() -> List:
     for _ in range(4):
         res.append([[] for j in range(nbCase)])
         nbCase += 2
+    print(res)
     return res
 
 def get_nb_of_line_in_array(array: List) -> int:
@@ -29,6 +30,8 @@ def fill_map_with_data(map: List, data: List) -> List:
 
     line = get_nb_of_line_in_array(data)
     for current in range(line):
+        if case == len(data):
+            break
         for i in range(nb):
             map[current][i].append(data[case])
             case += 1
