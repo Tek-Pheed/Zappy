@@ -15,20 +15,6 @@
 
 
 namespace Zappy {
-// class Map {
-//     public:
-//         Map(int x, int y);
-//         ~Map();
-//         void getBlock(std::list block);
-//         std::list<BLOCK> setBlock(std::list block);
-//         void drawMap();
-
-//     protected:
-//     private:
-//     int _x;
-//     int _y;
-//     std::list<std::queue, std::deque> _block;
-// };
 
 class Map {
     public:
