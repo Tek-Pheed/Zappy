@@ -61,7 +61,7 @@ static char *team_name(const server_t *serv, int ind)
     return buff;
 }
 
-char *all_name(server_t *serv)
+char *all_name(const server_t *serv)
 {
     char *buff = calloc(get_team_nb(serv) * DEFAULT_BUFFER_SIZE, sizeof(char));
     char *team = NULL;

@@ -26,6 +26,10 @@ void server_send_data(client_t *client, const char *data)
     } else if (strlen(client->write_buffer) + strlen(client->read_buffer)
         < BUFFER_MAX_SIZE) {
         strcat(client->write_buffer, data);
+    } else {
+        write(client->fd, client->write_buffer, strlen(client->write_buffer));
+        memset(client->write_buffer, 0, sizeof(client->write_buffer));
+        strcat(client->write_buffer, data);
     }
 }
 
@@ -92,7 +96,7 @@ static void add_client_command(client_t *client)
     memset(client->read_buffer, 0, sizeof(client->read_buffer));
 }
 
-static void read_client(server_t *serv, client_t *client)
+static void read_client(const server_t *serv, client_t *client)
 {
     int ret =
         read(client->fd, client->read_buffer, sizeof(client->read_buffer));

@@ -17,7 +17,7 @@ struct cell_s {
     int y;
 };
 
-cell_t **create_map(server_t *serv);
+cell_t **create_map(const server_t *serv);
 void free_map(server_t *serv);
 char *map_size(const server_t *serv);
 void create_teams_eggs(server_t *serv);

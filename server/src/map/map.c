@@ -62,7 +62,7 @@ void free_map(server_t *serv)
     serv->map = NULL;
 }
 
-cell_t **create_map(server_t *serv)
+cell_t **create_map(const server_t *serv)
 {
     cell_t **map = calloc(serv->resX, sizeof(cell_t *));
     float quant[7] = {0};

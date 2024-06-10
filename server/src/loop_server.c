@@ -62,7 +62,7 @@ static void remove_old_clients(server_t *serv)
     }
 }
 
-static bool check_win(server_t *serv)
+static bool check_win(const server_t *serv)
 {
     if (serv->winner != NULL) {
         event_end_game(serv, serv->winner);

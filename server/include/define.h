@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#define BUFFER_MAX_SIZE        2048
+#define BUFFER_MAX_SIZE        8192
 #define MAX_CONCURENT_COMMANDS 10
 
 #define OFFSET_ARGS           8
@@ -30,6 +30,8 @@
 #define SOUTH                 3
 #define WEST                  4
 #define DEFAULT_BUFFER_SIZE   100
+#define TEST_MAPX             10
+#define TEST_MAPY             10
 
 typedef struct server_s server_t;
 typedef struct cell_s cell_t;

@@ -32,7 +32,8 @@ void handle_destroyed_clients(server_t *server)
         list_del_elem_at_position(&server->client, to_remove[i]);
 }
 
-static void disable_client(server_t *serv, client_t *client, int write_ret)
+static void disable_client(
+    const server_t *serv, client_t *client, int write_ret)
 {
     if (write_ret == -1) {
         server_log(serv, EVENT, client->fd, "client disconnected");

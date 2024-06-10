@@ -20,7 +20,9 @@ void server_event_send_many(
 
     for (size_t i = 0; i != clients; i++) {
         client = list_get_elem_at_position(serv->client, i);
-        if (client == NULL || client->state != client_target)
+        if (client == NULL)
+            continue;
+        if (client->state != client_target)
             continue;
         server_send_data(client, buff);
     }
