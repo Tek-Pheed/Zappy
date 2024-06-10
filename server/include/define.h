@@ -18,13 +18,13 @@
 #define MENDIANE              3
 #define PHIRAS                4
 #define THYSTAME              5
-#define LINEMATE_R            0.3
+#define LINEMATE_R            10.3
 #define DERAUMERE_R           0.15
 #define SIBUR_R               0.1
 #define MENDIANE_R            0.1
 #define PHIRAS_R              0.08
 #define THYSTAME_R            0.05
-#define FOOD_R                0.5
+#define FOOD_R                10.5
 #define NORTH                 1
 #define EAST                  2
 #define SOUTH                 3

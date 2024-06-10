@@ -47,11 +47,10 @@ static bool is_client_ready(const server_t *serv, client_t *client)
 
 static bool handle_commands(server_t *serv, client_t *client)
 {
-    size_t nb_commands = list_get_size(client->cmds);
     char *cmd = NULL;
     bool result = true;
 
-    for (size_t i = 0; i < nb_commands; i++) {
+    for (size_t i = 0; i < list_get_size(client->cmds); i++) {
         if (!is_client_ready(serv, client))
             break;
         cmd = list_get_elem_at_position(client->cmds, i);

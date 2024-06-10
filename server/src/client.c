@@ -125,6 +125,8 @@ static void check_win_team(server_t *serv)
 
     for (int i = 0; i != len_team; i++) {
         tmp = list_get_elem_at_position(serv->teams, i);
+        if (tmp == NULL)
+            continue;
         if (tmp->nb_level_max >= 6) {
             serv->winner = strdup(tmp->name);
             return;
@@ -140,6 +142,8 @@ void check_lvl_player(server_t *serv)
 
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
+        if (tmp == NULL)
+            continue;
         if (tmp && tmp->state == AI && tmp->player.level == 8) {
             team_tmp = team_get_client(serv, tmp);
             team_tmp->nb_level_max += 1;

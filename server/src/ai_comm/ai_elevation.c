@@ -28,6 +28,8 @@ static bool check_nb_players(server_t *serv, const client_t *cli)
     client_len = list_get_size(serv->client);
     for (int i = 0; i != client_len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
+        if (tmp == NULL)
+            continue;
         if (tmp->state == AI && tmp->player.x == cli->player.x
             && tmp->player.y == cli->player.y
             && tmp->player.level == cli->player.level)
@@ -56,7 +58,9 @@ static void level_up_all(server_t *serv, const client_t *cli)
     client_len = list_get_size(serv->client);
     for (int i = 0; i != client_len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
-        if (tmp->player.elevating == true) {
+        if (tmp == NULL)
+            continue;
+        if (tmp->state == AI && tmp->player.elevating == true) {
             tmp->player.level += 1;
             tmp->player.elevating = false;
             event_player_level(serv, cli);
@@ -82,7 +86,8 @@ static int mark_player_elevating(server_t *serv, const client_t *cli)
     for (int i = 0;
         i != client_len && count >= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
-        if (tmp->player.x == cli->player.x && tmp->player.y == cli->player.y
+        if (tmp != NULL && tmp->player.x == cli->player.x
+            && tmp->player.y == cli->player.y
             && tmp->player.level == cli->player.level) {
             count++;
             tmp->player.elevating = true;
@@ -113,7 +118,6 @@ static int *getelevated(server_t *serv, int size)
     return (elevated);
 }
 
-// free this strdup somehow
 bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     bool val;
@@ -133,7 +137,7 @@ bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
     free(elevated);
     cli->cmd_duration = 300;
     gettimeofday(&cli->last_cmd_time, NULL);
-    list_add_elem_at_position(&cli->cmds, strdup("EndIncantationServer\n"), 2);
+    list_add_elem_at_back(&cli->cmds, strdup("EndIncantationServer\n"));
     return val;
 }
 

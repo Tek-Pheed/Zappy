@@ -18,6 +18,8 @@ team_t *team_get_client(server_t *serv, const client_t *cli)
 
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->teams, 1);
+        if (tmp == NULL)
+            continue;
         if (strcmp(cli->team_name, tmp->name) == 0)
             return tmp;
     }
@@ -80,6 +82,8 @@ bool team_add_client(server_t *serv, client_t *client)
 
     for (size_t i = 0; i != nb_teams; i++) {
         team = list_get_elem_at_position(serv->teams, i);
+        if (team == NULL)
+            continue;
         val = check_egg(serv, client, egg, team);
         if (val == true)
             return val;

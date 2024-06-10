@@ -23,7 +23,7 @@ void handle_destroyed_clients(server_t *server)
     memset(to_remove, -1, clients);
     for (size_t i = 0; i != clients; i++) {
         client = list_get_elem_at_position(server->client, i);
-        if (client->fd == -1) {
+        if (client != NULL && client->fd == -1) {
             to_remove[index] = (int) i;
             index++;
         }
