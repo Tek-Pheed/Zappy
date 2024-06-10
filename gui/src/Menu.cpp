@@ -80,6 +80,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
     SetTargetFPS(60);
     int playClicked = 0;
     int settingsClicked = 0;
+    bool settingsIsClicked = 0;
     int exitClicked = 0;
     int confirmClicked = 0;
     Settings s;
@@ -113,8 +114,12 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             }
             draw.createButton(400, 75, 1220, 700, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
-                currentScene = Zappy::SETTINGS;
+                settingsIsClicked = !settingsIsClicked;
             }
+            if (settingsIsClicked)
+                s.manageSettingsButton(resIsClick, music, volume);
+            else if (!settingsIsClicked)
+                resIsClick = false;
             draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN, "EXIT", 20, WHITE, Zappy::RECT, exitClicked);
             if (exitClicked == 1) {
                 CloseWindow();
@@ -134,13 +139,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
             GameScene(model, camera, position, bounds);
-        } else if (currentScene == Zappy::SETTINGS) {
-            s.manageSettingsButton(resIsClick, music, volume);
-            ClearBackground(RAYWHITE);
-            DrawText("SETTINGS SCENE", GetScreenWidth() / 2 - MeasureText("SETTINGS SCENE", 40) / 2, GetScreenHeight() / 2 - 20, 40, DARKGRAY);
-            DrawFPS(10, 10);
         }
-
         EndDrawing();
     }
 }
