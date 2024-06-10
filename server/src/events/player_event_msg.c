@@ -33,7 +33,7 @@ void event_broadcast(
     free(buff);
 }
 
-void event_end_incantation(const server_t *serv, const client_t *client,
+void event_end_incantation(server_t *serv, const client_t *client,
     const ivect2D_t *pos, const char *result)
 {
     char buff[DEFAULT_BUFFER_SIZE];

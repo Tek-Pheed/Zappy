@@ -48,7 +48,7 @@ void event_unknow_command(server_t *serv, client_t *client);
 void event_command_parameter(server_t *serv, client_t *client);
 void event_start_incantation(
     const server_t *serv, client_t *client, int *p_nb, int size);
-void event_end_incantation(const server_t *serv, const client_t *client,
+void event_end_incantation(server_t *serv, const client_t *client,
     const ivect2D_t *pos, const char *result);
 
 void event_teams_names(server_t *serv, client_t *client);

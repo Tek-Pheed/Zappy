@@ -50,7 +50,7 @@ static bool check_stone(const server_t *serv, const client_t *cli)
     return true;
 }
 
-static void level_up_all(server_t *serv, const client_t *cli)
+static void level_up_all(server_t *serv, client_t *cli)
 {
     int client_len = 0;
     client_t *tmp;
@@ -61,6 +61,7 @@ static void level_up_all(server_t *serv, const client_t *cli)
         if (tmp == NULL)
             continue;
         if (tmp->state == AI && tmp->player.elevating == true) {
+            printf("Level up player\n");
             tmp->player.level += 1;
             tmp->player.elevating = false;
             event_player_level(serv, cli);
@@ -76,7 +77,7 @@ static void remove_stone_used(server_t *serv, client_t *cli)
     }
 }
 
-static int mark_player_elevating(server_t *serv, const client_t *cli)
+static int mark_player_elevating(server_t *serv, client_t *cli)
 {
     int count = 0;
     int client_len = 0;
@@ -84,9 +85,9 @@ static int mark_player_elevating(server_t *serv, const client_t *cli)
 
     client_len = list_get_size(serv->client);
     for (int i = 0;
-        i != client_len && count >= p_required[cli->player.level - 1]; i++) {
+        i != client_len && count <= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
-        if (tmp != NULL && tmp->player.x == cli->player.x
+        if (tmp != NULL && tmp->state == AI && tmp->player.x == cli->player.x
             && tmp->player.y == cli->player.y
             && tmp->player.level == cli->player.level) {
             count++;
