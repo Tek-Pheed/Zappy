@@ -41,7 +41,7 @@ static bool check_stone(const server_t *serv, const client_t *cli)
 {
     for (int i = 0; i != 6; i++) {
         if (serv->map[cli->player.x][cli->player.y].stone[i]
-            != s_required[cli->player.level - 1][i])
+            < s_required[cli->player.level - 1][i])
             return false;
     }
     return true;
@@ -79,7 +79,7 @@ static int mark_player_elevating(server_t *serv, const client_t *cli)
 
     client_len = list_get_size(serv->client);
     for (int i = 0;
-    i != client_len && count >= p_required[cli->player.level - 1]; i++) {
+         i != client_len && count >= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp->player.x == cli->player.x && tmp->player.y == cli->player.y
             && tmp->player.level == cli->player.level) {
