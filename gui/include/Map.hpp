@@ -7,17 +7,41 @@
 
 #pragma once
 #include <vector>
+#include <list>
+#include <queue>
+#include <deque>
+#include <iostream>
 #include "IItems.hpp"
 
 
 namespace Zappy {
+// class Map {
+//     public:
+//         Map(int x, int y);
+//         ~Map();
+//         void getBlock(std::list block);
+//         std::list<BLOCK> setBlock(std::list block);
+//         void drawMap();
+
+//     protected:
+//     private:
+//     int _x;
+//     int _y;
+//     std::list<std::queue, std::deque> _block;
+// };
+
 class Map {
     public:
-        Map(int x, int y);
-        ~Map();
+        Map(int x, int y) : _x(x), _y(y) {}
+        ~Map() {}
+        void getBlock(std::list<Bloc>& block) const;
+        std::list<Bloc> setBlock(const std::list<Bloc>& block);
+        void drawMap();
 
-    protected:
     private:
+        int _x;
+        int _y;
+        std::list<Bloc> _block;
 };
 
 class Bloc {
@@ -28,6 +52,5 @@ class Bloc {
     private:
         int _x;
         int _y;
-        std::vector<IItems *> _items;
 };
 }
