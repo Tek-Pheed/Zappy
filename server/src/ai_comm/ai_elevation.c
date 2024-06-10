@@ -85,7 +85,7 @@ static int mark_player_elevating(server_t *serv, client_t *cli)
 
     client_len = list_get_size(serv->client);
     for (int i = 0;
-        i != client_len && count <= p_required[cli->player.level - 1]; i++) {
+         i != client_len && count <= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp != NULL && tmp->state == AI && tmp->player.x == cli->player.x
             && tmp->player.y == cli->player.y
@@ -129,16 +129,16 @@ bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
         n = mark_player_elevating(serv, cli);
         server_send_data(cli, "Elevation underway\n");
         val = true;
+        elevated = getelevated(serv, n);
+        event_start_incantation(serv, cli, elevated, n);
+        free(elevated);
+        list_add_elem_at_back(&cli->cmds, strdup("EndIncantationServer\n"));
     } else {
         server_send_data(cli, "ko\n");
         val = false;
     }
-    elevated = getelevated(serv, n);
-    event_start_incantation(serv, cli, elevated, n);
-    free(elevated);
     cli->cmd_duration = 300;
     gettimeofday(&cli->last_cmd_time, NULL);
-    list_add_elem_at_back(&cli->cmds, strdup("EndIncantationServer\n"));
     return val;
 }
 
