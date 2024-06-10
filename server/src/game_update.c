@@ -68,7 +68,7 @@ void game_update(server_t *serv)
     size_t client_nb = list_get_size(serv->client);
 
     for (size_t i = 0; i != client_nb; i++) {
-        client = list_get_elem_at_back(serv->client);
+        client = list_get_elem_at_position(serv->client, i);
         if (client == NULL || client->state != AI || client->fd == -1)
             continue;
         update_player(serv, client);
