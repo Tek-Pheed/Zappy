@@ -67,7 +67,7 @@ static void get_stone_cell(const cell_t *cell, char **ptr)
 
 static char *get_items_on_cell(const cell_t *cell)
 {
-    char buff[DEFAULT_BUFFER_SIZE * 10];
+    char buff[DEFAULT_BUFFER_SIZE * 256];
     char *ptr = buff;
 
     memset(buff, 0, sizeof(buff));
