@@ -66,13 +66,64 @@ void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds)
+void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
 {
-    ClearBackground(RAYWHITE);
-    BeginMode3D(camera);
-    DrawBoundingBox(bounds, GREEN);
-    EndMode3D();
-    DrawFPS(10, 10);
+    Model water;
+    Model heart;
+    Model chest;
+    Model tree;
+    Model island;
+    Camera3D camera = { 0 };
+    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
+    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+
+    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+
+    water = LoadModel("assets/item/water.glb");
+    heart = LoadModel("assets/item/heart.glb");
+    chest = LoadModel("assets/item/chest_island.glb");
+    tree = LoadModel("assets/item/palm_tree_island.glb");
+    island = LoadModel("assets/item/basic_island.glb");
+
+    DisableCursor();
+
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose()) {
+        UpdateCamera(&camera, CAMERA_FREE);
+
+        if (IsKeyPressed('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+
+        BeginDrawing();
+
+            ClearBackground(RAYWHITE);
+
+            BeginMode3D(camera);
+                for (int x = 0; x < 20; x++) {
+                    for (int z = 0; z < 20; z++) {
+                        DrawModel(water, (Vector3){ x * 2.0f, 0.0f, z * 2.0f }, 1.0f, WHITE);
+                    }
+                }
+                DrawModel(heart, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
+                // DrawModel(chest, (Vector3){ 2.0f, 0.0f, 0.0f }, 1.0f, WHITE);
+                DrawModel(tree, (Vector3){ 4.0f, 2.0f, 0.0f }, 1.0f, WHITE);
+                DrawModel(island, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
+                DrawGrid(10, 1.0f);
+
+            EndMode3D();
+
+            DrawText("Free camera default controls:", 20, 20, 10, BLACK);
+            DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
+            DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
+            DrawText("- Z to zoom to (0, 0, 0)", 40, 80, 10, DARKGRAY);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
 }
 
 void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
@@ -133,7 +184,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             textInputPort.DrawInput();
             textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
-            GameScene(model, camera, position, bounds);
+            GameScene(model, position, bounds);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);

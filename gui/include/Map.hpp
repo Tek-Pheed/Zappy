@@ -6,20 +6,28 @@
 */
 
 #pragma once
+#include <vector>
+#include "IItems.hpp"
+
 
 namespace Zappy {
 class Map {
     public:
-        Map();
+        Map(int x, int y);
         ~Map();
-        void setX(int x);
-        int getX();
-        void setY(int y);
-        int getY();
 
+    protected:
+    private:
+};
+
+class Bloc {
+    public:
+        Bloc(int x, int y, std::vector<IItems *> items);
+        ~Bloc();
     protected:
     private:
         int _x;
         int _y;
+        std::vector<IItems *> _items;
 };
 }
