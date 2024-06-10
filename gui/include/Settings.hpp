@@ -26,7 +26,7 @@ namespace Zappy {
             int getSound();
             void setResolution(Resolution resolution);
             void manageSettingsButton(bool &resIsClick, Music music, double &volume);
-            void manageSoundMusic(Music music, Draw d, double &volume);
+            void manageSoundMusic(Music music, Draw d, double &volume, bool &resIsClick);
             void changeResolution(std::deque<int> resClick);
             void manageResolution(Draw d, bool &resIsClick);
             Resolution getResolution();

@@ -60,6 +60,10 @@ namespace Zappy {
         } else {
             color = buttonColor;
         }
+        if (color.r == BLACK.r && color.g == BLACK.g && color.b == BLACK.b && color.a == BLACK.a && txtColor.r == BLACK.r && txtColor.g == BLACK.g && txtColor.b == BLACK.b && txtColor.a == BLACK.a)
+            txtColor = WHITE;
+        if (color.r == WHITE.r && color.g == WHITE.g && color.b == WHITE.b && color.a == WHITE.a && txtColor.r == WHITE.r && txtColor.g == WHITE.g && txtColor.b == WHITE.b && txtColor.a == WHITE.a)
+            txtColor = BLACK;
         if (shape == ButtonShape::CIRCLE)
             DrawCircleV(buttonPosC, r, color);
         else
