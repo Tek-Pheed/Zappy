@@ -52,9 +52,11 @@ void distribute_items_after(
         x = rand() % serv->resX;
         y = rand() % serv->resY;
         if (item_type == 6) {
+            server_log(serv, INFO, 0, "Adding food on map");
             map[x][y].food++;
             event_tile_update(serv, x, y);
         } else {
+            server_log(serv, INFO, 0, "Adding stone on map");
             map[x][y].stone[item_type]++;
             event_tile_update(serv, x, y);
         }

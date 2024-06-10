@@ -113,6 +113,7 @@ static int *getelevated(server_t *serv, int size)
     return (elevated);
 }
 
+// free this strdup somehow
 bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     bool val;
