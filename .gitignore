@@ -60,4 +60,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Test
+*.gcno
+*.gcda
+
 coding-style-reports.log
