@@ -43,14 +43,12 @@ class AI:
                             self.player.level = int(''.join(filter(str.isdigit, elem)))
                             if self.player.level == 8:
                                 exit(0)
-                            print(elem)
-                            print(self.player.level)
+                            print_verbose(self.player.verbose, f"[INFO] {elem}\n")
                             self.player.step = 0
-                            print(self.player.step)
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
-                                print_verbose(self.player.verbose, f"{self.player.inventory}\n")
+                                print_verbose(self.player.verbose, f"[INVENTORY] {self.player.inventory}\n")
                             except ValueError:
                                 print_verbose(self.player.verbose, f"Error {elem}")
                                 pass

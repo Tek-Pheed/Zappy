@@ -31,7 +31,7 @@ class Player:
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
-        print_verbose(self.verbose, f"Checking Incantation --> {self.level} --> {required_ressources}\n")
+        print_verbose(self.verbose, f"[INFO] level {self.level} require {required_ressources}\n")
         for r in required_ressources:
             if required_ressources[r] > self.inventory[r]:
                 return False
@@ -61,7 +61,7 @@ class Player:
         for i in range(len(self.map)):
             for y in range(self.size_of_look(self.map[i])):
                 if object in self.map[i][y][0]:
-                    print_verbose(self.verbose, f"{object} found in {(i, y)} !\n")
+                    print_verbose(self.verbose, f"[MAP] {object} found in {(i, y)} !\n")
                     return [i, y]
         return None
 
@@ -73,7 +73,6 @@ class Player:
         data = list
         map = generate_empty_map()
         map = fill_map_with_data(map, data)
-        print_verbose(self.verbose, f"Map: {self.map}\n")
         self.map = map
         coord = self.find_collectible(object)
         action = []
@@ -124,7 +123,6 @@ class Player:
         for r in required_ressources:
             if required_ressources[r] > 0:
                 continue
-            print(r in self.inventory and self.inventory[r] != 0)
             if r in self.inventory and self.inventory[r] != 0:
                 self.action = ["Set " + r + "\n"]
                 self.action.append("Look\n")
@@ -161,7 +159,7 @@ class Player:
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
-            print_verbose(self.verbose, f"Action: {self.data_to_send}")
+            print_verbose(self.verbose, f"[ACTION] {self.data_to_send}")
         elif self.step == 1:
             if (self.incantation_possible()):
                 self.step = 4
@@ -172,6 +170,7 @@ class Player:
             self.step += 1
         elif self.step == 3:
             if "food" in self.inventory and self.inventory["food"] < 35:
+                print(self.look_arround)
                 self.action = self.parse_look_command(self.look_arround, "food")
                 self.step = 0
             else:
@@ -183,11 +182,9 @@ class Player:
             self.step += 1
         elif self.step == 5:
             if self.incantation_possible():
-                print("Begin Incantation")
                 self.begin_incantation()
             if self.step != 6:
                 self.drop_items_for_incantation()
-                print(self.action)
                 if self.action:
                     self.data_to_send = self.action[0]
                     self.action = self.action[1:]
@@ -197,6 +194,5 @@ class Player:
             if self.action:
                 self.data_to_send = self.action[0]
                 self.action = self.action[1:]
-                print(f"Action: {self.action}")
         elif self.step == 7:
             self.data_to_send = ""
