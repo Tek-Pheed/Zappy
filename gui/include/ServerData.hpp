@@ -45,7 +45,7 @@ namespace Zappy
       public:
         Parser();
         ~Parser();
-        std::list<IItems> createItems(std::queue<std::string> items);
+        std::list<IItems *> createItems(std::queue<std::string> items);
         void createBloc(std::queue<std::string> bloc);
         void createMap(std::queue<std::string> size);
         void createTeams(std::queue<std::string> teams);

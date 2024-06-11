@@ -16,7 +16,7 @@ Zappy::Parser::~Parser()
 {
 }
 
-std::list<Zappy::IItems> Zappy::Parser::createItems(std::queue<std::string> items)
+std::list<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
 {
 
 }
