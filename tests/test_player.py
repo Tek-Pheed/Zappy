@@ -1,5 +1,5 @@
 from pytest import raises
-from src.player import Player
+from ai.src.player import Player
 
 def test_player_default_inventory():
     p: Player = Player("test")
