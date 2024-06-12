@@ -23,12 +23,13 @@ class Player:
         self.map = []
         self.look_arround: str = ""
         self.level = 1
-        self.step = 0
+        self.step = 8
         self.action = []
         self.object_to_go = ""
         self.ready_to_level_up = False
         self.team_slot = 0
         self.verbose = False
+        self.can_fork = True
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -171,7 +172,6 @@ class Player:
             self.step += 1
         elif self.step == 3:
             if "food" in self.inventory and self.inventory["food"] < 35:
-                print(self.look_arround)
                 self.action = self.parse_look_command(self.look_arround, "food")
                 self.step = 0
             else:
@@ -201,5 +201,9 @@ class Player:
             self.data_to_send = "Connect_nbr\n"
             self.step += 1
         elif self.step == 9:
-            self.data_to_send = "Fork\n"
+            if self.team_slot == 0:
+                self.data_to_send = "Fork\n"
+                self.can_fork = True
+            else:
+                self.data_to_send = "Look\n"
             self.step = 0
