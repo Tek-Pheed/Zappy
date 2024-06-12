@@ -8,12 +8,6 @@ def test_invalid_args():
     assert exitStatus.value.code == 84
 
 def test_not_enought_args():
-    args = ["22", "test"]
-    with raises(SystemExit) as exitStatus:
-        parse_args(args)
-    assert exitStatus.value.code == 84
-
-def test_not_enought_args2():
     args = ["22"]
     with raises(SystemExit) as exitStatus:
         parse_args(args)
@@ -24,3 +18,9 @@ def test_no_args():
     with raises(SystemExit) as exitStatus:
         parse_args(args)
     assert exitStatus.value.code == 84
+
+def test_good_args():
+    args = ["-p", "22", "-n", "zap"]
+
+    new_args = parse_args(args)
+    assert new_args.p == 22 and new_args.n == "zap" and new_args.h == "localhost"

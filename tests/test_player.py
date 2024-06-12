@@ -1,22 +1,24 @@
 from pytest import raises
 from ai.src.player import Player
 
-def test_player_default_inventory():
-    p: Player = Player("test")
+def test_default_player():
+    p: Player = Player("zap")
 
-    assert p.inventory == {"food": 0, "linemate": 0, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
+    assert p.team == "zap" and p.logged == False
 
-def test_player_default_level():
-    p: Player = Player("test")
+def test_incantation_not_possible():
+    p: Player = Player("zap")
 
-    assert p.level == 1
+    assert p.incantation_possible() == False
 
-def test_player_team_name():
-    p: Player = Player("test")
+def test_incantation_possible():
+    p: Player = Player("zap")
 
-    assert p.team == "test"
+    p.inventory = {"linemate": 1}
 
-def test_player_first_data_to_send():
-    p: Player = Player("test")
+    assert p.incantation_possible() == True
 
-    assert p.data_to_send == f"{p.team}\n"
+def test_search_minerals():
+    p: Player = Player("zap")
+
+    assert p.what_i_search() == "linemate"

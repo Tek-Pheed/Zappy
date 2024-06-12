@@ -64,4 +64,9 @@ dkms.conf
 *.gcno
 *.gcda
 
+# Python && Pytest
+.coverage
+.pytest_cache
+__pycache__
+
 coding-style-reports.log
