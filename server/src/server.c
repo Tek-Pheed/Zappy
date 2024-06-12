@@ -10,6 +10,7 @@
 #include <netinet/ip.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -65,15 +66,20 @@ bool init_server(server_t *serv)
     }
     if (!start_socket(serv->socket))
         return false;
+    gettimeofday(&serv->last_map_update, NULL);
     return true;
 }
 
-int create_server(server_t *serv)
+int run_server(server_t *serv)
 {
-    if (!init_server(serv))
+    if (!init_server(serv)) {
+        perror("Unable to initialize server");
         return 84;
+    }
     signal(SIGINT, stop_server);
+    server_log(serv, INFO, 0, "Server ready to accept clients");
     while (is_on(0))
-        server_loop(serv);
+        if (server_loop(serv))
+            break;
     return 0;
 }

@@ -14,7 +14,22 @@
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
+static void create_team(server_t *serv, int flags[6])
+{
+    team_t *team = NULL;
+
+    for (int i = 0; serv->tName[i] != NULL; i++) {
+        team = calloc(1, sizeof(team_t));
+        team->name = strdup(serv->tName[i]);
+        team->nb_player = 0;
+        team->eggs = calloc(1, sizeof(list_t));
+        list_add_elem_at_back(&serv->teams, team);
+    }
+    flags[3] = 1;
+}
+
+void parse_team_name(
+    server_t *serv, int flags[6], int argc, char *const argv[])
 {
     size_t allocated_size = 2;
     size_t current_size = 0;
@@ -35,7 +50,7 @@ void parse_team_name(server_t *serv, int flags[6], int argc, char *argv[])
         current_size++;
     }
     serv->tName[current_size] = NULL;
-    flags[3] = 1;
+    create_team(serv, flags);
 }
 
 void parse_port(server_t *serv, int flags[6])

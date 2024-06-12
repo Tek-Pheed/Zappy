@@ -1,5 +1,5 @@
 from pytest import raises
-from src.arguments import *
+from ai.src.arguments import *
 
 def test_invalid_args():
     args = ["test", "01", "test"]
