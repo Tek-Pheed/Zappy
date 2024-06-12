@@ -5,7 +5,7 @@
 ** ConfirmButton
 */
 
-#include "../include/Menu.hpp"
+#include "Menu.hpp"
 
 bool Zappy::ConfirmButton::createButton(float width, float height, float posX, float posY, float borderThickness, Color borderColor, Color hoverColor, Color pressColor, const char* text, float textSize, Color textColor, Shape shape, bool &clicked)
 {

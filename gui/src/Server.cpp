@@ -12,7 +12,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "../include/ServerData.hpp"
+#include "ServerData.hpp"
 
 Zappy::Server::Server(int port, char *ip)
 {

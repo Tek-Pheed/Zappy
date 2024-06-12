@@ -5,8 +5,8 @@
 ** Parser.cpp
 */
 
-#include "../include/ServerData.hpp"
-#include "../include/Items.hpp"
+#include "ServerData.hpp"
+#include "Items.hpp"
 
 Zappy::Parser::Parser()
 {
