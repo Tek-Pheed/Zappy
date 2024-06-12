@@ -54,6 +54,10 @@ class AI:
                                 pass
                         elif self.player.data_to_send == "Look\n":
                             self.player.look_arround = elem
+                        elif self.player.data_to_send == "Connect_nbr\n":
+                            self.player.team_slot = int(elem)
+                            if self.player.team_slot != 0 and self.args.thread == True:
+                                subprocess.Popen(["python3","zappy_ai","-p", self.args.port, "-n", self.player.team, "--thread True"])
                         message = message.split("\n")[-1]
                         running = 1
 

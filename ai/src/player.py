@@ -27,6 +27,7 @@ class Player:
         self.action = []
         self.object_to_go = ""
         self.ready_to_level_up = False
+        self.team_slot = 0
         self.verbose = False
 
     def incantation_possible(self) -> bool:
@@ -196,3 +197,9 @@ class Player:
                 self.action = self.action[1:]
         elif self.step == 7:
             self.data_to_send = ""
+        elif self.step == 8:
+            self.data_to_send = "Connect_nbr\n"
+            self.step += 1
+        elif self.step == 9:
+            self.data_to_send = "Fork\n"
+            self.step = 0
