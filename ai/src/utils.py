@@ -7,7 +7,7 @@ def clean_str(str: str) -> str:
     str = str.replace("\n", "")
     return str
 
-def print_verbose(verbose: bool, str) -> None:
+def print_verbose(verbose: bool, str):
     if verbose:
         print(f"{str}", end="")
 
@@ -18,7 +18,6 @@ def generate_empty_map() -> List:
     for _ in range(4):
         res.append([[] for j in range(nbCase)])
         nbCase += 2
-    print(res)
     return res
 
 def get_nb_of_line_in_array(array: List) -> int:
