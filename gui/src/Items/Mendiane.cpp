@@ -5,7 +5,7 @@
 ** Mendiane.cpp
 */
 
-#include "IItems.hpp"
+#include "Items.hpp"
 
 Zappy::Mendiane::Mendiane(float density, std::map<std::string, int> position,
     std::vector<std::map<std::string, int>> sameItems, const char *model,

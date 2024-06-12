@@ -5,7 +5,7 @@
 ** Sibur.cpp
 */
 
-#include "IItems.hpp"
+#include "Items.hpp"
 
 Zappy::Sibur::Sibur(float density, std::map<std::string, int> position,
     std::vector<std::map<std::string, int>> sameItems, const char *model,
