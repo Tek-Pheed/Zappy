@@ -5,8 +5,9 @@
 ** Parser.cpp
 */
 
-#include "../include/ServerData.hpp"
-#include "../include/Items.hpp"
+#include "ServerData.hpp"
+#include "Items.hpp"
+#include "Map.hpp"
 
 Zappy::Parser::Parser()
 {
@@ -18,26 +19,60 @@ Zappy::Parser::~Parser()
 
 std::list<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
 {
+    std::list<IItems *> listOfItems;
+    Utils utils;
 
+    while (!items.empty()) {
+        if (items.front() == "0") {
+            listOfItems.push_back(new Food("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "1") {
+            listOfItems.push_back(new Linemate("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "2") {
+            listOfItems.push_back(new Deraumere("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "3") {
+            listOfItems.push_back(new Sibur("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "4") {
+            listOfItems.push_back(new Mendiane("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "5") {
+            listOfItems.push_back(new Phiras("../gems", "../gems", utils));
+            items.pop();
+        }
+        if (items.front() == "6") {
+            listOfItems.push_back(new Thystame("../gems", "../gems", utils));
+            items.pop();
+        }
+    }
+    return listOfItems;
 }
 
-void Zappy::Parser::createBloc(std::queue<std::string> bloc)
+Bloc &Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
     int x = std::stoi(bloc.front());
     bloc.pop();
     int y = std::stoi(bloc.front());
     bloc.pop();
-    std::cout << "Position Bloc x: " << x << ", y: " << y << std::endl;
-    createItems(bloc);
+    Bloc bloc(x, y, createItems(bloc));
+    return bloc;
 }
 
-void Zappy::Parser::createMap(std::queue<std::string> map)
+Map &Zappy::Parser::createMap(std::queue<std::string> map)
 {
     int x = std::stoi(map.front());
     map.pop();
     int y = std::stoi(map.front());
     map.pop();
-    std::cout << "Position Map x: " << x << ", y: " << y << std::endl;
+    Map map(x, y);
+    return map;
 }
 
 void Zappy::Parser::createTeams(std::queue<std::string> teams)
@@ -48,10 +83,10 @@ void Zappy::Parser::createTeams(std::queue<std::string> teams)
     } 
 }
 
-void Zappy::Parser::createFrequ(std::queue<std::string> freq)
+int Zappy::Parser::createFrequ(std::queue<std::string> freq)
 {
     int nbFreq = std::stoi(freq.front());
-    std::cout << "Frequence: " << nbFreq << std::endl;
+    return nbFreq;
 }
 
 void Zappy::Parser::newPlayer(std::queue<std::string> player)
@@ -309,4 +344,5 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         tmpFront.pop();
         unknowCommand();
     }
+    tmpFront.pop();
 }
