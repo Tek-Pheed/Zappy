@@ -167,7 +167,7 @@ class Player:
                 self.player_incantation += 1
 
     def walk_to_broadcast_emitter(self, direction: int) -> list:
-        if self.action:
+        if self.ready_to_level_up or self.action:
             return
         action = []
         if direction == 0:
@@ -195,6 +195,7 @@ class Player:
                 message = f"{self.team} incantation {self.level}"
                 self.data_to_send = f"Broadcast {message}\n"
                 self.player_incantation = 1
+                self.ready_to_level_up = True
                 self.step = 4
             else:
                 self.step += 1
