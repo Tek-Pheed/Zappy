@@ -17,62 +17,62 @@ Zappy::Parser::~Parser()
 {
 }
 
-std::list<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
+std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
 {
-    std::list<IItems *> listOfItems;
-    Utils utils;
+    std::vector<Zappy::IItems *> listOfItems;
+    Zappy::Utils utils;
 
     while (!items.empty()) {
         if (items.front() == "0") {
-            listOfItems.push_back(new Food("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Food("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "1") {
-            listOfItems.push_back(new Linemate("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Linemate("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "2") {
-            listOfItems.push_back(new Deraumere("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Deraumere("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "3") {
-            listOfItems.push_back(new Sibur("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Sibur("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "4") {
-            listOfItems.push_back(new Mendiane("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Mendiane("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "5") {
-            listOfItems.push_back(new Phiras("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Phiras("../gems", "../gems", utils));
             items.pop();
         }
         if (items.front() == "6") {
-            listOfItems.push_back(new Thystame("../gems", "../gems", utils));
+            listOfItems.push_back(new Zappy::Thystame("../gems", "../gems", utils));
             items.pop();
         }
     }
     return listOfItems;
 }
 
-Bloc &Zappy::Parser::createBloc(std::queue<std::string> bloc)
+Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
     int x = std::stoi(bloc.front());
     bloc.pop();
     int y = std::stoi(bloc.front());
     bloc.pop();
-    Bloc bloc(x, y, createItems(bloc));
-    return bloc;
+    Bloc *newbloc = new Bloc(x, y, createItems(bloc));
+    return newbloc;
 }
 
-Map &Zappy::Parser::createMap(std::queue<std::string> map)
+void Zappy::Parser::createMap(std::queue<std::string> map, Map realmap)
 {
     int x = std::stoi(map.front());
     map.pop();
     int y = std::stoi(map.front());
     map.pop();
-    Map map(x, y);
-    return map;
+    realmap.setX(x);
+    realmap.setY(y);
 }
 
 void Zappy::Parser::createTeams(std::queue<std::string> teams)
@@ -249,6 +249,8 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront = data.front();
+    Map map;
+
     if (tmpFront.front() == "tna") {
         tmpFront.pop();
         createTeams(tmpFront);
@@ -259,11 +261,11 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
     }
     if (tmpFront.front() == "msz") {
         tmpFront.pop();
-        createMap(tmpFront);
+        createMap(tmpFront, map);
     }
     if (tmpFront.front() == "bct") {
         tmpFront.pop();
-        createBloc(tmpFront);
+        map.pushBloc(createBloc(tmpFront));
     }
     if (tmpFront.front() == "pnw") {
         tmpFront.pop();
