@@ -27,6 +27,7 @@ class Player:
         self.action = []
         self.object_to_go = ""
         self.ready_to_level_up = False
+        self.broadcast_receive = ""
         self.verbose = False
 
     def incantation_possible(self) -> bool:
