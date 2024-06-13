@@ -22,3 +22,27 @@ def test_search_minerals():
     p: Player = Player("zap")
 
     assert p.what_i_search() == "linemate"
+
+def test_size_of_look():
+    p: Player = Player("zap")
+    map: list = [[["player food food"]], [["food"], ["linemate"], [" "]]]
+
+    assert p.size_of_look(map) == 2
+
+def test_find_collectible():
+    p: Player = Player("zap")
+    map: list = [[["player food food"]], [["food"], ["linemate"], [" "]]]
+
+    p.map = map
+
+    assert p.find_collectible("food") == [0, 0]
+
+def test_parse_look_command():
+    p: Player = Player("zap")
+
+    assert p.parse_look_command("[player food food, food, linemate, ]", "food") == ["Take food\n"]
+
+def test_wal_to_broadcast_emitter():
+    p: Player = Player("zap")
+
+    assert p.walk_to_broadcast_emitter(0) == []
