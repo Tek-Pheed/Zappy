@@ -18,14 +18,14 @@ int main(void)
     Model model;
     Zappy::Draw draw;
     Zappy::Menu menu;
-    Texture2D texture_body, texture_leaf;
+    Texture2D texture_body, texture_leaf, gemsTexture;
 
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les ressources." << std::endl;
         return 1;
     }
 
-    menu.LoadResources(model, texture_body, texture_leaf);
+    menu.LoadResources(model, texture_body, texture_leaf, gemsTexture);
 
     Camera camera;
     menu.ConfigureCamera(camera);
@@ -35,8 +35,8 @@ int main(void)
 
     Texture2D background = LoadTexture("assets/background.png");
 
-    menu.MainLoop(model, background, camera, position, bounds, draw);
+    menu.MainLoop(model, background, camera, position, bounds, draw, gemsTexture);
 
-    menu.UnloadResources(model, texture_body, texture_leaf);
+    menu.UnloadResources(model, texture_body, texture_leaf, gemsTexture);
     return 0;
 }

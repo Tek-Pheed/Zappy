@@ -12,6 +12,7 @@
 #include "Settings.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
+bool inventoryisOpen = false;
 
 Zappy::Menu::Menu() {}
 Zappy::Menu::~Menu() {}
@@ -22,7 +23,7 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
     return IsWindowReady();
 }
 
-void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
+void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf, Texture2D &gemsTexture)
 {
     model = LoadModel("assets/korok.glb");
     if (model.meshCount == 0) {
@@ -55,7 +56,10 @@ void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D
     for (int i = 0; i < model.meshCount; i++) {
         model.meshMaterial[i] = (i == 0) ? 0 : 1;
     }
+
+    gemsTexture = LoadTexture("assets/rubee_texture.png"); // Charger la texture des gemmes
 }
+
 
 void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera = { 0 };
@@ -66,16 +70,50 @@ void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds)
+void Zappy::Menu::GameScene(Model model, Camera camera, Vector3 position, BoundingBox bounds, Texture2D gemsTexture)
 {
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     DrawBoundingBox(bounds, GREEN);
     EndMode3D();
+
+    if (IsKeyPressed(KEY_E)) {
+        inventoryisOpen = !inventoryisOpen;
+    }
+
+    if (inventoryisOpen) {
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenHeight();
+        int inventoryHeight = screenHeight / 5;
+        int gemCount = 9;
+        int gemTextureWidth = gemsTexture.width / gemCount;
+        int gemTextureHeight = gemsTexture.height;
+        int gemDisplayWidth = 32;
+        int gemDisplayHeight = 64;
+        int spacing = 100;
+        int startX = 20;
+        int startY = screenHeight - inventoryHeight + 100;
+
+        DrawRectangle(0, screenHeight - inventoryHeight, screenWidth, inventoryHeight, Fade(BLACK, 0.8f));
+        DrawRectangle(10, screenHeight - inventoryHeight + 10, screenWidth - 20, inventoryHeight - 20, Fade(WHITE, 0.8f));
+        DrawText("Inventory", 20, screenHeight - inventoryHeight + 20, 50, BLACK);
+
+        for (int i = 0; i < gemCount; i++) {
+            DrawTexturePro(
+                gemsTexture,
+                (Rectangle){i * gemTextureWidth, 0, gemTextureWidth, gemTextureHeight},
+                (Rectangle){startX + i * (gemDisplayWidth + spacing), startY, gemDisplayWidth, gemDisplayHeight},
+                (Vector2){0, 0},
+                0.0f,
+                WHITE
+            );
+        }
+    }
+
     DrawFPS(10, 10);
 }
 
-void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Texture2D gemsTexture)
 {
     SetTargetFPS(60);
     int playClicked = 0;
@@ -138,15 +176,17 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             textInputPort.DrawInput();
             textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
-            GameScene(model, camera, position, bounds);
+            GameScene(model, camera, position, bounds, gemsTexture);
         }
         EndDrawing();
     }
 }
-void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
+
+void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf, Texture2D gemsTexture)
 {
     UnloadTexture(texture_body);
     UnloadTexture(texture_leaf);
     UnloadModel(model);
+    UnloadTexture(gemsTexture); // Décharger la texture des gemmes
     CloseWindow();
 }
