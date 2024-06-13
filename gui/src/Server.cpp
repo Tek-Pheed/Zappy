@@ -14,27 +14,7 @@
 #include <fcntl.h>
 #include "ServerData.hpp"
 
-Zappy::Server::Server(int port, char *ip)
-{
-    std::string addr;
-
-    addr = ip;
-    _isconnect = false;
-    _sock = socket(AF_INET, SOCK_STREAM, 0);
-    _server_addr.sin_family = AF_INET;
-    _server_addr.sin_port = htons(port);
-    if (addr == "localhost")
-        addr = "127.0.0.1";
-    inet_pton(AF_INET, addr.c_str(), &_server_addr.sin_addr);
-    int result = connect(_sock, (struct sockaddr*)&_server_addr, sizeof(_server_addr)); //class error
-    if (result == -1) {
-        std::cerr << "Connection error" << std::endl;
-    } else {
-        _isconnect = true;
-    }
-    FD_ZERO(&_writefds);
-    FD_ZERO(&_readfds);
-}
+Zappy::Server::Server() {}
 
 bool Zappy::Server::getIsconnect()
 {
@@ -46,13 +26,31 @@ Zappy::Server::~Server()
     close(_sock);
 }
 
+Zappy::Server::connect(std::string ip, int port)
+{
+    _isconnect = false;
+    _sock = socket(AF_INET, SOCK_STREAM, 0);
+    _server_addr.sin_family = AF_INET;
+    _server_addr.sin_port = htons(port);
+    if (ip == "localhost")
+        ip = "127.0.0.1";
+    inet_pton(AF_INET, ip.c_str(), &_server_addr.sin_addr);
+    int result = connect(_sock, (struct sockaddr*)&_server_addr, sizeof(_server_addr)); //class error
+    if (result == -1) {
+        std::cerr << "Connection error" << std::endl;
+    } else {
+        _isconnect = true;
+    }
+    FD_ZERO(&_writefds);
+    FD_ZERO(&_readfds);
+}
+
 std::queue<std::string> Zappy::Server::splitData(std::string data)
 {
     std::queue<std::string> tmpQueue;
     std::stringstream ss(data);
     std::string word;
 
-    // printf("%s\n", data);
     while (ss >> word) {
         tmpQueue.push(word);
     }
@@ -68,12 +66,10 @@ void Zappy::Server::messConnect()
     if (FD_ISSET(_sock, &_writefds)){
         write(_sock, message.c_str(), message.length());
     }
-    // send(_sock, message.c_str(), message.length(), 0);
 }
 
 void Zappy::Server::parseBuffer(char *buffer)
 {
-    // std::string buffer(_buffer);
     std::stringstream c(buffer);
     std::string data;
 

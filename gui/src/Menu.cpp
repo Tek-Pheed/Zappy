@@ -142,6 +142,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
 
 void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
+    Zappy::Server server;
     SetTargetFPS(60);
     int playClicked = 0;
     int settingsClicked = 0;
@@ -195,7 +196,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 std::string ip = textInputIP.GetText();
                 std::string port = textInputPort.GetText();
                 std::cout << "IP: " << ip << " Port: " << port << std::endl;
-                Zappy::Server server(std::stoi(port), ip.data());
+                server.connect(std::stoi(port), ip.data());
                 if (server.getIsconnect()) {
                     std::cout << "Connected to server" << std::endl;
                     server.messConnect();
