@@ -21,18 +21,20 @@ SRC		= src/main.cpp \
 		  src/Items/Phiras.cpp \
 		  src/Items/Sibur.cpp \
 		  src/Items/Thystame.cpp \
+		  src/ConfirmButton.cpp	\
 
 OBJ		=	$(SRC:.cpp=.o)
 
 CFLAGS = -W -Wall -Wextra -I./include
 
-LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lX11
 
 %.o: %.cpp
 	g++ $(CFLAGS) $^ -c -o $@
 
 $(NAME): $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(LDFLAGS)
+	@cp $(NAME) ../
 
 all: $(NAME)
 
