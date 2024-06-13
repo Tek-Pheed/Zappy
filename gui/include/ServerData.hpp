@@ -16,6 +16,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include "Items.hpp"
+#include "Map.hpp"
+#include "Player.hpp"
 
 namespace Zappy
 {
@@ -45,14 +47,14 @@ namespace Zappy
       public:
         Parser();
         ~Parser();
-        std::list<IItems *> createItems(std::queue<std::string> items);
-        void createBloc(std::queue<std::string> bloc);
-        void createMap(std::queue<std::string> size);
+        std::vector<IItems *> createItems(std::queue<std::string> items);
+        Bloc *createBloc(std::queue<std::string> bloc);
+        void createMap(std::queue<std::string> size, Map realmap);
         void createTeams(std::queue<std::string> teams);
-        void createFrequ(std::queue<std::string> freq);
+        int createFrequ(std::queue<std::string> freq);
         void parsing(std::queue<std::queue<std::string>> data);
-        void newPlayer(std::queue<std::string> player);
-        void positionPlayer(std::queue<std::string> player);
+        void newPlayer(std::queue<std::string> player, Player realplayer);
+        void positionPlayer(std::queue<std::string> player, Player realplayer);
         void levelPlayer(std::queue<std::string> player);
         void inventoryPlayer(std::queue<std::string> player);
         void expulsion(std::queue<std::string> exp);

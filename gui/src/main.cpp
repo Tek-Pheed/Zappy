@@ -9,7 +9,7 @@
 #include "raylib.h"
 #include "Menu.hpp"
 #include "Draw.hpp"
-#include "../include/ServerData.hpp"
+#include "ServerData.hpp"
 
 int main(void)
 {

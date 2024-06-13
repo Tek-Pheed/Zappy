@@ -19,7 +19,9 @@ class Player {
         std::map<std::string, int> getPosition();
         void setPosition(std::map<std::string, int>);
         void setPositionX(int x);
+        int getPositionX();
         void setPositionY(int y);
+        int getPositionY();
         std::vector <std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 
@@ -28,5 +30,7 @@ class Player {
         std::map<std::string, int> _position;
         std::map<std::string, int> _inventory;
         int _playerId;
+        int _x;
+        int _y;
 };
 }

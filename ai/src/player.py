@@ -113,6 +113,8 @@ class Player:
         return action
 
     def drop_items_for_incantation(self):
+        if self.action:
+            return
         data = self.look_arround.split(",")[0]
         while True:
             if len(data) == 0 or data[0].isalpha():
@@ -122,10 +124,10 @@ class Player:
         required_ressources = LVLS_MANDATORY[self.level].copy()
         for r in required_ressources:
             for r2 in data:
-                    if r == r2:
-                        required_ressources[r] -= 1
+                if r == r2:
+                    required_ressources[r] -= 1
         for r in required_ressources:
-            if required_ressources[r] > 0:
+            if required_ressources[r] < 1:
                 continue
             if r in self.inventory and self.inventory[r] != 0:
                 self.action = ["Set " + r + "\n"]
@@ -152,7 +154,6 @@ class Player:
             if required_ressources[r] > 0:
                 return
         self.data_to_send = "Incantation\n"
-        self.action = ["Incantation\n"]
         self.step += 1
 
     def parse_broadcast(self):
@@ -204,7 +205,6 @@ class Player:
             self.step += 1
         elif self.step == 3:
             if "food" in self.inventory and self.inventory["food"] < 35:
-                print(self.look_arround)
                 self.action = self.parse_look_command(self.look_arround, "food")
                 self.step = 0
             else:
