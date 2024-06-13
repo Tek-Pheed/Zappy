@@ -39,7 +39,6 @@ class AI:
                         if "Elevation underway" in elem:
                             self.player.step = 7
                         elif "Current level:" in elem:
-                            print(int(''.join(filter(str.isdigit, elem))))
                             self.player.level = int(''.join(filter(str.isdigit, elem)))
                             if self.player.level == 8:
                                 exit(0)
