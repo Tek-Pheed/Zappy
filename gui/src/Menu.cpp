@@ -7,9 +7,11 @@
 
 #include <iostream>
 #include "raylib.h"
+#include "raymath.h"
 #include "Menu.hpp"
 #include "Draw.hpp"
 #include "Settings.hpp"
+#include "ServerData.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
@@ -82,36 +84,48 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
 
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
 
-    water = LoadModel("assets/item/water.glb");
-    heart = LoadModel("assets/item/heart.glb");
+    water = LoadModel("assets/water.obj");
+    heart = LoadModel("assets/rubis/rubis_korok.glb");
     chest = LoadModel("assets/item/chest_island.glb");
     tree = LoadModel("assets/item/palm_tree_island.glb");
-    island = LoadModel("assets/item/basic_island.glb");
+    island = LoadModel("assets/island.obj");
 
     DisableCursor();
 
     SetTargetFPS(60);
 
+    Vector3 heartPosition = { 0.0f, 10.0f, 0.0f };
+    float velocityY = 0.0f;
+    const float gravity = -9.81f;
+    const float bounceFactor = 0.7f;
+
     while (!WindowShouldClose()) {
         UpdateCamera(&camera, CAMERA_FREE);
 
-        if (IsKeyPressed('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+        velocityY += gravity * GetFrameTime();
+        heartPosition.y += velocityY * GetFrameTime();
+
+        if (heartPosition.y <= 1.3f) {
+            heartPosition.y = 1.3f;
+            velocityY = -velocityY * bounceFactor;
+
+            if (fabs(velocityY) < 0.1f) {
+                velocityY = 0.0f;
+            }
+        }
 
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
-                for (int x = 0; x < 20; x++) {
-                    for (int z = 0; z < 20; z++) {
-                        DrawModel(water, (Vector3){ x * 2.0f, 0.0f, z * 2.0f }, 1.0f, WHITE);
+                for (int x = 0; x < 10; x++) {
+                    for (int z = 0; z < 10; z++) {
+                        DrawModel(water, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
+                        DrawModel(island, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
+                        DrawModel(heart, heartPosition, 1.0f, WHITE);
                     }
                 }
-                DrawModel(heart, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                // DrawModel(chest, (Vector3){ 2.0f, 0.0f, 0.0f }, 1.0f, WHITE);
-                DrawModel(tree, (Vector3){ 4.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                DrawModel(island, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                DrawGrid(10, 1.0f);
 
             EndMode3D();
 
@@ -181,6 +195,13 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 std::string ip = textInputIP.GetText();
                 std::string port = textInputPort.GetText();
                 std::cout << "IP: " << ip << " Port: " << port << std::endl;
+                Zappy::Server server(std::stoi(port), ip.data());
+                if (server.getIsconnect()) {
+                    std::cout << "Connected to server" << std::endl;
+                    server.messConnect();
+                } else {
+                    std::cerr << "Error: Connection to server failed" << std::endl;
+                }
             }
 
             textInputPort.UpdateInput();

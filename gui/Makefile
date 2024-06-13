@@ -26,6 +26,7 @@ SRC		= src/main.cpp \
 		  src/Items/Sibur.cpp \
 		  src/Items/Thystame.cpp \
 		  src/ConfirmButton.cpp	\
+		  src/Server.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
