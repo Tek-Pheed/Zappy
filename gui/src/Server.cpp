@@ -26,7 +26,7 @@ Zappy::Server::~Server()
     close(_sock);
 }
 
-Zappy::Server::connect(std::string ip, int port)
+void Zappy::Server::init_connection(std::string ip, int port)
 {
     _isconnect = false;
     _sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -52,8 +52,10 @@ std::queue<std::string> Zappy::Server::splitData(std::string data)
     std::string word;
 
     while (ss >> word) {
+        //std::cout << word << std::endl;
         tmpQueue.push(word);
     }
+    //std::cout << tmpQueue.front() << std::endl;
     return tmpQueue;
 }
 
@@ -61,11 +63,12 @@ void Zappy::Server::messConnect()
 {
     std::string message = "GRAPHIC";
 
-    FD_SET(_sock, &_writefds);
-    int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
-    if (FD_ISSET(_sock, &_writefds)){
-        write(_sock, message.c_str(), message.length());
-    }
+    //FD_SET(_sock, &_writefds);
+    //int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
+    //if (FD_ISSET(_sock, &_writefds)){
+    //    write(_sock, message.c_str(), message.length());
+    //}
+    send(_sock, message.c_str(), message.length(), 0);
 }
 
 void Zappy::Server::parseBuffer(char *buffer)
@@ -75,7 +78,9 @@ void Zappy::Server::parseBuffer(char *buffer)
 
     while (std::getline(c, data)) {
         if (!data.empty()) {
-            _data.push(splitData(data));
+            std::queue<std::string> response = splitData(data);
+            _data.push(response);
+            std::cout << _data.front().front() << std::endl;
         }
     }
 }

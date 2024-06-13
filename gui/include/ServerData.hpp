@@ -31,8 +31,9 @@ namespace Zappy
         std::queue<std::queue<std::string>> _data;
 
       public:
-        Server(int port, char *ip);
+        Server();
         ~Server();
+        void init_connection(std::string ip, int port);
         bool getIsconnect();
         void receiveMess();
         void messConnect();
@@ -50,6 +51,7 @@ namespace Zappy
         std::vector<IItems *> createItems(std::queue<std::string> items);
         Bloc *createBloc(std::queue<std::string> bloc);
         void createMap(std::queue<std::string> size, Map realmap);
+        void createMap(std::queue<std::string> size);
         void createTeams(std::queue<std::string> teams);
         int createFrequ(std::queue<std::string> freq);
         void parsing(std::queue<std::queue<std::string>> data);
@@ -72,6 +74,14 @@ namespace Zappy
         void endGame(std::queue<std::string> team);
         void messServer(std::queue<std::string> mess);
         void unknowCommand();
+
+        Zappy::Map getMap();
+        void setMap();
+
+        private:
+          Zappy::Map _map;
+          std::vector<Zappy::IItems *> _items;
+          std::vector<Model> _itemsModelList;
         //sbp
     };
 } // namespace Zappy

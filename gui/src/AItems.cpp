@@ -7,12 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::AItems::AItems(/*std::vector<std::map<std::string, int>> sameItems,*/
-    const char *model, const char *texture, Utils &u)
-    : _u(u)
-{
-    _model = _u.createModel(texture, model);
-}
+Zappy::AItems::AItems(Model model) : _model(model) {}
 
 Zappy::AItems::~AItems()
 {
@@ -27,11 +22,6 @@ Zappy::AItems::~AItems()
 // {
 //     return _sameItems;
 // }
-
-void Zappy::AItems::setModel(const char *texture, const char *model)
-{
-    _model = _u.createModel(model, texture);
-}
 
 Model Zappy::AItems::getModel()
 {

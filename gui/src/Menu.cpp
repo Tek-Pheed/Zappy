@@ -12,6 +12,7 @@
 #include "Draw.hpp"
 #include "Settings.hpp"
 #include "ServerData.hpp"
+#include "Map.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
@@ -70,10 +71,9 @@ void Zappy::Menu::ConfigureCamera(Camera &camera) {
 
 void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Zappy::Server server)
 {
+    Zappy::Parser parser;
+    std::string response;
     Model water;
-    Model heart;
-    Model chest;
-    Model tree;
     Model island;
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
@@ -85,9 +85,6 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
 
     water = LoadModel("assets/water.obj");
-    heart = LoadModel("assets/rubis/rubis_korok.glb");
-    chest = LoadModel("assets/item/chest_island.glb");
-    tree = LoadModel("assets/item/palm_tree_island.glb");
     island = LoadModel("assets/island.obj");
 
     DisableCursor();
@@ -99,7 +96,13 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     const float gravity = -9.81f;
     const float bounceFactor = 0.7f;
 
+    server.receiveMess();
+    parser.parsing(server.getData());
+    std::list<Bloc *> blocks = parser.getMap().getBloc();
+
     while (!WindowShouldClose()) {
+        std::cout << server.getData().front().front() << std::endl;
+
         UpdateCamera(&camera, CAMERA_FREE);
 
         velocityY += gravity * GetFrameTime();
@@ -119,12 +122,20 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
             ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
-                for (int x = 0; x < 10; x++) {
-                    for (int z = 0; z < 10; z++) {
+                for (int x = 0; x < parser.getMap().getX(); x++) {
+                    for (int z = 0; z < parser.getMap().getY(); z++) {
                         DrawModel(water, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
                         DrawModel(island, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
-                        DrawModel(heart, heartPosition, 1.0f, WHITE);
                     }
+                }
+                
+                while (blocks.size() != 0) {
+                    while (blocks.front()->getItems().size() != 0) {
+                        DrawModel(blocks.front()->getItems().front()->getModel(), (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+
+                        blocks.front()->getItems().pop_back();
+                    }
+                    blocks.pop_front();
                 }
 
             EndMode3D();
@@ -185,13 +196,15 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 std::string ip = textInputIP.GetText();
                 std::string port = textInputPort.GetText();
                 std::cout << "IP: " << ip << " Port: " << port << std::endl;
-                server.connect(std::stoi(port), ip.data());
-                if (server.getIsconnect()) {
-                    std::cout << "Connected to server" << std::endl;
-                    server.messConnect();
-                    currentScene = Zappy::GAME;
-                } else {
-                    std::cerr << "Error: Connection to server failed" << std::endl;
+                if (!port.empty()) {
+                    server.init_connection(ip, std::stoi(port));
+                    if (server.getIsconnect()) {
+                        std::cout << "Connected to server" << std::endl;
+                        server.messConnect();
+                        currentScene = Zappy::GAME;
+                    } else {
+                        std::cerr << "Error: Connection to server failed" << std::endl;
+                    }
                 }
             }
 

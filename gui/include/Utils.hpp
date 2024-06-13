@@ -14,7 +14,7 @@ namespace Zappy {
            Utils();
            ~Utils();
            Camera createCamera();
-           Model createModel(const char *model, const char *texture);
+           Model createModel(const char *model);
        private:
    };
 }

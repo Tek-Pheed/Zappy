@@ -20,11 +20,17 @@ class Bloc {
     public:
         Bloc(int x, int y, std::vector<IItems *> items);
         ~Bloc();
-    protected:
+        int getX();
+        int getY();
+        void setX(int x);
+        void setY(int y);
+        std::vector<Zappy::IItems *> getItems();
+        void setItems(std::vector<Zappy::IItems *> items);
+
     private:
         int _x;
         int _y;
-        std::vector<IItems *> _items;
+        std::vector<Zappy::IItems *> _items;
 };
 
 class Map {
