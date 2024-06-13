@@ -63,12 +63,12 @@ void Zappy::Server::messConnect()
 {
     std::string message = "GRAPHIC";
 
-    // FD_SET(_sock, &_writefds);
-    // int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
-    // if (FD_ISSET(_sock, &_writefds)){
-    //     write(_sock, message.c_str(), message.length());
-    // }
-    send(_sock, message.c_str(), message.length(), 0);
+    FD_SET(_sock, &_writefds);
+    int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
+    if (FD_ISSET(_sock, &_writefds)){
+        write(_sock, message.c_str(), message.length());
+    }
+    // send(_sock, message.c_str(), message.length(), 0);
 }
 
 void Zappy::Server::parseBuffer(char *buffer)

@@ -68,7 +68,7 @@ void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
+void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Zappy::Server server)
 {
     Model water;
     Model heart;
@@ -199,6 +199,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 if (server.getIsconnect()) {
                     std::cout << "Connected to server" << std::endl;
                     server.messConnect();
+                    currentScene = Zappy::GAME;
                 } else {
                     std::cerr << "Error: Connection to server failed" << std::endl;
                 }
@@ -210,7 +211,7 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             textInputPort.DrawInput();
             textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
-            GameScene(model, position, bounds);
+            GameScene(model, position, bounds, server);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
