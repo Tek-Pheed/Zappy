@@ -13,6 +13,10 @@ SRC		= src/main.cpp \
 		  src/Input.cpp \
 		  src/Settings.cpp \
 		  src/Draw.cpp \
+		  src/Parser.cpp \
+		  src/Player.cpp \
+		  src/Map.cpp \
+		  src/Bloc.cpp \
 		  src/AItems.cpp \
 		  src/Items/Food.cpp \
 		  src/Items/Deraumere.cpp \

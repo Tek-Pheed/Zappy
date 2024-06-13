@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include "Items.hpp"
 #include "Map.hpp"
+#include "Player.hpp"
 
 namespace Zappy
 {
