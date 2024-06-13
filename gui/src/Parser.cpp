@@ -8,6 +8,7 @@
 #include "ServerData.hpp"
 #include "Items.hpp"
 #include "Map.hpp"
+#include "Player.hpp"
 
 Zappy::Parser::Parser()
 {
@@ -89,7 +90,7 @@ int Zappy::Parser::createFrequ(std::queue<std::string> freq)
     return nbFreq;
 }
 
-void Zappy::Parser::newPlayer(std::queue<std::string> player)
+void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -108,9 +109,11 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player)
     int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
+    realplayer.setPositionX(x);
+    realplayer.setPositionY(y);
 }
 
-void Zappy::Parser::positionPlayer(std::queue<std::string> player)
+void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realplayer)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -125,6 +128,8 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player)
     int south = std::stoi(player.front());
     player.pop();
     int west = std::stoi(player.front());
+    realplayer.setPositionX(x);
+    realplayer.setPositionY(y);
 }
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
@@ -250,6 +255,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront = data.front();
     Map map;
+    Player player;
 
     if (tmpFront.front() == "tna") {
         tmpFront.pop();
@@ -269,11 +275,11 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
     }
     if (tmpFront.front() == "pnw") {
         tmpFront.pop();
-        newPlayer(tmpFront);
+        newPlayer(tmpFront, player);
     }
     if (tmpFront.front() == "ppo") {
         tmpFront.pop();
-        positionPlayer(tmpFront);
+        positionPlayer(tmpFront, player);
     }
     if (tmpFront.front() == "plv") {
         tmpFront.pop();
