@@ -171,14 +171,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
 
             playClicked = false;
             settingsClicked = false;
-            exitClicked = false;
-            confirmClicked = false;
 
-            draw.createButton(400, 75, 300, 700, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
-            if (playClicked == 1) {
-                currentScene = Zappy::GAME;
-            }
-            draw.createButton(400, 75, 1220, 700, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
+            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
             }
@@ -186,13 +180,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 s.manageSettingsButton(resIsClick, music, volume);
             else if (!settingsIsClicked)
                 resIsClick = false;
-            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN, "EXIT", 20, WHITE, Zappy::RECT, exitClicked);
-            if (exitClicked == 1) {
-                CloseWindow();
-                break;
-            }
-            draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN, "CONFIRM", 20, WHITE, Zappy::RECT, confirmClicked);
-            if (confirmClicked == 1) {
+            draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
+            if (playClicked == 1) {
                 std::string ip = textInputIP.GetText();
                 std::string port = textInputPort.GetText();
                 std::cout << "IP: " << ip << " Port: " << port << std::endl;
