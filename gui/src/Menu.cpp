@@ -83,9 +83,10 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     Model phiras;
     Model thystame;
     Camera3D camera = { 0 };
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-    Vector3 heartPosition = { 0.0f, 10.0f, 0.0f };
     std::list<Bloc *> blocks;
+    (void) bounds;
+    (void) position;
+    (void) model;
 
     camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
@@ -114,17 +115,17 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     while (!WindowShouldClose()) {
         UpdateCamera(&camera, CAMERA_FREE);
 
-        velocityY += gravity * GetFrameTime();
-        heartPosition.y += velocityY * GetFrameTime();
+        // velocityY += gravity * GetFrameTime();
+        // heartPosition.y += velocityY * GetFrameTime();
 
-        if (heartPosition.y <= 1.3f) {
-            heartPosition.y = 1.3f;
-            velocityY = -velocityY * bounceFactor;
+        // if (heartPosition.y <= 1.3f) {
+        //     heartPosition.y = 1.3f;
+        //     velocityY = -velocityY * bounceFactor;
 
-            if (fabs(velocityY) < 0.1f) {
-                velocityY = 0.0f;
-            }
-        }
+        //     if (fabs(velocityY) < 0.1f) {
+        //         velocityY = 0.0f;
+        //     }
+        // }
 
         BeginDrawing();
 
@@ -177,8 +178,6 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
     int playClicked = 0;
     int settingsClicked = 0;
     bool settingsIsClicked = 0;
-    int exitClicked = 0;
-    int confirmClicked = 0;
     Settings s;
     bool resIsClick = false;
     Music music;
