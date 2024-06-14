@@ -20,7 +20,8 @@ static void check_player_death(const server_t *serv, client_t *client)
     if (client->player.food <= 0) {
         event_player_death(serv, client);
         client->player.is_dead = true;
-        serv->map[client->player.x % serv->resY][client->player.y % serv->resX].nb_player_on--;
+        serv->map[client->player.x % serv->resY][client->player.y % serv->resX]
+            .nb_player_on--;
         return;
     }
 }
