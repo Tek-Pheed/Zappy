@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Deraumere::Deraumere(Model model)
-    : AItems(model)
+Zappy::Deraumere::Deraumere(Zappy::items item): AItems(item)
 {
 }
 

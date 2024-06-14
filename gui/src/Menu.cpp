@@ -75,34 +75,43 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     std::string response;
     Model water;
     Model island;
+    Model food;
+    Model linemate;
+    Model deraumere;
+    Model sibur;
+    Model mendiane;
+    Model phiras;
+    Model thystame;
     Camera3D camera = { 0 };
+    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+    Vector3 heartPosition = { 0.0f, 10.0f, 0.0f };
+    std::list<Bloc *> blocks;
+
     camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
-
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-
     water = LoadModel("assets/water.obj");
     island = LoadModel("assets/island.obj");
-
+    food = LoadModel("assets/rubis/rubis_yigas.glb");
+    linemate = LoadModel("assets/rubis/rubis_korok.glb");
+    deraumere = LoadModel("assets/rubis/rubis_goron.glb");
+    sibur = LoadModel("assets/rubis/rubis_zora.glb");
+    mendiane = LoadModel("assets/rubis/rubis_crepuscule.glb");
+    phiras = LoadModel("assets/rubis/rubis_piaf.glb");
+    thystame = LoadModel("assets/rubis/rubis_divin.glb");
     DisableCursor();
-
     SetTargetFPS(60);
-
-    Vector3 heartPosition = { 0.0f, 10.0f, 0.0f };
     float velocityY = 0.0f;
     const float gravity = -9.81f;
     const float bounceFactor = 0.7f;
 
     server.receiveMess();
     parser.parsing(server.getData());
-    std::list<Bloc *> blocks = parser.getMap().getBloc();
+    blocks = parser.getMap().getBloc();
 
     while (!WindowShouldClose()) {
-        std::cout << server.getData().front().front() << std::endl;
-
         UpdateCamera(&camera, CAMERA_FREE);
 
         velocityY += gravity * GetFrameTime();
@@ -131,7 +140,22 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
                 
                 while (blocks.size() != 0) {
                     while (blocks.front()->getItems().size() != 0) {
-                        DrawModel(blocks.front()->getItems().front()->getModel(), (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                        switch (blocks.front()->getItems().front()->getItem()) {
+                            case Zappy::items::food:
+                                DrawModel(food, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::linemate:
+                                DrawModel(linemate, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::deraumere:
+                                DrawModel(deraumere, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::sibur:
+                                DrawModel(sibur, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::mendiane:
+                                DrawModel(mendiane, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::phiras:
+                                DrawModel(phiras, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                            case Zappy::items::thystame:
+                                DrawModel(thystame, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                        }
 
                         blocks.front()->getItems().pop_back();
                     }
@@ -139,11 +163,6 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
                 }
 
             EndMode3D();
-
-            DrawText("Free camera default controls:", 20, 20, 10, BLACK);
-            DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-            DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-            DrawText("- Z to zoom to (0, 0, 0)", 40, 80, 10, DARKGRAY);
 
         EndDrawing();
     }

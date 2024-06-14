@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Mendiane::Mendiane(Model model)
-    : AItems(model)
+Zappy::Mendiane::Mendiane(Zappy::items item): AItems(item)
 {
 }
 

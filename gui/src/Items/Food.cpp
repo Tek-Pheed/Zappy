@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Food::Food(Model model)
-    : AItems(model)
+Zappy::Food::Food(Zappy::items item): AItems(item)
 {
 }
 

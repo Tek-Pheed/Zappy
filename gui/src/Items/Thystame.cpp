@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Thystame::Thystame(Model model)
-    : AItems(model)
+Zappy::Thystame::Thystame(Zappy::items item): AItems(item)
 {
 }
 

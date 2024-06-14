@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Sibur::Sibur(Model model)
-    : AItems(model)
+Zappy::Sibur::Sibur(Zappy::items item): AItems(item)
 {
 }
 

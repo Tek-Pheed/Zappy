@@ -15,14 +15,6 @@
 
 namespace Zappy
 {
-    class IItems {
-      public:
-        virtual ~IItems() = default;
-        // virtual std::vector<std::map<std::string, int>> getSameItems() = 0;
-        // virtual void addSameItems(std::map<std::string, int> position) = 0;
-        // void RemoveItems(int amount); ???? a voir si on en a besoin
-        virtual Model getModel() = 0;
-    };
 
     enum items {
         food = 0,
@@ -33,66 +25,70 @@ namespace Zappy
         phiras = 5,
         thystame = 6
     };
+    
+    class IItems {
+      public:
+        virtual ~IItems() = default;
+        virtual Zappy::items getItem() = 0;
+    };
 
     class AItems : public IItems {
       private:
         std::vector<std::map<std::string, int>> _sameItems;
         Model _model;
+        Zappy::items _item;
 
       public:
-        AItems(Model model);
+        AItems(Zappy::items item);
         ~AItems();
-        // std::vector<std::map<std::string, int>> getSameItems() override;
-        // void addSameItems(std::map<std::string, int> position) override;
-        Model getModel() override;
+        Zappy::items getItem() override;
     };
 
     class Deraumere : public AItems {
       public:
-        Deraumere(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+        Deraumere(Zappy::items item);
         ~Deraumere();
     };
 
     class Food : public AItems {
       public:
         Food(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Food();
     };
 
     class Linemate : public AItems {
       public:
         Linemate(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Linemate();
     };
 
     class Mendiane : public AItems {
       public:
         Mendiane(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Mendiane();
     };
 
     class Phiras : public AItems {
       public:
         Phiras(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Phiras();
     };
 
     class Sibur : public AItems {
       public:
         Sibur(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Sibur();
     };
 
     class Thystame : public AItems {
       public:
         Thystame(/*std::vector<std::map<std::string, int>> sameItems,*/
-            Model model);
+            Zappy::items item);
         ~Thystame();
     };
 } // namespace Zappy

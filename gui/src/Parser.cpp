@@ -13,13 +13,6 @@
 
 Zappy::Parser::Parser()
 {
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_yigas.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_korok.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_goron.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_zora.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_crepuscule.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_piaf.glb"));
-    this->_itemsModelList.push_back(LoadModel("assets/rubis/rubis_divin.glb"));
 }
 
 Zappy::Parser::~Parser()
@@ -34,31 +27,31 @@ std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> 
 
     while (!items.empty()) {
         if (items.front() == "0") {
-            listOfItems.push_back(new Zappy::Food(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Food(Zappy::food));
             items.pop();
         }
         if (items.front() == "1") {
-            listOfItems.push_back(new Zappy::Linemate(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Linemate(Zappy::linemate));
             items.pop();
         }
         if (items.front() == "2") {
-            listOfItems.push_back(new Zappy::Deraumere(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Deraumere(Zappy::deraumere));
             items.pop();
         }
         if (items.front() == "3") {
-            listOfItems.push_back(new Zappy::Sibur(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Sibur(Zappy::sibur));
             items.pop();
         }
         if (items.front() == "4") {
-            listOfItems.push_back(new Zappy::Mendiane(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Mendiane(Zappy::mendiane));
             items.pop();
         }
         if (items.front() == "5") {
-            listOfItems.push_back(new Zappy::Phiras(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Phiras(Zappy::phiras));
             items.pop();
         }
         if (items.front() == "6") {
-            listOfItems.push_back(new Zappy::Thystame(tmpModel.front()));
+            listOfItems.push_back(new Zappy::Thystame(Zappy::thystame));
             items.pop();
         }
         tmpModel.pop_back();

@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Linemate::Linemate(Model model)
-    : AItems(model)
+Zappy::Linemate::Linemate(Zappy::items item): AItems(item)
 {
 }
 

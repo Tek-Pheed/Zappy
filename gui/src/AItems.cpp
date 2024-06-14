@@ -7,23 +7,11 @@
 
 #include "Items.hpp"
 
-Zappy::AItems::AItems(Model model) : _model(model) {}
+Zappy::AItems::AItems(Zappy::items item): _item(item) {}
 
-Zappy::AItems::~AItems()
+Zappy::AItems::~AItems() {}
+
+Zappy::items Zappy::AItems::getItem()
 {
-}
-
-// void Zappy::AItems::addSameItems(std::map<std::string, int> position)
-// {
-//     _sameItems.push_back(position);
-// }
-
-// std::vector<std::map<std::string, int>> Zappy::AItems::getSameItems()
-// {
-//     return _sameItems;
-// }
-
-Model Zappy::AItems::getModel()
-{
-    return _model;
+    return this->_item;
 }

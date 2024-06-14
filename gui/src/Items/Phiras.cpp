@@ -7,8 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Phiras::Phiras(Model model)
-    : AItems(model)
+Zappy::Phiras::Phiras(Zappy::items item): AItems(item)
 {
 }
 
