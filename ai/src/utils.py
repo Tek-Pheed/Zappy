@@ -7,7 +7,7 @@ def clean_str(str: str) -> str:
     str = str.replace("\n", "")
     return str
 
-def print_verbose(verbose: bool, str) -> None:
+def print_verbose(verbose: bool, str):
     if verbose:
         print(f"{str}", end="")
 

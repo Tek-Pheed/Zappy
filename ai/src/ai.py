@@ -44,6 +44,10 @@ class AI:
                                 exit(0)
                             print_verbose(self.player.verbose, f"[INFO] {elem}\n")
                             self.player.step = 0
+                        elif "message" in elem:
+                            self.player.broadcast_receive = elem
+                            self.player.parse_broadcast()
+                            message = message.split("\n")[-1]
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)

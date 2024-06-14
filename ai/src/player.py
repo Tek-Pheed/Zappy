@@ -14,6 +14,8 @@ LVLS_MANDATORY = {
     7: {"linemate": 2, "deraumere": 2, "sibur": 2, "mendiane": 2, "phiras": 2, "thystame": 1},
 }
 
+PLAYER_MANDATORY = [1, 2, 2, 4, 4, 6, 6]
+
 class Player:
     def __init__(self, team_name: str) -> None:
         self.team = team_name
@@ -27,6 +29,8 @@ class Player:
         self.action = []
         self.object_to_go = ""
         self.ready_to_level_up = False
+        self.broadcast_receive = ""
+        self.player_incantation = 1
         self.team_slot = 0
         self.verbose = False
         self.can_fork = True
@@ -154,6 +158,32 @@ class Player:
         self.data_to_send = "Incantation\n"
         self.step += 1
 
+    def parse_broadcast(self):
+        message = self.broadcast_receive.split(",")[1]
+        direction = int(self.broadcast_receive[8])
+        print(message)
+        if self.team in message:
+            if "incantation" in message:
+                self.step = 0
+                self.action = self.walk_to_broadcast_emitter(direction)
+            if "ready" in message:
+                self.player_incantation += 1
+
+    def walk_to_broadcast_emitter(self, direction: int) -> list:
+        if self.ready_to_level_up or self.action:
+            return
+        action = []
+        if direction == 0:
+            self.data_to_send = f"Broadcast {self.team} ready\n"
+            return []
+        if direction in (2, 1, 8):
+            action.append("Forward\n")
+        elif direction in (5, 6, 7):
+            action.append("Right\n")
+        else:
+            action.append("Left\n")
+        return action
+
     def take_action(self):
         if self.step == 0:
             if self.action:
@@ -165,6 +195,10 @@ class Player:
             print_verbose(self.verbose, f"[ACTION] {self.data_to_send}")
         elif self.step == 1:
             if (self.incantation_possible()):
+                message = f"{self.team} incantation {self.level}"
+                self.data_to_send = f"Broadcast {message}\n"
+                self.player_incantation = 1
+                self.ready_to_level_up = True
                 self.step = 4
             else:
                 self.step += 1
@@ -183,7 +217,8 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 5:
-            self.begin_incantation()
+            if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
+                self.begin_incantation()
             if self.step != 6:
                 self.drop_items_for_incantation()
                 if self.action:
