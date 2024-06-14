@@ -4,7 +4,7 @@ from ai.src.server import *
 from ai.src.action import *
 from ai.src.player import Player
 from ai.src.utils import print_verbose
-
+import subprocess
 class AI:
     def __init__(self) -> None:
         self.args = None
@@ -57,6 +57,12 @@ class AI:
                                 pass
                         elif self.player.data_to_send == "Look\n":
                             self.player.look_arround = elem
+                        elif self.player.data_to_send == "Connect_nbr\n":
+                            self.player.team_slot = int(elem)
+                        elif self.player.data_to_send == "Fork\n":
+                            if self.args.thread == True and self.player.can_fork:
+                                subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])
+                                self.player.can_fork = False
                         message = message.split("\n")[-1]
                         running = 1
 
