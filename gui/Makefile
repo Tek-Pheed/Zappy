@@ -30,7 +30,7 @@ SRC		= src/main.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
-CFLAGS = -W -Wall -Wextra -I./include
+CFLAGS = -W -Wall -Wextra -I./include -g3
 
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lX11
 

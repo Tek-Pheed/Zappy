@@ -82,13 +82,14 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     Model mendiane;
     Model phiras;
     Model thystame;
+    Model player;
     Camera3D camera = { 0 };
     std::list<Bloc *> blocks;
     (void) bounds;
     (void) position;
     (void) model;
 
-    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
+    camera.position = (Vector3){ 22.0f, 22.0f, 22.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
@@ -102,30 +103,20 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     mendiane = LoadModel("assets/rubis/rubis_crepuscule.glb");
     phiras = LoadModel("assets/rubis/rubis_piaf.glb");
     thystame = LoadModel("assets/rubis/rubis_divin.glb");
+    player = LoadModel("assets/korok.glb");
     DisableCursor();
     SetTargetFPS(60);
     float velocityY = 0.0f;
     const float gravity = -9.81f;
     const float bounceFactor = 0.7f;
+    bool firstDrop = true;
 
     server.receiveMess();
     parser.parsing(server.getData());
-    blocks = parser.getMap().getBloc();
 
     while (!WindowShouldClose()) {
+        blocks = parser.getMap().getBloc();
         UpdateCamera(&camera, CAMERA_FREE);
-
-        // velocityY += gravity * GetFrameTime();
-        // heartPosition.y += velocityY * GetFrameTime();
-
-        // if (heartPosition.y <= 1.3f) {
-        //     heartPosition.y = 1.3f;
-        //     velocityY = -velocityY * bounceFactor;
-
-        //     if (fabs(velocityY) < 0.1f) {
-        //         velocityY = 0.0f;
-        //     }
-        // }
 
         BeginDrawing();
 
@@ -138,27 +129,51 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
                         DrawModel(island, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
                     }
                 }
-                
+
                 while (blocks.size() != 0) {
-                    while (blocks.front()->getItems().size() != 0) {
-                        switch (blocks.front()->getItems().front()->getItem()) {
-                            case Zappy::items::food:
-                                DrawModel(food, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::linemate:
-                                DrawModel(linemate, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::deraumere:
-                                DrawModel(deraumere, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::sibur:
-                                DrawModel(sibur, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::mendiane:
-                                DrawModel(mendiane, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::phiras:
-                                DrawModel(phiras, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
-                            case Zappy::items::thystame:
-                                DrawModel(thystame, (Vector3){blocks.front()->getX()* 5.0f, 1.0f, blocks.front()->getY()* 5.0f}, 1.0f, WHITE);
+                    std::vector<Zappy::IItems *> items = blocks.front()->getItems();
+                    while (items.size() != 0) {
+                        float rand_pos = rand() % 4;
+                        Vector3 pos;
+
+                        if (rand_pos == 0) {
+                           pos = {blocks.front()->getX() * 5.0f + (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  - (items.front()->getZ())}; 
+                        } else if (rand_pos == 1) {
+                           pos = {blocks.front()->getX() * 5.0f - (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  + (items.front()->getZ())}; 
+                        } else if (rand_pos == 2) {
+                           pos = {blocks.front()->getX() * 5.0f - (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  - (items.front()->getZ())}; 
+                        } else {
+                           pos = {blocks.front()->getX() * 5.0f + (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  + (items.front()->getZ())};           
                         }
 
-                        blocks.front()->getItems().pop_back();
+                        velocityY += gravity * GetFrameTime();
+                        pos.y += velocityY * GetFrameTime();
+
+                        if (pos.y <= (1.2f - (items.size() / 10))) {
+                            pos.y = (1.2f - (items.size() / 10));
+                            velocityY = -velocityY * bounceFactor;
+
+                            if (fabs(velocityY) < 0.1f) {
+                                velocityY = 0.0f;
+                            }
+                        }
+
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::food)
+                            DrawModel(food, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::linemate)
+                            DrawModel(linemate, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::deraumere)
+                            DrawModel(deraumere, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::sibur)
+                            DrawModel(sibur, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::mendiane)
+                            DrawModel(mendiane, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::phiras)
+                            DrawModel(phiras, pos, 1.0f, WHITE);
+                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::thystame)
+                            DrawModel(thystame, pos, 1.0f, WHITE);
+                        
+                        items.pop_back();
                     }
                     blocks.pop_front();
                 }
@@ -166,6 +181,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
             EndMode3D();
 
         EndDrawing();
+        firstDrop = false;
     }
 
     CloseWindow();

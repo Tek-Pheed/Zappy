@@ -21,42 +21,59 @@ Zappy::Parser::~Parser()
 
 std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
 {
-    std::vector<Model> tmpModel = this->_itemsModelList;
     std::vector<Zappy::IItems *> listOfItems;
     Zappy::Utils utils;
+    int i = 0;
 
     while (!items.empty()) {
-        if (items.front() == "0") {
-            listOfItems.push_back(new Zappy::Food(Zappy::food));
-            items.pop();
+        int nbElem = std::stoi(items.front());
+        if (i == 6) break;
+        while (nbElem != 0) {
+            float randomX = (float) rand()/RAND_MAX;
+            float randomZ = (float) rand()/RAND_MAX;
+            Zappy::IItems *ptr = nullptr;
+
+            if (i == 0)
+                ptr = new Zappy::Food(Zappy::food);
+            if (i == 1)
+                ptr = new Zappy::Linemate(Zappy::linemate);
+            if (i == 2)
+                ptr = new Zappy::Deraumere(Zappy::deraumere);
+            if (i == 3)
+                ptr = new Zappy::Sibur(Zappy::sibur);
+            if (i == 4)
+                ptr = new Zappy::Mendiane(Zappy::mendiane);
+            if (i == 5)
+                ptr = new Zappy::Phiras(Zappy::phiras);
+            if (i == 6)
+                ptr = new Zappy::Thystame(Zappy::thystame);
+            if (ptr != nullptr) {
+                ptr->setX(randomX);
+                ptr->setZ(randomZ);
+                listOfItems.push_back(ptr);
+            }
+            nbElem --;
         }
-        if (items.front() == "1") {
-            listOfItems.push_back(new Zappy::Linemate(Zappy::linemate));
-            items.pop();
-        }
-        if (items.front() == "2") {
-            listOfItems.push_back(new Zappy::Deraumere(Zappy::deraumere));
-            items.pop();
-        }
-        if (items.front() == "3") {
-            listOfItems.push_back(new Zappy::Sibur(Zappy::sibur));
-            items.pop();
-        }
-        if (items.front() == "4") {
-            listOfItems.push_back(new Zappy::Mendiane(Zappy::mendiane));
-            items.pop();
-        }
-        if (items.front() == "5") {
-            listOfItems.push_back(new Zappy::Phiras(Zappy::phiras));
-            items.pop();
-        }
-        if (items.front() == "6") {
-            listOfItems.push_back(new Zappy::Thystame(Zappy::thystame));
-            items.pop();
-        }
-        tmpModel.pop_back();
+        i++;
+        items.pop();
     }
     return listOfItems;
+}
+
+std::vector<Zappy::Player> createPlayerMap(std::queue<std::string> nbPlayer, int x, int y)
+{
+    std::vector<Zappy::Player> playerList;
+    int nb = std::stoi(nbPlayer.front());
+
+    while (nb != 0) {
+        Zappy::Player p;
+
+        p.setPositionX(x);
+        p.setPositionY(y);
+        playerList.push_back(p);
+        nb --;
+    }
+    return playerList;
 }
 
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
@@ -66,6 +83,7 @@ Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
     int y = std::stoi(bloc.front());
     bloc.pop();
     Bloc *newbloc = new Bloc(x, y, createItems(bloc));
+    newbloc->setPlayers(createPlayerMap(bloc, x, y));
     return newbloc;
 }
 

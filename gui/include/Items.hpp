@@ -15,7 +15,6 @@
 
 namespace Zappy
 {
-
     enum items {
         food = 0,
         linemate = 1,
@@ -30,6 +29,10 @@ namespace Zappy
       public:
         virtual ~IItems() = default;
         virtual Zappy::items getItem() = 0;
+        virtual float getX() = 0;
+        virtual float getZ() = 0;
+        virtual void setX(float x) = 0;
+        virtual void setZ(float z) = 0;
     };
 
     class AItems : public IItems {
@@ -37,11 +40,17 @@ namespace Zappy
         std::vector<std::map<std::string, int>> _sameItems;
         Model _model;
         Zappy::items _item;
+        float _z;
+        float _x;
 
       public:
         AItems(Zappy::items item);
         ~AItems();
         Zappy::items getItem() override;
+        float getX() override;
+        float getZ() override;
+        void setX(float x) override;
+        void setZ(float z) override;
     };
 
     class Deraumere : public AItems {

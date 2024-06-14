@@ -45,3 +45,13 @@ void Zappy::Bloc::setItems(std::vector<Zappy::IItems *> items)
     this->_items = items;
 }
 
+std::vector<Zappy::Player> Zappy::Bloc::getPlayers()
+{
+    return this->_players;
+}
+
+void Zappy::Bloc::setPlayers(std::vector<Zappy::Player> players)
+{
+    this->_players = players;
+}
+
