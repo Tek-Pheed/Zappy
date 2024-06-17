@@ -45,4 +45,4 @@ def test_parse_look_command():
 def test_wal_to_broadcast_emitter():
     p: Player = Player("zap")
 
-    assert p.walk_to_broadcast_emitter(0) == []
+    assert p.walk_to_broadcast_emitter(0, "") == []
