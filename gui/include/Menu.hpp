@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Draw.hpp"
 #include "raylib.h"
+#include "ServerData.hpp"
 #include <string>
 
 namespace Zappy {
@@ -39,7 +40,7 @@ class Menu {
         void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic, Music &GameMusic);
         void UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf, Music MenuMusic, Music GameMusic);
         void LoopForTextbox(Rectangle textBox, bool &mouseOnText, char name[MAX_INPUT_CHARS + 1], int &letterCount, int &framesCounter);
-        void GameScene(Model model, Vector3 position, BoundingBox bounds, Music music);
+        void GameScene(Model model, Vector3 position, BoundingBox bounds, Zappy::Server server, Music music);
         void TextBoxForIp(Rectangle textBox, bool mouseOnText, char ip[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter);
         void LoopForTextboxIp(Rectangle textBox, bool &mouseOnText, char ip[MAX_INPUT_CHARS + 1], int &letterCount, int &framesCounter);
         void TextBoxForPort(Rectangle textBox, bool mouseOnText, char port[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter);

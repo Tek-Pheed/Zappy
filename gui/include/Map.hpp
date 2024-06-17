@@ -11,7 +11,9 @@
 #include <queue>
 #include <deque>
 #include <iostream>
+#include <memory>
 #include "Items.hpp"
+#include "Player.hpp"
 
 
 namespace Zappy {
@@ -20,11 +22,20 @@ class Bloc {
     public:
         Bloc(int x, int y, std::vector<IItems *> items);
         ~Bloc();
-    protected:
+        int getX();
+        int getY();
+        void setX(int x);
+        void setY(int y);
+        std::vector<Zappy::IItems *> getItems();
+        void setItems(std::vector<Zappy::IItems *> items);
+        std::vector<Zappy::Player> getPlayers();
+        void setPlayers(std::vector<Zappy::Player> players);
+
     private:
         int _x;
         int _y;
-        std::vector<IItems *> _items;
+        std::vector<Zappy::IItems *> _items;
+        std::vector<Zappy::Player> _players;
 };
 
 class Map {

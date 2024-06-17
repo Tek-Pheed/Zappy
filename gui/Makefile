@@ -15,6 +15,7 @@ SRC		= src/main.cpp \
 		  src/Draw.cpp \
 		  src/Parser.cpp \
 		  src/Player.cpp \
+		  src/VectorPlayers.cpp \
 		  src/Map.cpp \
 		  src/Bloc.cpp \
 		  src/AItems.cpp \
@@ -26,6 +27,7 @@ SRC		= src/main.cpp \
 		  src/Items/Sibur.cpp \
 		  src/Items/Thystame.cpp \
 		  src/ConfirmButton.cpp	\
+		  src/Server.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 

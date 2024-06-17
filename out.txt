@@ -1,0 +1,9 @@
+P: 1234
+X: 10
+Y: 10
+N: test1
+C: 6
+F: 100
+Verbose: true
+[INFO]: Server ready to accept clients
+[INFO]: Stopping server...
