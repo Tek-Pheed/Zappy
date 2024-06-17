@@ -121,7 +121,7 @@ int Zappy::Parser::createFrequ(std::queue<std::string> freq)
     return nbFreq;
 }
 
-void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
+void Zappy::Parser::newPlayer(std::queue<std::string> player)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -140,15 +140,17 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
     // int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
-    realplayer.setPositionX(x);
-    realplayer.setPositionY(y);
-    realplayer.setPositionN(north);
-    realplayer.setPositionS(south);
-    realplayer.setPositionW(west);
-    realplayer.setPositionE(est);
+    _player.setID(nb_p);
+    _player.setPositionX(x);
+    _player.setPositionY(y);
+    _player.setPositionN(north);
+    _player.setPositionS(south);
+    _player.setPositionW(west);
+    _player.setPositionE(est);
+    _player.createModel("../assets/korok.obj");
 }
 
-void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realplayer)
+void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 {
     //int nb_p = std::stoi(player.front());
     player.pop();
@@ -163,12 +165,12 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realpl
     int south = std::stoi(player.front());
     player.pop();
     int west = std::stoi(player.front());
-    realplayer.setPositionX(x);
-    realplayer.setPositionY(y);
-    realplayer.setPositionN(north);
-    realplayer.setPositionS(south);
-    realplayer.setPositionW(west);
-    realplayer.setPositionE(est);
+    _player.setPositionX(x);
+    _player.setPositionY(y);
+    _player.setPositionN(north);
+    _player.setPositionS(south);
+    _player.setPositionW(west);
+    _player.setPositionE(est);
 }
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
@@ -293,7 +295,8 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
-    Player player;
+    Players playList;
+    // Player player;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -316,11 +319,12 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
-            newPlayer(tmpFront, player);
+            newPlayer(tmpFront);
+            playList.mapPlayers(&_player);
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();
-            positionPlayer(tmpFront, player);
+            positionPlayer(tmpFront);
         }
         if (tmpFront.front() == "plv") {
             tmpFront.pop();
@@ -400,4 +404,19 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 Zappy::Map Zappy::Parser::getMap()
 {
     return _map;
+}
+
+void Zappy::Parser::setMap(Zappy::Map map)
+{
+    _map = map;
+}
+
+Zappy::Player Zappy::Parser::getPlayer()
+{
+    return _player;
+}
+
+void Zappy::Parser::setPlayer(Zappy::Player player)
+{
+    _player = player;
 }

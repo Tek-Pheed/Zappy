@@ -6,6 +6,7 @@
 */
 
 #include "Player.hpp"
+#include "Utils.hpp"
 
 Zappy::Player::Player()
 {
@@ -88,4 +89,21 @@ void Zappy::Player::setPositionW(int west)
 int Zappy::Player::getPositionW()
 {
     return _west;
+}
+
+void Zappy::Player::setID(int id)
+{
+    _id = id;
+}
+
+int Zappy::Player::getID()
+{
+    return _id;
+}
+
+void Zappy::Player::createModel(std::string modelPath)
+{
+    Utils utils;
+
+    _model = utils.createModel(modelPath.c_str());
 }
