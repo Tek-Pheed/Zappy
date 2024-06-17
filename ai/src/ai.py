@@ -1,10 +1,10 @@
 from sys import argv as av
+import subprocess
 from ai.src.arguments import parse_args
 from ai.src.server import *
 from ai.src.action import *
 from ai.src.player import Player
 from ai.src.utils import print_verbose
-
 class AI:
     def __init__(self) -> None:
         self.args = None
@@ -32,6 +32,7 @@ class AI:
                         self.server.close_connection()
                     tmp = message.split("\n")
                     for elem in tmp[:-1]:
+                        print_verbose(self.player.verbose, f"[RECEIVE] {elem}\n")
                         if "dead" in elem:
                             print("I'm dead")
                             self.server.close_connection()
@@ -39,21 +40,32 @@ class AI:
                         if "Elevation underway" in elem:
                             self.player.step = 7
                         elif "Current level:" in elem:
-                            print(int(''.join(filter(str.isdigit, elem))))
                             self.player.level = int(''.join(filter(str.isdigit, elem)))
                             if self.player.level == 8:
                                 exit(0)
                             print_verbose(self.player.verbose, f"[INFO] {elem}\n")
+                            self.player.player_incantation = 1
+                            self.player.ready_to_level_up = False
                             self.player.step = 0
+                        elif "message" in elem:
+                            self.player.broadcast_receive = elem
+                            self.player.parse_broadcast()
+                            message = message.split("\n")[-1]
+                            continue
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
-                                print_verbose(self.player.verbose, f"[INVENTORY] {self.player.inventory}\n")
-                            except ValueError:
-                                print_verbose(self.player.verbose, f"Error {elem}")
+                            except (ValueError, IndexError):
+                                print_verbose(self.player.verbose, f"[ERROR] {elem}\n")
                                 pass
                         elif self.player.data_to_send == "Look\n":
                             self.player.look_arround = elem
+                        elif self.player.data_to_send == "Connect_nbr\n":
+                            self.player.team_slot = int(elem)
+                        elif self.player.data_to_send == "Fork\n":
+                            if self.args.thread == True and self.player.can_fork:
+                                subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])
+                                self.player.can_fork = False
                         message = message.split("\n")[-1]
                         running = 1
 

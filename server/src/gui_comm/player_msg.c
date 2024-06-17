@@ -63,9 +63,8 @@ char *player_level(server_t *serv, int p_index)
             sprintf(buff, "plv %d %d\n", p_index, tmp->player.level);
             return buff;
         }
-        buff = NULL;
     }
-    return buff;
+    return NULL;
 }
 
 char *player_inventory(server_t *serv, int p_index)

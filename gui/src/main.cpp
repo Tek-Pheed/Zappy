@@ -9,6 +9,7 @@
 #include "raylib.h"
 #include "Menu.hpp"
 #include "Draw.hpp"
+#include "ServerData.hpp"
 
 int main(void)
 {
@@ -37,6 +38,5 @@ int main(void)
     menu.MainLoop(model, background, camera, position, bounds, draw);
 
     menu.UnloadResources(model, texture_body, texture_leaf);
-
     return 0;
 }

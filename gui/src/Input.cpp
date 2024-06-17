@@ -5,7 +5,7 @@
 ** Input
 */
 
-#include "../include/Menu.hpp"
+#include "Menu.hpp"
 
 Zappy::TextInput::TextInput(float x, float y, float width, float height)
     : bounds{ x, y, width, height }, text(""), letterCount(0), mouseOnText(false), framesCounter(0) {}
