@@ -61,7 +61,11 @@ class AI:
                         elif self.player.data_to_send == "Look\n":
                             self.player.look_arround = elem
                         elif self.player.data_to_send == "Connect_nbr\n":
-                            self.player.team_slot = int(elem)
+                            if "ko" in elem:
+                                self.player.data_to_send = "Connect_nbr\n"
+                                self.player.step = 0
+                            else:
+                                self.player.team_slot = int(elem)
                         elif self.player.data_to_send == "Fork\n":
                             if self.args.thread == True and self.player.can_fork:
                                 subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])
