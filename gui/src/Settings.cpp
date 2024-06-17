@@ -48,6 +48,7 @@ void Zappy::Settings::manageSoundMusic(Music music, Draw d, double &volume, bool
     int clickVolP = 0;
     int isClickVolM = 0;
     int isClickVolP = 0;
+    (void) music;
 
     DrawTextEx(GetFontDefault(), "Volume music :", (Vector2) {780, 430}, 25, 1, BLACK);
     if (!resIsClick) {
@@ -81,7 +82,7 @@ void Zappy::Settings::manageResolution(Draw d, bool &resIsClick)
     resolutionName.push("2560 x 1440");
     resolutionName.push("3840 x 2160");
 
-    for (int i = 0; i < resolutionName.size(); i++)
+    for (size_t i = 0; i < resolutionName.size(); i++)
         resolutionChoose.push_back(0);
 
     DrawTextEx(GetFontDefault(), "Resolution :", (Vector2) {780, 340}, 25, 1, BLACK);

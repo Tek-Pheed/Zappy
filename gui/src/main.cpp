@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <ctime>
 #include "raylib.h"
 #include "Menu.hpp"
 #include "Draw.hpp"
@@ -19,6 +20,7 @@ int main(void)
     Zappy::Draw draw;
     Zappy::Menu menu;
     Texture2D texture_body, texture_leaf;
+    srand(time(0)); 
 
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les ressources." << std::endl;

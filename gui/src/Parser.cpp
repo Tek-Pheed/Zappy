@@ -5,6 +5,7 @@
 ** Parser.cpp
 */
 
+#include <iostream>
 #include "ServerData.hpp"
 #include "Items.hpp"
 #include "Map.hpp"
@@ -22,38 +23,57 @@ std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> 
 {
     std::vector<Zappy::IItems *> listOfItems;
     Zappy::Utils utils;
+    int i = 0;
 
     while (!items.empty()) {
-        if (items.front() == "0") {
-            listOfItems.push_back(new Zappy::Food("../gems", "../gems", utils));
-            items.pop();
+        int nbElem = std::stoi(items.front());
+        if (i == 6) break;
+        while (nbElem != 0) {
+            float randomX = (float) rand()/RAND_MAX;
+            float randomZ = (float) rand()/RAND_MAX;
+            Zappy::IItems *ptr = nullptr;
+
+            if (i == 0)
+                ptr = new Zappy::Food(Zappy::food);
+            if (i == 1)
+                ptr = new Zappy::Linemate(Zappy::linemate);
+            if (i == 2)
+                ptr = new Zappy::Deraumere(Zappy::deraumere);
+            if (i == 3)
+                ptr = new Zappy::Sibur(Zappy::sibur);
+            if (i == 4)
+                ptr = new Zappy::Mendiane(Zappy::mendiane);
+            if (i == 5)
+                ptr = new Zappy::Phiras(Zappy::phiras);
+            if (i == 6)
+                ptr = new Zappy::Thystame(Zappy::thystame);
+            if (ptr != nullptr) {
+                ptr->setX(randomX);
+                ptr->setZ(randomZ);
+                listOfItems.push_back(ptr);
+            }
+            nbElem --;
         }
-        if (items.front() == "1") {
-            listOfItems.push_back(new Zappy::Linemate("../gems", "../gems", utils));
-            items.pop();
-        }
-        if (items.front() == "2") {
-            listOfItems.push_back(new Zappy::Deraumere("../gems", "../gems", utils));
-            items.pop();
-        }
-        if (items.front() == "3") {
-            listOfItems.push_back(new Zappy::Sibur("../gems", "../gems", utils));
-            items.pop();
-        }
-        if (items.front() == "4") {
-            listOfItems.push_back(new Zappy::Mendiane("../gems", "../gems", utils));
-            items.pop();
-        }
-        if (items.front() == "5") {
-            listOfItems.push_back(new Zappy::Phiras("../gems", "../gems", utils));
-            items.pop();
-        }
-        if (items.front() == "6") {
-            listOfItems.push_back(new Zappy::Thystame("../gems", "../gems", utils));
-            items.pop();
-        }
+        i++;
+        items.pop();
     }
     return listOfItems;
+}
+
+std::vector<Zappy::Player> createPlayerMap(std::queue<std::string> nbPlayer, int x, int y)
+{
+    std::vector<Zappy::Player> playerList;
+    int nb = std::stoi(nbPlayer.front());
+
+    while (nb != 0) {
+        Zappy::Player p;
+
+        p.setPositionX(x);
+        p.setPositionY(y);
+        playerList.push_back(p);
+        nb --;
+    }
+    return playerList;
 }
 
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
@@ -63,6 +83,7 @@ Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
     int y = std::stoi(bloc.front());
     bloc.pop();
     Bloc *newbloc = new Bloc(x, y, createItems(bloc));
+    newbloc->setPlayers(createPlayerMap(bloc, x, y));
     return newbloc;
 }
 
@@ -74,6 +95,16 @@ void Zappy::Parser::createMap(std::queue<std::string> map, Map realmap)
     map.pop();
     realmap.setX(x);
     realmap.setY(y);
+}
+
+void Zappy::Parser::createMap(std::queue<std::string> map)
+{
+    int x = std::stoi(map.front());
+    map.pop();
+    int y = std::stoi(map.front());
+    map.pop();
+    _map.setX(x);
+    _map.setY(y);
 }
 
 void Zappy::Parser::createTeams(std::queue<std::string> teams)
@@ -98,15 +129,15 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    int north = std::stoi(player.front());
+    //int north = std::stoi(player.front());
     player.pop();
-    int est = std::stoi(player.front());
+    //int est = std::stoi(player.front());
     player.pop();
-    int south = std::stoi(player.front());
+    //int south = std::stoi(player.front());
     player.pop();
-    int west = std::stoi(player.front());
+    //int west = std::stoi(player.front());
     player.pop();
-    int level = std::stoi(player.front());
+    //int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
     realplayer.setPositionX(x);
@@ -115,17 +146,17 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realplayer)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
     int x = std::stoi(player.front());
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    int north = std::stoi(player.front());
+    //int north = std::stoi(player.front());
     player.pop();
-    int est = std::stoi(player.front());
+    //int est = std::stoi(player.front());
     player.pop();
-    int south = std::stoi(player.front());
+    //int south = std::stoi(player.front());
     player.pop();
     int west = std::stoi(player.front());
     realplayer.setPositionX(x);
@@ -134,30 +165,30 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realpl
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
-    int level = std::stoi(player.front());
+    //int level = std::stoi(player.front());
 }
 
 void Zappy::Parser::inventoryPlayer(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
-    int x = std::stoi(player.front());
+    //int x = std::stoi(player.front());
     player.pop();
-    int y = std::stoi(player.front());
+    //int y = std::stoi(player.front());
     player.pop();
     //items;
 }
 
 void Zappy::Parser::expulsion(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::broadcast(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
     std::queue<std::string> message = player;
 }
@@ -165,11 +196,11 @@ void Zappy::Parser::broadcast(std::queue<std::string> player)
 void Zappy::Parser::startInc(std::queue<std::string> player)
 {
     std::list<int> list_n;
-    int x = std::stoi(player.front());
+    //int x = std::stoi(player.front());
     player.pop();
-    int y = std::stoi(player.front());
+    //int y = std::stoi(player.front());
     player.pop();
-    int level = std::stoi(player.front());
+    //int level = std::stoi(player.front());
     player.pop();
     while (!player.empty()){
         list_n.push_back(std::stoi(player.front()));
@@ -179,66 +210,66 @@ void Zappy::Parser::startInc(std::queue<std::string> player)
 
 void Zappy::Parser::endInc(std::queue<std::string> player)
 {
-    int x = std::stoi(player.front());
+    //int x = std::stoi(player.front());
     player.pop();
-    int y = std::stoi(player.front());
+    //int y = std::stoi(player.front());
     player.pop();
     std::string result = player.front();
 }
 
 void Zappy::Parser::layingEgg(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::dropRess(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
-    int nb_i = std::stoi(player.front());
+    //int nb_i = std::stoi(player.front());
 }
 
 void Zappy::Parser::collectRess(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
     player.pop();
-    int nb_i = std::stoi(player.front());
+    //int nb_i = std::stoi(player.front());
 }
 
 void Zappy::Parser::death(std::queue<std::string> player)
 {
-    int nb_p = std::stoi(player.front());
+    //int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 {
-    int nb_e = std::stoi(egg.front());
+    //int nb_e = std::stoi(egg.front());
     egg.pop();
-    int nb_p = std::stoi(egg.front());
+    //int nb_p = std::stoi(egg.front());
     egg.pop();
-    int x = std::stoi(egg.front());
+    //int x = std::stoi(egg.front());
     egg.pop();
-    int y = std::stoi(egg.front());
+    //int y = std::stoi(egg.front());
 }
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
-    int nb_e = std::stoi(egg.front());
+    //int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
 {
-    int nb_e = std::stoi(egg.front());
+    //int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::frequModification(std::queue<std::string> freq)
 {
-    int time_frq = std::stoi(freq.front());
+    //int time_frq = std::stoi(freq.front());
 }
 
 void Zappy::Parser::endGame(std::queue<std::string> team)
 {
-    std::string team_name = team.front();
+    //std::string team_name = team.front();
 }
 
 void Zappy::Parser::messServer(std::queue<std::string> mess)
@@ -253,104 +284,112 @@ void Zappy::Parser::unknowCommand()
 
 void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
-    std::queue<std::string> tmpFront = data.front();
-    Map map;
+    std::queue<std::string> tmpFront;
     Player player;
 
-    if (tmpFront.front() == "tna") {
-        tmpFront.pop();
-        createTeams(tmpFront);
+    while (!data.empty()) {
+        tmpFront = data.front();
+
+        if (tmpFront.front() == "tna") {
+            tmpFront.pop();
+            createTeams(tmpFront);
+        }
+        if (tmpFront.front() == "sgt") {
+            tmpFront.pop();
+            createFrequ(tmpFront);
+        }
+        if (tmpFront.front() == "msz") {
+            tmpFront.pop();
+            createMap(tmpFront);
+        }
+        if (tmpFront.front() == "bct") {
+            tmpFront.pop();
+            _map.pushBloc(createBloc(tmpFront));
+        }
+        if (tmpFront.front() == "pnw") {
+            tmpFront.pop();
+            newPlayer(tmpFront, player);
+        }
+        if (tmpFront.front() == "ppo") {
+            tmpFront.pop();
+            positionPlayer(tmpFront, player);
+        }
+        if (tmpFront.front() == "plv") {
+            tmpFront.pop();
+            levelPlayer(tmpFront);
+        }
+        if (tmpFront.front() == "pin") {
+            tmpFront.pop();
+            inventoryPlayer(tmpFront);
+        }
+        if (tmpFront.front() == "pex") {
+            tmpFront.pop();
+            expulsion(tmpFront);
+        }
+        if (tmpFront.front() == "pbc") {
+            tmpFront.pop();
+            broadcast(tmpFront);
+        }
+        if (tmpFront.front() == "pic") {
+            tmpFront.pop();
+            startInc(tmpFront);
+        }
+        if (tmpFront.front() == "pie") {
+            tmpFront.pop();
+            endInc(tmpFront);
+        }
+        if (tmpFront.front() == "pfk") {
+            tmpFront.pop();
+            layingEgg(tmpFront);
+        }
+        if (tmpFront.front() == "pdr") {
+            tmpFront.pop();
+            dropRess(tmpFront);
+        }
+        if (tmpFront.front() == "pgt") {
+            tmpFront.pop();
+            collectRess(tmpFront);
+        }
+        if (tmpFront.front() == "pdi") {
+            tmpFront.pop();
+            death(tmpFront);
+        }
+        if (tmpFront.front() == "enw") {
+            tmpFront.pop();
+            laidEgg(tmpFront);
+        }
+        if (tmpFront.front() == "ebo") {
+            tmpFront.pop();
+            connectEgg(tmpFront);
+        }
+        if (tmpFront.front() == "edi") {
+            tmpFront.pop();
+            deathEgg(tmpFront);
+        }
+        if (tmpFront.front() == "sst") {
+            tmpFront.pop();
+            frequModification(tmpFront);
+        }
+        if (tmpFront.front() == "seg") {
+            tmpFront.pop();
+            endGame(tmpFront);
+        }
+        if (tmpFront.front() == "smg") {
+            tmpFront.pop();
+            messServer(tmpFront);
+        }
+        // if (tmpFront.front() == "sbp") {
+        //     tmpFront.pop();
+        // }
+        if (tmpFront.front() == "suc") {
+            tmpFront.pop();
+            unknowCommand();
+        }
+        data.pop();
     }
-    if (tmpFront.front() == "sgt") {
-        tmpFront.pop();
-        createFrequ(tmpFront);
-    }
-    if (tmpFront.front() == "msz") {
-        tmpFront.pop();
-        createMap(tmpFront, map);
-    }
-    if (tmpFront.front() == "bct") {
-        tmpFront.pop();
-        map.pushBloc(createBloc(tmpFront));
-    }
-    if (tmpFront.front() == "pnw") {
-        tmpFront.pop();
-        newPlayer(tmpFront, player);
-    }
-    if (tmpFront.front() == "ppo") {
-        tmpFront.pop();
-        positionPlayer(tmpFront, player);
-    }
-    if (tmpFront.front() == "plv") {
-        tmpFront.pop();
-        levelPlayer(tmpFront);
-    }
-    if (tmpFront.front() == "pin") {
-        tmpFront.pop();
-        inventoryPlayer(tmpFront);
-    }
-    if (tmpFront.front() == "pex") {
-        tmpFront.pop();
-        expulsion(tmpFront);
-    }
-    if (tmpFront.front() == "pbc") {
-        tmpFront.pop();
-        broadcast(tmpFront);
-    }
-    if (tmpFront.front() == "pic") {
-        tmpFront.pop();
-        startInc(tmpFront);
-    }
-    if (tmpFront.front() == "pie") {
-        tmpFront.pop();
-        endInc(tmpFront);
-    }
-    if (tmpFront.front() == "pfk") {
-        tmpFront.pop();
-        layingEgg(tmpFront);
-    }
-    if (tmpFront.front() == "pdr") {
-        tmpFront.pop();
-        dropRess(tmpFront);
-    }
-    if (tmpFront.front() == "pgt") {
-        tmpFront.pop();
-        collectRess(tmpFront);
-    }
-    if (tmpFront.front() == "pdi") {
-        tmpFront.pop();
-        death(tmpFront);
-    }
-    if (tmpFront.front() == "enw") {
-        tmpFront.pop();
-        laidEgg(tmpFront);
-    }
-    if (tmpFront.front() == "ebo") {
-        tmpFront.pop();
-        connectEgg(tmpFront);
-    }
-    if (tmpFront.front() == "edi") {
-        tmpFront.pop();
-        deathEgg(tmpFront);
-    }
-    if (tmpFront.front() == "sst") {
-        tmpFront.pop();
-        frequModification(tmpFront);
-    }
-    if (tmpFront.front() == "seg") {
-        tmpFront.pop();
-        endGame(tmpFront);
-    }
-    if (tmpFront.front() == "smg") {
-        tmpFront.pop();
-        messServer(tmpFront);
-    }
-    // if (tmpFront.front() == "sbp") {
-    //     tmpFront.pop();
-    // }
-    if (tmpFront.front() == "suc") {
-        tmpFront.pop();
-        unknowCommand();
-    }
-    tmpFront.pop();
+}
+
+Zappy::Map Zappy::Parser::getMap()
+{
+    return _map;
 }

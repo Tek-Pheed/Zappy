@@ -7,9 +7,7 @@
 
 #include "Items.hpp"
 
-Zappy::Mendiane::Mendiane(/*std::vector<std::map<std::string, int>> sameItems,*/
-    const char *model, const char *texture, Utils &u)
-    : AItems(model, texture, u)
+Zappy::Mendiane::Mendiane(Zappy::items item): AItems(item)
 {
 }
 

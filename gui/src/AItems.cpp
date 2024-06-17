@@ -7,33 +7,31 @@
 
 #include "Items.hpp"
 
-Zappy::AItems::AItems(/*std::vector<std::map<std::string, int>> sameItems,*/
-    const char *model, const char *texture, Utils &u)
-    : _u(u)
+Zappy::AItems::AItems(Zappy::items item): _item(item) {}
+
+Zappy::AItems::~AItems() {}
+
+Zappy::items Zappy::AItems::getItem()
 {
-    _model = _u.createModel(texture, model);
+    return this->_item;
 }
 
-Zappy::AItems::~AItems()
+float Zappy::AItems::getX()
 {
+    return this->_x;
 }
 
-// void Zappy::AItems::addSameItems(std::map<std::string, int> position)
-// {
-//     _sameItems.push_back(position);
-// }
-
-// std::vector<std::map<std::string, int>> Zappy::AItems::getSameItems()
-// {
-//     return _sameItems;
-// }
-
-void Zappy::AItems::setModel(const char *texture, const char *model)
+float Zappy::AItems::getZ()
 {
-    _model = _u.createModel(model, texture);
+    return this->_z;
 }
 
-Model Zappy::AItems::getModel()
+void Zappy::AItems::setX(float x)
 {
-    return _model;
+    this->_x = x;
+}
+
+void Zappy::AItems::setZ(float z)
+{
+    this->_z = z;
 }
