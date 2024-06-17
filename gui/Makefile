@@ -18,14 +18,6 @@ SRC		= src/main.cpp \
 		  src/VectorPlayers.cpp \
 		  src/Map.cpp \
 		  src/Bloc.cpp \
-		  src/AItems.cpp \
-		  src/Items/Food.cpp \
-		  src/Items/Deraumere.cpp \
-		  src/Items/Linemate.cpp \
-		  src/Items/Mendiane.cpp \
-		  src/Items/Phiras.cpp \
-		  src/Items/Sibur.cpp \
-		  src/Items/Thystame.cpp \
 		  src/ConfirmButton.cpp	\
 		  src/Server.cpp \
 
@@ -51,5 +43,8 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
+
+debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
+debug:	re
 
 .PHONY: all clean fclean re

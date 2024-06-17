@@ -6,10 +6,11 @@
 */
 
 #include <iostream>
-#include "ServerData.hpp"
 #include "Items.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
+#include "ServerData.hpp"
+#include "Utils.hpp"
 
 Zappy::Parser::Parser()
 {
@@ -19,40 +20,20 @@ Zappy::Parser::~Parser()
 {
 }
 
-std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> items)
+std::vector<Zappy::items> Zappy::Parser::createItems(
+    std::queue<std::string> items)
 {
-    std::vector<Zappy::IItems *> listOfItems;
-    Zappy::Utils utils;
+    std::vector<Zappy::items> listOfItems;
     int i = 0;
 
     while (!items.empty()) {
         int nbElem = std::stoi(items.front());
-        if (i == 6) break;
+        if (i == 6)
+            break;
         while (nbElem != 0) {
-            float randomX = (float) rand()/RAND_MAX;
-            float randomZ = (float) rand()/RAND_MAX;
-            Zappy::IItems *ptr = nullptr;
-
-            if (i == 0)
-                ptr = new Zappy::Food(Zappy::food);
-            if (i == 1)
-                ptr = new Zappy::Linemate(Zappy::linemate);
-            if (i == 2)
-                ptr = new Zappy::Deraumere(Zappy::deraumere);
-            if (i == 3)
-                ptr = new Zappy::Sibur(Zappy::sibur);
-            if (i == 4)
-                ptr = new Zappy::Mendiane(Zappy::mendiane);
-            if (i == 5)
-                ptr = new Zappy::Phiras(Zappy::phiras);
-            if (i == 6)
-                ptr = new Zappy::Thystame(Zappy::thystame);
-            if (ptr != nullptr) {
-                ptr->setX(randomX);
-                ptr->setZ(randomZ);
-                listOfItems.push_back(ptr);
-            }
-            nbElem --;
+            if (i <= 6 && i >= 0)
+                listOfItems.push_back(static_cast<Zappy::items> (i));
+            nbElem--;
         }
         i++;
         items.pop();
@@ -60,7 +41,8 @@ std::vector<Zappy::IItems *> Zappy::Parser::createItems(std::queue<std::string> 
     return listOfItems;
 }
 
-std::vector<Zappy::Player> createPlayerMap(std::queue<std::string> nbPlayer, int x, int y)
+std::vector<Zappy::Player> createPlayerMap(
+    std::queue<std::string> nbPlayer, int x, int y)
 {
     std::vector<Zappy::Player> playerList;
     int nb = std::stoi(nbPlayer.front());
@@ -71,7 +53,7 @@ std::vector<Zappy::Player> createPlayerMap(std::queue<std::string> nbPlayer, int
         p.setPositionX(x);
         p.setPositionY(y);
         playerList.push_back(p);
-        nb --;
+        nb--;
     }
     return playerList;
 }
@@ -82,7 +64,8 @@ Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
     bloc.pop();
     int y = std::stoi(bloc.front());
     bloc.pop();
-    Bloc *newbloc = new Bloc(x, y, createItems(bloc));
+    Bloc *newbloc = new Bloc(x, y);
+    newbloc->setItems(createItems(bloc));
     newbloc->setPlayers(createPlayerMap(bloc, x, y));
     return newbloc;
 }
@@ -112,7 +95,7 @@ void Zappy::Parser::createTeams(std::queue<std::string> teams)
     while (!teams.empty()) {
         std::cout << "Teams name: " << teams.front().c_str() << std::endl;
         teams.pop();
-    } 
+    }
 }
 
 int Zappy::Parser::createFrequ(std::queue<std::string> freq)
@@ -152,7 +135,7 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player)
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
     int x = std::stoi(player.front());
     player.pop();
@@ -175,30 +158,30 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
-    //int level = std::stoi(player.front());
+    // int level = std::stoi(player.front());
 }
 
 void Zappy::Parser::inventoryPlayer(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
-    //int x = std::stoi(player.front());
+    // int x = std::stoi(player.front());
     player.pop();
-    //int y = std::stoi(player.front());
+    // int y = std::stoi(player.front());
     player.pop();
-    //items;
+    // items;
 }
 
 void Zappy::Parser::expulsion(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::broadcast(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
     std::queue<std::string> message = player;
 }
@@ -206,13 +189,13 @@ void Zappy::Parser::broadcast(std::queue<std::string> player)
 void Zappy::Parser::startInc(std::queue<std::string> player)
 {
     std::list<int> list_n;
-    //int x = std::stoi(player.front());
+    // int x = std::stoi(player.front());
     player.pop();
-    //int y = std::stoi(player.front());
+    // int y = std::stoi(player.front());
     player.pop();
-    //int level = std::stoi(player.front());
+    // int level = std::stoi(player.front());
     player.pop();
-    while (!player.empty()){
+    while (!player.empty()) {
         list_n.push_back(std::stoi(player.front()));
         player.pop();
     }
@@ -220,71 +203,71 @@ void Zappy::Parser::startInc(std::queue<std::string> player)
 
 void Zappy::Parser::endInc(std::queue<std::string> player)
 {
-    //int x = std::stoi(player.front());
+    // int x = std::stoi(player.front());
     player.pop();
-    //int y = std::stoi(player.front());
+    // int y = std::stoi(player.front());
     player.pop();
     std::string result = player.front();
 }
 
 void Zappy::Parser::layingEgg(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::dropRess(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
-    //int nb_i = std::stoi(player.front());
+    // int nb_i = std::stoi(player.front());
 }
 
 void Zappy::Parser::collectRess(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
     player.pop();
-    //int nb_i = std::stoi(player.front());
+    // int nb_i = std::stoi(player.front());
 }
 
 void Zappy::Parser::death(std::queue<std::string> player)
 {
-    //int nb_p = std::stoi(player.front());
+    // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 {
-    //int nb_e = std::stoi(egg.front());
+    // int nb_e = std::stoi(egg.front());
     egg.pop();
-    //int nb_p = std::stoi(egg.front());
+    // int nb_p = std::stoi(egg.front());
     egg.pop();
-    //int x = std::stoi(egg.front());
+    // int x = std::stoi(egg.front());
     egg.pop();
-    //int y = std::stoi(egg.front());
+    // int y = std::stoi(egg.front());
 }
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
-    //int nb_e = std::stoi(egg.front());
+    // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
 {
-    //int nb_e = std::stoi(egg.front());
+    // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::frequModification(std::queue<std::string> freq)
 {
-    //int time_frq = std::stoi(freq.front());
+    // int time_frq = std::stoi(freq.front());
 }
 
 void Zappy::Parser::endGame(std::queue<std::string> team)
 {
-    //std::string team_name = team.front();
+    // std::string team_name = team.front();
 }
 
 void Zappy::Parser::messServer(std::queue<std::string> mess)
 {
-    //utiliser la queue
+    // utiliser la queue
 }
 
 void Zappy::Parser::unknowCommand()

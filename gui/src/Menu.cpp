@@ -5,32 +5,40 @@
 ** Menu.cpp
 */
 
+#include "Menu.hpp"
 #include <iostream>
+#include "Draw.hpp"
+#include "Map.hpp"
+#include "ServerData.hpp"
+#include "Settings.hpp"
 #include "raylib.h"
 #include "raymath.h"
-#include "Menu.hpp"
-#include "Draw.hpp"
-#include "Settings.hpp"
-#include "ServerData.hpp"
-#include "Map.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-Zappy::Menu::Menu() {}
-Zappy::Menu::~Menu() {}
+Zappy::Menu::Menu()
+{
+}
+Zappy::Menu::~Menu()
+{
+}
 
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitAudioDevice();
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(
+        screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
-void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf, Music &MenuMusic, Music &GameMusic)
+void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body,
+    Texture2D &texture_leaf, Music &MenuMusic, Music &GameMusic)
 {
     model = LoadModel("assets/korok.glb");
     if (model.meshCount == 0) {
-        std::cerr << "Erreur : Impossible de charger le modèle 'assets/korok.glb'" << std::endl;
+        std::cerr
+            << "Erreur : Impossible de charger le modèle 'assets/korok.glb'"
+            << std::endl;
         exit(1);
     }
 
@@ -42,19 +50,24 @@ void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D
 
     texture_body = LoadTexture("assets/MakarBody.png");
     if (texture_body.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture 'assets/MakarBody.png'" << std::endl;
+        std::cerr << "Erreur : Impossible de charger la texture "
+                     "'assets/MakarBody.png'"
+                  << std::endl;
         exit(1);
     }
 
     texture_leaf = LoadTexture("assets/MakarLeaf.png");
     if (texture_leaf.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture 'assets/MakarLeaf.png'" << std::endl;
+        std::cerr << "Erreur : Impossible de charger la texture "
+                     "'assets/MakarLeaf.png'"
+                  << std::endl;
         exit(1);
     }
 
     if (model.materialCount < 2) {
         model.materialCount = 2;
-        model.materials = (Material *)realloc(model.materials, model.materialCount * sizeof(Material));
+        model.materials = (Material *) realloc(
+            model.materials, model.materialCount * sizeof(Material));
         model.materials[0] = LoadMaterialDefault();
         model.materials[1] = LoadMaterialDefault();
     }
@@ -67,16 +80,18 @@ void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D
     }
 }
 
-void Zappy::Menu::ConfigureCamera(Camera &camera) {
-    camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 2.0f, 25.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+void Zappy::Menu::ConfigureCamera(Camera &camera)
+{
+    camera = {0};
+    camera.position = (Vector3){0.0f, 2.0f, 25.0f};
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f};
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
     camera.fovy = 90.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Zappy::Server server, Music music)
+void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds,
+    Zappy::Server server, Music music)
 {
     Zappy::Parser parser;
     std::string response;
@@ -93,15 +108,15 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     Model tree;
     Model thystame;
     Model player;
-    Camera3D camera = { 0 };
+    Camera3D camera = {0};
     std::list<Bloc *> blocks;
     (void) bounds;
     (void) position;
     (void) model;
 
-    camera.position = (Vector3){ 22.0f, 22.0f, 22.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera.position = (Vector3){22.0f, 22.0f, 22.0f};
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f};
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
     water = LoadModel("assets/water.obj");
@@ -115,7 +130,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     thystame = LoadModel("assets/rubis/rubis_divin.glb");
     player = LoadModel("assets/korok.glb");
 
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+    Vector3 cubePosition = {0.0f, 0.0f, 0.0f};
 
     water = LoadModel("assets/item/water.glb");
     heart = LoadModel("assets/item/heart.glb");
@@ -139,69 +154,62 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
         UpdateCamera(&camera, CAMERA_FREE);
         UpdateMusicStream(music);
 
-        if (IsKeyPressed('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+        if (IsKeyPressed('Z'))
+            camera.target = (Vector3){0.0f, 0.0f, 0.0f};
 
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+        ClearBackground(RAYWHITE);
 
-            BeginMode3D(camera);
-                for (int x = 0; x < parser.getMap().getX(); x++) {
-                    for (int z = 0; z < parser.getMap().getY(); z++) {
-                        DrawModel(water, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
-                        DrawModel(island, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
+        BeginMode3D(camera);
+        for (int x = 0; x < parser.getMap().getX(); x++) {
+            for (int z = 0; z < parser.getMap().getY(); z++) {
+                DrawModel(
+                    water, (Vector3){x * 5.0f, 0.0f, z * 5.0f}, 0.5f, WHITE);
+                DrawModel(
+                    island, (Vector3){x * 5.0f, 0.0f, z * 5.0f}, 0.5f, WHITE);
+            }
+        }
+
+        while (blocks.size() != 0) {
+            std::vector<Zappy::items> items = blocks.front()->getItems();
+            int i = 0;
+            while (items.size() != 0) {
+                Vector3 pos = {blocks.front()->getX() * 5.0f + (i * 0.5f), 0,
+                    blocks.front()->getY() * 5.0f};
+
+                i++;
+                velocityY += gravity * GetFrameTime();
+                pos.y += velocityY * GetFrameTime();
+
+                if (pos.y <= (1.2f - (items.size() / 10))) {
+                    pos.y = (1.2f - (items.size() / 10));
+                    velocityY = -velocityY * bounceFactor;
+
+                    if (fabs(velocityY) < 0.1f) {
+                        velocityY = 0.0f;
                     }
                 }
+                if (items.back() == Zappy::items::food)
+                    DrawModel(food, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::linemate)
+                    DrawModel(linemate, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::deraumere)
+                    DrawModel(deraumere, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::sibur)
+                    DrawModel(sibur, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::mendiane)
+                    DrawModel(mendiane, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::phiras)
+                    DrawModel(phiras, pos, 1.0f, WHITE);
+                if (items.back() == Zappy::items::thystame)
+                    DrawModel(thystame, pos, 1.0f, WHITE);
+                items.pop_back();
+            }
+            blocks.pop_front();
+        }
 
-                while (blocks.size() != 0) {
-                    std::vector<Zappy::IItems *> items = blocks.front()->getItems();
-                    while (items.size() != 0) {
-                        float rand_pos = rand() % 4;
-                        Vector3 pos;
-
-                        if (rand_pos == 0) {
-                           pos = {blocks.front()->getX() * 5.0f + (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  - (items.front()->getZ())}; 
-                        } else if (rand_pos == 1) {
-                           pos = {blocks.front()->getX() * 5.0f - (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  + (items.front()->getZ())}; 
-                        } else if (rand_pos == 2) {
-                           pos = {blocks.front()->getX() * 5.0f - (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  - (items.front()->getZ())}; 
-                        } else {
-                           pos = {blocks.front()->getX() * 5.0f + (items.front()->getX()), firstDrop ? 10.0f : (1.2f - (items.size() / 10)), blocks.front()->getY() * 5.0f  + (items.front()->getZ())};           
-                        }
-
-                        velocityY += gravity * GetFrameTime();
-                        pos.y += velocityY * GetFrameTime();
-
-                        if (pos.y <= (1.2f - (items.size() / 10))) {
-                            pos.y = (1.2f - (items.size() / 10));
-                            velocityY = -velocityY * bounceFactor;
-
-                            if (fabs(velocityY) < 0.1f) {
-                                velocityY = 0.0f;
-                            }
-                        }
-
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::food)
-                            DrawModel(food, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::linemate)
-                            DrawModel(linemate, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::deraumere)
-                            DrawModel(deraumere, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::sibur)
-                            DrawModel(sibur, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::mendiane)
-                            DrawModel(mendiane, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::phiras)
-                            DrawModel(phiras, pos, 1.0f, WHITE);
-                        if (blocks.front()->getItems().back()->getItem() == Zappy::items::thystame)
-                            DrawModel(thystame, pos, 1.0f, WHITE);
-                        
-                        items.pop_back();
-                    }
-                    blocks.pop_front();
-                }
-
-            EndMode3D();
+        EndMode3D();
 
         EndDrawing();
         firstDrop = false;
@@ -210,7 +218,9 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     CloseWindow();
 }
 
-void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic, Music &GameMusic)
+void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera,
+    Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic,
+    Music &GameMusic)
 {
     Zappy::Server server;
     SetTargetFPS(60);
@@ -242,7 +252,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             playClicked = false;
             settingsClicked = false;
 
-            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
+            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN,
+                "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
             }
@@ -250,7 +261,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 s.manageSettingsButton(resIsClick, music, volume);
             else if (!settingsIsClicked)
                 resIsClick = false;
-            draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
+            draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN,
+                "PLAY", 20, WHITE, Zappy::RECT, playClicked);
             if (playClicked == 1) {
                 std::string ip = textInputIP.GetText();
                 std::string port = textInputPort.GetText();
@@ -262,7 +274,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                         server.messConnect();
                         currentScene = Zappy::GAME;
                     } else {
-                        std::cerr << "Error: Connection to server failed" << std::endl;
+                        std::cerr << "Error: Connection to server failed"
+                                  << std::endl;
                     }
                 }
             }
@@ -278,13 +291,16 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
-            DrawText("SETTINGS SCENE", GetScreenWidth() / 2 - MeasureText("SETTINGS SCENE", 40) / 2, GetScreenHeight() / 2 - 20, 40, DARKGRAY);
+            DrawText("SETTINGS SCENE",
+                GetScreenWidth() / 2 - MeasureText("SETTINGS SCENE", 40) / 2,
+                GetScreenHeight() / 2 - 20, 40, DARKGRAY);
             DrawFPS(10, 10);
         }
         EndDrawing();
     }
 }
-void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf, Music MenuMusic, Music GameMusic)
+void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body,
+    Texture2D texture_leaf, Music MenuMusic, Music GameMusic)
 {
     UnloadTexture(texture_body);
     UnloadTexture(texture_leaf);

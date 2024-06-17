@@ -37,6 +37,7 @@ fclean: clean
 
 debug:
 	@make debug -C ./server/
+	@make debug -C ./gui/
 	@echo "Debug ✔"
 
 re: fclean all

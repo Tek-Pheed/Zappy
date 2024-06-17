@@ -25,7 +25,7 @@ namespace Zappy
       private:
         std::vector<Player> _players;
         // _component;
-        std::vector<IItems *> _items;
+        // std::vector<IItems *> _items;
         // _window;
     };
 } // namespace Zappy

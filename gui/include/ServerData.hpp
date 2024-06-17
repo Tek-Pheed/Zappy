@@ -9,8 +9,6 @@
 
 #include <arpa/inet.h>
 #include <fcntl.h>
-#include <iostream>
-#include <list>
 #include <queue>
 #include <string>
 #include <sys/socket.h>
@@ -48,7 +46,7 @@ namespace Zappy
       public:
         Parser();
         ~Parser();
-        std::vector<IItems *> createItems(std::queue<std::string> items);
+        std::vector<Zappy::items> createItems(std::queue<std::string> items);
         Bloc *createBloc(std::queue<std::string> bloc);
         void createMap(std::queue<std::string> size, Map realmap);
         void createMap(std::queue<std::string> size);
@@ -80,11 +78,10 @@ namespace Zappy
         Player getPlayer();
         void setPlayer(Player map);
 
-        private:
-          Map _map;
-          Player _player;
-          std::vector<IItems *> _items;
-          std::vector<Model> _itemsModelList;
-        //sbp
+      private:
+        Map _map;
+        Player _player;
+        std::vector<Model> _itemsModelList;
+        // sbp
     };
 } // namespace Zappy
