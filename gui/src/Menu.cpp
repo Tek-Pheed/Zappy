@@ -175,12 +175,12 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds,
             std::vector<Zappy::items> items = blocks.front()->getItems();
             int i = 0;
             while (items.size() != 0) {
-                Vector3 pos = {blocks.front()->getX() * 5.0f + (i * 0.5f), 0,
+                Vector3 pos = {blocks.front()->getX() * 5.0f, 1.0f + (0.75f * i),
                     blocks.front()->getY() * 5.0f};
 
                 i++;
-                velocityY += gravity * GetFrameTime();
-                pos.y += velocityY * GetFrameTime();
+                //velocityY += gravity * GetFrameTime();
+                //pos.y += velocityY * GetFrameTime();
 
                 if (pos.y <= (1.2f - (items.size() / 10))) {
                     pos.y = (1.2f - (items.size() / 10));
