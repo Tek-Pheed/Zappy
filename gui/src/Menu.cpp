@@ -178,7 +178,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
         UpdateMusicStream(music);
 
         if (currentScene == Zappy::MENU) {
-            DrawTexture(background, 0, 0, WHITE);
+            DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), DARKGREEN);
             BeginMode3D(camera);
             DrawModel(model, position, 40.0f, WHITE);
             DrawBoundingBox(bounds, GREEN);
@@ -187,8 +187,13 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
 
             playClicked = false;
             settingsClicked = false;
-            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN,
-                "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
+            exitClicked = false;
+            confirmClicked = false;
+
+            if (playClicked == 1) {
+                currentScene = Zappy::GAME;
+            }
+            draw.createButton(400, 75, 1220, 700, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
             }
