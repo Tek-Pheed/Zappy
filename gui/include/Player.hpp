@@ -22,6 +22,14 @@ class Player {
         int getPositionX();
         void setPositionY(int y);
         int getPositionY();
+        void setPositionN(int north);
+        int getPositionN();
+        void setPositionS(int south);
+        int getPositionS();
+        void setPositionW(int west);
+        int getPositionW();
+        void setPositionE(int est);
+        int getPositionE();
         std::vector <std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 
@@ -32,5 +40,9 @@ class Player {
         int _playerId;
         int _x;
         int _y;
+        int _south;
+        int _north;
+        int _est;
+        int _west;
 };
 }

@@ -49,3 +49,43 @@ void Zappy::Player::setInventory(std::map<std::string, int> inventory)
 {
     _inventory = inventory;
 }
+
+void Zappy::Player::setPositionN(int north)
+{
+    _north = north;
+}
+
+int Zappy::Player::getPositionN()
+{
+    return _north;
+}
+
+void Zappy::Player::setPositionS(int south)
+{
+    _south = south;
+}
+
+int Zappy::Player::getPositionS()
+{
+    return _south;
+}
+
+void Zappy::Player::setPositionE(int est)
+{
+    _est = est;
+}
+
+int Zappy::Player::getPositionE()
+{
+    return _est;
+}
+
+void Zappy::Player::setPositionW(int west)
+{
+    _west = west;
+}
+
+int Zappy::Player::getPositionW()
+{
+    return _west;
+}

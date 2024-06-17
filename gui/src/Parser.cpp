@@ -129,19 +129,23 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player, Player realplayer)
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    //int north = std::stoi(player.front());
+    int north = std::stoi(player.front());
     player.pop();
-    //int est = std::stoi(player.front());
+    int est = std::stoi(player.front());
     player.pop();
-    //int south = std::stoi(player.front());
+    int south = std::stoi(player.front());
     player.pop();
-    //int west = std::stoi(player.front());
+    int west = std::stoi(player.front());
     player.pop();
-    //int level = std::stoi(player.front());
+    // int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
     realplayer.setPositionX(x);
     realplayer.setPositionY(y);
+    realplayer.setPositionN(north);
+    realplayer.setPositionS(south);
+    realplayer.setPositionW(west);
+    realplayer.setPositionE(est);
 }
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realplayer)
@@ -152,15 +156,19 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player, Player realpl
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    //int north = std::stoi(player.front());
+    int north = std::stoi(player.front());
     player.pop();
-    //int est = std::stoi(player.front());
+    int est = std::stoi(player.front());
     player.pop();
-    //int south = std::stoi(player.front());
+    int south = std::stoi(player.front());
     player.pop();
     int west = std::stoi(player.front());
     realplayer.setPositionX(x);
     realplayer.setPositionY(y);
+    realplayer.setPositionN(north);
+    realplayer.setPositionS(south);
+    realplayer.setPositionW(west);
+    realplayer.setPositionE(est);
 }
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
