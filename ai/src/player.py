@@ -1,3 +1,4 @@
+import uuid
 import re
 import random
 from ai.src.action import *
@@ -34,6 +35,7 @@ class Player:
         self.team_slot = 0
         self.verbose = False
         self.can_fork = True
+        self.client_id = uuid.uuid4()
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -161,27 +163,41 @@ class Player:
     def parse_broadcast(self):
         message = self.broadcast_receive.split(",")[1]
         direction = int(self.broadcast_receive[8])
-        print(message)
         if self.team in message:
             if "incantation" in message:
+                message = message.split(";")[3]
+                self.action = self.walk_to_broadcast_emitter(direction, message)
                 self.step = 0
-                self.action = self.walk_to_broadcast_emitter(direction)
-            if "ready" in message:
+            if "wainting_you" in message and str(self.client_id) in message:
+                message = message.split(";")[3]
+                self.action = self.walk_to_broadcast_emitter(direction, message)
+                self.step = 0
+            if "i_am_comming" in message and str(self.client_id) in message:
+                message = message.split(";")[3]
+                self.action = [f"Broadcast {self.team};waiting_you;{self.level};{message}\n"]
+            if "ready" in message and str(self.client_id) in message:
                 self.player_incantation += 1
+                self.data_to_send = ""
+                self.step = 5
 
-    def walk_to_broadcast_emitter(self, direction: int) -> list:
-        if self.ready_to_level_up or self.action:
+    def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
+        if self.ready_to_level_up:
             return
         action = []
         if direction == 0:
-            self.data_to_send = f"Broadcast {self.team} ready\n"
+            self.action = [f"Broadcast {self.team};ready;{self.level};{sender_id}\n"]
+            self.ready_to_level_up = True
             return []
+        action.append("Forward\n")
         if direction in (2, 1, 8):
             action.append("Forward\n")
+            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
         elif direction in (5, 6, 7):
             action.append("Right\n")
+            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
         else:
             action.append("Left\n")
+            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
         return action
 
     def take_action(self):
@@ -192,11 +208,13 @@ class Player:
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
-            print_verbose(self.verbose, f"[ACTION] {self.data_to_send}")
+            print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
         elif self.step == 1:
             if (self.incantation_possible()):
-                message = f"{self.team} incantation {self.level}"
-                self.data_to_send = f"Broadcast {message}\n"
+                if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
+                    message = f"{self.team};incantation;{self.level};{self.client_id}"
+                    self.data_to_send = f"Broadcast {message}\n"
+                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.player_incantation = 1
                 self.ready_to_level_up = True
                 self.step = 4
@@ -206,18 +224,22 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 3:
-            if "food" in self.inventory and self.inventory["food"] < 35:
-                self.action = self.parse_look_command(self.look_arround, "food")
-                self.step = 0
-            else:
-                self.object_to_go = self.what_i_search()
-                self.action = self.parse_look_command(self.look_arround, self.object_to_go)
-                self.step = 0
+            try:
+                if "food" in self.inventory and self.inventory["food"] < 15:
+                    self.action = self.parse_look_command(self.look_arround, "food")
+                    self.step = 0
+                else:
+                    self.object_to_go = self.what_i_search()
+                    self.action = self.parse_look_command(self.look_arround, self.object_to_go)
+                    self.step = 0
+            except (ValueError, IndexError):
+                print_verbose(self.verbose, f"[ERROR] {self.look_arround}\n")
         elif self.step == 4:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 5:
-            if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
+            print_verbose(self.verbose, f"[LEVEL] Player necessary: {self.player_incantation >= PLAYER_MANDATORY[self.level - 1]}\n")
+            if self.player_incantation >= PLAYER_MANDATORY[self.level - 1]:
                 self.begin_incantation()
             if self.step != 6:
                 self.drop_items_for_incantation()
@@ -226,6 +248,7 @@ class Player:
                     self.action = self.action[1:]
                 else:
                     self.data_to_send = "Inventory\n"
+                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
         elif self.step == 6:
             if self.action:
                 self.data_to_send = self.action[0]
@@ -234,11 +257,14 @@ class Player:
             self.data_to_send = ""
         elif self.step == 8:
             self.data_to_send = "Connect_nbr\n"
+            print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
             self.step += 1
         elif self.step == 9:
             if self.team_slot == 0:
                 self.data_to_send = "Fork\n"
+                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.can_fork = True
             else:
+                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.data_to_send = "Look\n"
             self.step = 0
