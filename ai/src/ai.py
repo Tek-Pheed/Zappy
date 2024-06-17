@@ -52,14 +52,6 @@ class AI:
                             self.player.parse_broadcast()
                             message = message.split("\n")[-1]
                             continue
-                        elif self.player.data_to_send == "Inventory\n":
-                            try:
-                                self.player.inventory = get_inventory(elem, self.player.inventory)
-                            except (ValueError, IndexError):
-                                print_verbose(self.player.verbose, f"[ERROR] {elem}\n")
-                                pass
-                        elif self.player.data_to_send == "Look\n":
-                            self.player.look_arround = elem
                         elif self.player.data_to_send == "Connect_nbr\n":
                             if "ko" in elem:
                                 self.player.data_to_send = "Connect_nbr\n"
@@ -70,6 +62,14 @@ class AI:
                             if self.args.thread == True and self.player.can_fork:
                                 subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])
                                 self.player.can_fork = False
+                        elif self.player.data_to_send == "Inventory\n":
+                            try:
+                                self.player.inventory = get_inventory(elem, self.player.inventory)
+                            except (ValueError, IndexError):
+                                print_verbose(self.player.verbose, f"[ERROR] {elem}\n")
+                                pass
+                        elif self.player.data_to_send == "Look\n":
+                            self.player.look_arround = elem
                         message = message.split("\n")[-1]
                         running = 1
 
