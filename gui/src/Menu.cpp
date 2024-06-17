@@ -127,6 +127,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
                 std::cout << "IP: " << ip << " Port: " << port << std::endl;
             }
 
+            DrawText("IP:", 1350, 70, 30, LIGHTGRAY);
+            DrawText("PORT:", 1350, 170, 30, LIGHTGRAY);
             textInputPort.UpdateInput();
             textInputIP.UpdateInput();
 
