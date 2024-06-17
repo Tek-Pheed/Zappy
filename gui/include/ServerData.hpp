@@ -55,8 +55,8 @@ namespace Zappy
         void createTeams(std::queue<std::string> teams);
         int createFrequ(std::queue<std::string> freq);
         void parsing(std::queue<std::queue<std::string>> data);
-        void newPlayer(std::queue<std::string> player, Player realplayer);
-        void positionPlayer(std::queue<std::string> player, Player realplayer);
+        void newPlayer(std::queue<std::string> player);
+        void positionPlayer(std::queue<std::string> player);
         void levelPlayer(std::queue<std::string> player);
         void inventoryPlayer(std::queue<std::string> player);
         void expulsion(std::queue<std::string> exp);
@@ -76,10 +76,13 @@ namespace Zappy
         void unknowCommand();
 
         Zappy::Map getMap();
-        void setMap();
+        void setMap(Zappy::Map map);
+        Zappy::Player getPlayer();
+        void setPlayer(Zappy::Player player);
 
         private:
           Zappy::Map _map;
+          Zappy::Player _player;
           std::vector<Zappy::IItems *> _items;
           std::vector<Model> _itemsModelList;
         //sbp
