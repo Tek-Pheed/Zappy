@@ -1,6 +1,7 @@
 import uuid
 import re
 import random
+import time
 from ai.src.action import *
 from ai.src.utils import print_verbose
 from ai.src.utils import *
@@ -270,3 +271,4 @@ class Player:
             self.step = 0
         elif self.step == 10:
             self.data_to_send = "Connect_nbr\n"
+            time.sleep(1)

@@ -56,6 +56,7 @@ class AI:
                             if "ko" in elem:
                                 self.player.step = 10
                             else:
+                                self.player.step = 0
                                 self.player.team_slot = int(elem)
                         elif self.player.data_to_send == "Fork\n":
                             if self.args.thread == True and self.player.can_fork:
