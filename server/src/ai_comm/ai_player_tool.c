@@ -88,9 +88,18 @@ static void sub_eject(server_t *serv, client_t *cli)
 {
     char msg[20];
     int len_client = list_get_size(serv->client);
+    int orient = cli->player.orient;
 
+    if (orient == cli->player.orient && orient == NORTH)
+        orient = SOUTH;
+    if (orient == cli->player.orient && orient == SOUTH)
+        orient = NORTH;
+    if (orient == cli->player.orient && orient == EAST)
+        orient = WEST;
+    if (orient == cli->player.orient && orient == WEST)
+        orient = EAST;
     memset(msg, '\0', sizeof(msg));
-    sprintf(msg, "eject: %d\n", cli->player.orient);
+    sprintf(msg, "eject: %d\n", orient);
     for (int i = 0; i != len_client; i++)
         eject_player(i, cli, serv, msg);
 }
