@@ -54,8 +54,7 @@ class AI:
                             continue
                         elif self.player.data_to_send == "Connect_nbr\n":
                             if "ko" in elem:
-                                self.player.data_to_send = "Connect_nbr\n"
-                                self.player.step = 0
+                                self.player.step = 10
                             else:
                                 self.player.team_slot = int(elem)
                         elif self.player.data_to_send == "Fork\n":

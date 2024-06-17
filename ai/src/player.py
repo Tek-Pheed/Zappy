@@ -268,3 +268,5 @@ class Player:
                 print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.data_to_send = "Look\n"
             self.step = 0
+        elif self.step == 10:
+            self.data_to_send = "Connect_nbr\n"
