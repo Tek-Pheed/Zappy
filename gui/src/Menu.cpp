@@ -18,17 +18,24 @@ Zappy::Menu::~Menu() {}
 
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
+    InitAudioDevice();
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
-void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
+void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf, Music &MenuMusic, Music &GameMusic)
 {
     model = LoadModel("assets/korok.glb");
     if (model.meshCount == 0) {
         std::cerr << "Erreur : Impossible de charger le modèle 'assets/korok.glb'" << std::endl;
         exit(1);
     }
+
+    MenuMusic = LoadMusicStream("assets/menu.mp3");
+    SetMusicVolume(MenuMusic, 0.5f);
+
+    GameMusic = LoadMusicStream("assets/game.mp3");
+    SetMusicVolume(GameMusic, 0.5f);
 
     texture_body = LoadTexture("assets/MakarBody.png");
     if (texture_body.id == 0) {
@@ -66,7 +73,7 @@ void Zappy::Menu::ConfigureCamera(Camera &camera) {
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
+void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Music music)
 {
     Model water;
     Model heart;
@@ -87,6 +94,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
     chest = LoadModel("assets/item/chest_island.glb");
     tree = LoadModel("assets/item/palm_tree_island.glb");
     island = LoadModel("assets/item/basic_island.glb");
+    PlayMusicStream(music);
 
     DisableCursor();
 
@@ -94,6 +102,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
 
     while (!WindowShouldClose()) {
         UpdateCamera(&camera, CAMERA_FREE);
+        UpdateMusicStream(music);
 
         if (IsKeyPressed('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
 
@@ -126,7 +135,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
     CloseWindow();
 }
 
-void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic, Music &GameMusic)
 {
     SetTargetFPS(60);
     int playClicked = 0;
@@ -136,15 +145,17 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
     int confirmClicked = 0;
     Settings s;
     bool resIsClick = false;
-    Music music;
     double volume = 0.5f;
+    Music music = MenuMusic;
 
     TextInput textInputPort(1350, 200, 320, 50);
     TextInput textInputIP(1350, 100, 320, 50);
+    PlayMusicStream(music);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        UpdateMusicStream(music);
 
         if (currentScene == Zappy::MENU) {
             DrawTexture(background, 0, 0, WHITE);
@@ -189,7 +200,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             textInputPort.DrawInput();
             textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
-            GameScene(model, position, bounds);
+            music = GameMusic;
+            GameScene(model, position, bounds, music);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
@@ -199,10 +211,12 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
         EndDrawing();
     }
 }
-void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
+void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf, Music MenuMusic, Music GameMusic)
 {
     UnloadTexture(texture_body);
     UnloadTexture(texture_leaf);
     UnloadModel(model);
+    UnloadMusicStream(MenuMusic);
+    UnloadMusicStream(GameMusic);
     CloseWindow();
 }

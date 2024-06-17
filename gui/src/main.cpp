@@ -16,6 +16,8 @@ int main(void)
     const int screenWidth = 1920;
     const int screenHeight = 1080;
     Model model;
+    Music MenuMusic;
+    Music GameMusic;
     Zappy::Draw draw;
     Zappy::Menu menu;
     Texture2D texture_body, texture_leaf;
@@ -25,7 +27,7 @@ int main(void)
         return 1;
     }
 
-    menu.LoadResources(model, texture_body, texture_leaf);
+    menu.LoadResources(model, texture_body, texture_leaf, MenuMusic, GameMusic);
 
     Camera camera;
     menu.ConfigureCamera(camera);
@@ -35,8 +37,8 @@ int main(void)
 
     Texture2D background = LoadTexture("assets/background.png");
 
-    menu.MainLoop(model, background, camera, position, bounds, draw);
+    menu.MainLoop(model, background, camera, position, bounds, draw, MenuMusic, GameMusic);
 
-    menu.UnloadResources(model, texture_body, texture_leaf);
+    menu.UnloadResources(model, texture_body, texture_leaf, MenuMusic, GameMusic);
     return 0;
 }
