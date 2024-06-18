@@ -20,6 +20,7 @@ SRC		= src/main.cpp \
 		  src/Bloc.cpp \
 		  src/ConfirmButton.cpp	\
 		  src/Server.cpp \
+		  src/RessourcePool.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -44,10 +45,10 @@ fclean: clean
 
 re: fclean all
 
-debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
+debug:	CFLAGS	+= -O0	-g -ggdb3 -Wpedantic
 debug:	re
 
-asan: CFLAGS += -fsanitize=address -g
+asan: CFLAGS += -g3 -fsanitize=address
 asan: LDFLAGS += -fsanitize=address
 asan: re
 
