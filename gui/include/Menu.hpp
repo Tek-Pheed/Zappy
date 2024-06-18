@@ -81,6 +81,6 @@ namespace Zappy
         bool createButton(float width, float height, float posX, float posY,
             float borderThickness, Color borderColor, Color hoverColor,
             Color pressColor, const char *text, float textSize,
-            Color textColor, Shape shape, bool &clicked);
+            Color textColor, bool &clicked);
     };
 } // namespace Zappy

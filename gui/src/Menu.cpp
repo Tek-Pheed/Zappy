@@ -7,11 +7,10 @@
 
 #include "Menu.hpp"
 #include <iostream>
-#include "raylib.h"
-#include "Menu.hpp"
 #include "Draw.hpp"
 #include "Items.hpp"
 #include "Map.hpp"
+#include "Menu.hpp"
 #include "RessourcePool.hpp"
 #include "ServerData.hpp"
 #include "Settings.hpp"
@@ -83,12 +82,8 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 
 void Zappy::Menu::ConfigureCamera(Camera &camera)
 {
-    camera = {0};
-    camera.position = (Vector3){0.0f, 2.0f, 25.0f};
-    camera.target = (Vector3){0.0f, 0.0f, 0.0f};
-    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
-    camera.fovy = 90.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
+    camera = {0, 0, 0, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 90.0f,
+        CAMERA_PERSPECTIVE};
 }
 
 void loadItems(RessourceManager &objectPool)
@@ -108,26 +103,19 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     Zappy::Parser parser;
     std::string response;
     Players listPlayers;
-    Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
-    Model island =
-        objectPool.models.dynamicLoad("island", "assets/island.obj");
-    Model player = objectPool.models.dynamicLoad("player", "assets/korok.glb");
-    Camera3D camera = {0};
+    objectPool.models.loadRessource("water", "assets/water.obj");
+    objectPool.models.loadRessource("island", "assets/island.obj");
+    objectPool.models.loadRessource("player", "assets/korok.glb");
+
+    Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 45.0f,
+    CAMERA_PERSPECTIVE};
+
     std::list<Bloc *> blocks;
-    Vector3 cubePosition = {0.0f, 0.0f, 0.0f};
-    float velocityY = 0.0f;
-    const float gravity = -9.81f;
-    const float bounceFactor = 0.7f;
     loadItems(objectPool);
 
     (void) bounds;
     (void) position;
 
-    camera.position = (Vector3){22.0f, 22.0f, 22.0f};
-    camera.target = (Vector3){0.0f, 0.0f, 0.0f};
-    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
-    camera.fovy = 45.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
     PlayMusicStream(music);
     DisableCursor();
     SetTargetFPS(60);

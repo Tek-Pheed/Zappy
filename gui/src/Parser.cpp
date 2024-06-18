@@ -166,6 +166,7 @@ void Zappy::Parser::inventoryPlayer(std::queue<std::string> player)
 
 void Zappy::Parser::expulsion(std::queue<std::string> player)
 {
+    (void) player;
     // int nb_p = std::stoi(player.front());
 }
 
@@ -202,6 +203,7 @@ void Zappy::Parser::endInc(std::queue<std::string> player)
 
 void Zappy::Parser::layingEgg(std::queue<std::string> player)
 {
+    (void) player;
     // int nb_p = std::stoi(player.front());
 }
 
@@ -214,6 +216,7 @@ void Zappy::Parser::dropRess(std::queue<std::string> player)
 
 void Zappy::Parser::collectRess(std::queue<std::string> player)
 {
+    (void) player;
     // int nb_p = std::stoi(player.front());
     player.pop();
     // int nb_i = std::stoi(player.front());
@@ -221,11 +224,13 @@ void Zappy::Parser::collectRess(std::queue<std::string> player)
 
 void Zappy::Parser::death(std::queue<std::string> player)
 {
+    (void) player;
     // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 {
+    (void) egg;
     // int nb_e = std::stoi(egg.front());
     egg.pop();
     // int nb_p = std::stoi(egg.front());
@@ -237,26 +242,31 @@ void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
+    (void) egg;
     // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
 {
+    (void) egg;
     // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::frequModification(std::queue<std::string> freq)
 {
+    (void) freq;
     // int time_frq = std::stoi(freq.front());
 }
 
 void Zappy::Parser::endGame(std::queue<std::string> team)
 {
+    (void) team;
     // std::string team_name = team.front();
 }
 
 void Zappy::Parser::messServer(std::queue<std::string> mess)
 {
+    (void) mess;
     // utiliser la queue
 }
 
