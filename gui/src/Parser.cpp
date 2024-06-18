@@ -80,16 +80,6 @@ void Zappy::Parser::createMap(std::queue<std::string> map, Map realmap)
     realmap.setY(y);
 }
 
-void Zappy::Parser::createMap(std::queue<std::string> map)
-{
-    int x = std::stoi(map.front());
-    map.pop();
-    int y = std::stoi(map.front());
-    map.pop();
-    _map.setX(x);
-    _map.setY(y);
-}
-
 void Zappy::Parser::createTeams(std::queue<std::string> teams)
 {
     while (!teams.empty()) {
@@ -401,4 +391,24 @@ Zappy::Player Zappy::Parser::getPlayer()
 void Zappy::Parser::setPlayer(Zappy::Player player)
 {
     _player = player;
+}
+
+void Zappy::Parser::createMap(std::queue<std::string> map)
+{
+    int x = std::stoi(map.front());
+    map.pop();
+    int y = std::stoi(map.front());
+    map.pop();
+    _map.setX(x);
+    _map.setY(y);
+}
+
+Zappy::Players Zappy::Parser::getPlayersList()
+{
+    return _playersMap;
+}
+
+void Zappy::Parser::setPlayersList(Zappy::Players list)
+{
+    _playersMap = list;
 }

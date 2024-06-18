@@ -35,7 +35,8 @@ namespace Zappy
         int getPositionE();
         void setID(int id);
         int getID();
-        void createModel(RessourceManager &objectPool, const std::string &modelPath);
+        void createModel(
+            RessourceManager &objectPool, const std::string &modelPath);
         std::vector<std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 
@@ -55,12 +56,13 @@ namespace Zappy
 
     class Players {
       private:
-        std::map<int, Player *> _players;
+        std::map<int, Player *> _playerslist;
 
       public:
         Players();
         ~Players();
         void mapPlayers(Player *player);
-        std::map<int, Player *> getPlayers();
+        std::map<int, Player *> getPlayersList();
+        void setPlayersList(std::map<int, Player *> playerslist);
     };
 } // namespace Zappy

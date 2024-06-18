@@ -12,6 +12,8 @@
 #include "RessourcePool.hpp"
 #include "ServerData.hpp"
 #include "raylib.h"
+#include "ServerData.hpp"
+#include <string>
 
 #define MAX_INPUT_CHARS 9
 

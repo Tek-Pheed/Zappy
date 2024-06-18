@@ -7,6 +7,8 @@
 
 #include "Menu.hpp"
 #include <iostream>
+#include "raylib.h"
+#include "Menu.hpp"
 #include "Draw.hpp"
 #include "Items.hpp"
 #include "Map.hpp"
@@ -103,12 +105,13 @@ void loadItems(RessourceManager &objectPool)
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
+    Zappy::Parser parser;
+    std::string response;
+    Players listPlayers;
     Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
     Model island =
         objectPool.models.dynamicLoad("island", "assets/island.obj");
     Model player = objectPool.models.dynamicLoad("player", "assets/korok.glb");
-    Zappy::Parser parser;
-    std::string response;
     Camera3D camera = {0};
     std::list<Bloc *> blocks;
     Vector3 cubePosition = {0.0f, 0.0f, 0.0f};
@@ -132,6 +135,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     parser.parsing(objectPool, server.getData());
     while (!WindowShouldClose()) {
         blocks = parser.getMap().getBloc();
+        listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
         UpdateMusicStream(music);
         if (IsKeyPressed('Z'))
@@ -145,6 +149,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         }
         EndMode3D();
         EndDrawing();
+        // server.receiveMess();
+        // parser.parsing(server.getData());
     }
     CloseWindow();
 }
