@@ -5,6 +5,7 @@ from ai.src.server import *
 from ai.src.action import *
 from ai.src.player import Player
 from ai.src.utils import print_verbose
+
 class AI:
     def __init__(self) -> None:
         self.args = None
