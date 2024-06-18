@@ -48,6 +48,7 @@ class AI:
                             self.player.ready_to_level_up = False
                             self.player.step = 0
                         elif "message" in elem:
+                            self.player.no_response = 0
                             self.player.broadcast_receive = elem
                             self.player.parse_broadcast()
                             message = message.split("\n")[-1]

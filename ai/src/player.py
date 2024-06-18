@@ -37,6 +37,7 @@ class Player:
         self.verbose = False
         self.can_fork = True
         self.client_id = uuid.uuid4()
+        self.no_response = 0
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -166,39 +167,44 @@ class Player:
         direction = int(self.broadcast_receive[8])
         if self.team in message:
             if "incantation" in message:
-                message = message.split(";")[3]
-                self.action = self.walk_to_broadcast_emitter(direction, message)
+                sender_id = message.split(";")[3]
+                self.action = self.walk_to_broadcast_emitter(direction, sender_id)
                 self.step = 0
-            if "wainting_you" in message and str(self.client_id) in message:
-                message = message.split(";")[3]
-                self.action = self.walk_to_broadcast_emitter(direction, message)
+        elif str(self.client_id) in message:
+            if "waiting_you" in message:
+                sender_id = message.split(";")[3]
+                print(f"{self.client_id} wait {sender_id}")
+                self.action = self.walk_to_broadcast_emitter(direction, sender_id)
                 self.step = 0
-            if "i_am_comming" in message and str(self.client_id) in message:
-                message = message.split(";")[3]
-                self.action = [f"Broadcast {self.team};waiting_you;{self.level};{message}\n"]
-            if "ready" in message and str(self.client_id) in message:
+            if "i_am_comming" in message:
+                sender_id = message.split(";")[3]
+                print(f"{sender_id} comming to position of {self.client_id}")
+                self.action = [f"Broadcast {sender_id};waiting_you;{self.level};{self.client_id}\n"]
+            if "ready" in message:
+                print(f"{self.client_id} is ready to help to level up !")
                 self.player_incantation += 1
                 self.data_to_send = ""
                 self.step = 5
 
+
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
         if self.ready_to_level_up:
-            return
+            return []
         action = []
         if direction == 0:
-            self.action = [f"Broadcast {self.team};ready;{self.level};{sender_id}\n"]
-            self.ready_to_level_up = True
-            return []
+            action = [f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"]
+            self.step = 7
+            return action
         action.append("Forward\n")
         if direction in (2, 1, 8):
             action.append("Forward\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
+            action.append(f"Broadcast {sender_id};i_am_comming;{self.level};{self.client_id}")
         elif direction in (5, 6, 7):
             action.append("Right\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
+            action.append(f"Broadcast {sender_id};i_am_comming;{self.level};{self.client_id}")
         else:
             action.append("Left\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
+            action.append(f"Broadcast {sender_id};i_am_comming;{self.level};{self.client_id}")
         return action
 
     def take_action(self):
@@ -220,6 +226,7 @@ class Player:
                 self.ready_to_level_up = True
                 self.step = 4
             else:
+                self.ready_to_level_up = False
                 self.step += 1
         elif self.step == 2:
             self.data_to_send = "Look\n"
