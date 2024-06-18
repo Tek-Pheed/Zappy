@@ -7,20 +7,19 @@
 
 NAME    =   zappy_gui
 
-SRC		= src/main.cpp              \
-		  src/Menu.cpp              \
-		  src/Utils.cpp             \
-		  src/Input.cpp             \
-		  src/Settings.cpp          \
-		  src/Draw.cpp              \
-		  src/Parser.cpp            \
-		  src/Player.cpp            \
-		  src/VectorPlayers.cpp     \
-		  src/Map.cpp               \
-		  src/Bloc.cpp              \
-		  src/ConfirmButton.cpp	    \
-		  src/Server.cpp            \
-		  src/RessourcePool.cpp
+SRC		= src/main.cpp \
+		  src/Menu.cpp \
+		  src/Utils.cpp \
+		  src/Input.cpp \
+		  src/Settings.cpp \
+		  src/Draw.cpp \
+		  src/Parser.cpp \
+		  src/Player.cpp \
+		  src/VectorPlayers.cpp \
+		  src/Map.cpp \
+		  src/Bloc.cpp \
+		  src/ConfirmButton.cpp	\
+		  src/Server.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -48,4 +47,8 @@ re: fclean all
 debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
 debug:	re
 
-.PHONY: all clean fclean re
+asan: CFLAGS += -fsanitize=address -g
+asan: LDFLAGS += -fsanitize=address
+asan: re
+
+.PHONY: all clean fclean asan re
