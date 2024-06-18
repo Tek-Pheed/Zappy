@@ -9,8 +9,7 @@
 
 bool Zappy::ConfirmButton::createButton(float width, float height, float posX,
     float posY, float borderThickness, Color borderColor, Color hoverColor,
-    Color pressColor, const char *text, float textSize, Color textColor,
-    Shape shape, bool &clicked)
+    Color pressColor, const char *text, float textSize, Color textColor, bool &clicked)
 {
     Rectangle buttonRect = {posX, posY, width, height};
     Vector2 mousePoint = GetMousePosition();

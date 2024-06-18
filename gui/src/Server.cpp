@@ -91,7 +91,7 @@ void Zappy::Server::receiveMess()
     char buffer[10024];
 
     FD_SET(_sock, &_readfds);
-    int res = select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
+    select(_sock + 1, &_readfds, &_writefds, nullptr, nullptr); //class error
     if (FD_ISSET(_sock, &_readfds)){
         bit_read = read(_sock, buffer, 10023);
         buffer[bit_read] ='\0';
