@@ -278,7 +278,7 @@ void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<
             tmpFront.pop();
             createMap(tmpFront);
         }
-        if (tmpFront.front() == "bct") {
+        if (tmpFront.front() == "bct" && _map.getBloc().size() != (_map.getX() * _map.getY())) {
             tmpFront.pop();
             _map.pushBloc(createBloc(tmpFront));
         }
