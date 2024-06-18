@@ -13,6 +13,7 @@
 #include "Settings.hpp"
 #include "raylib.h"
 #include "raymath.h"
+#include "RessourcePool.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
@@ -31,39 +32,34 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
     return IsWindowReady();
 }
 
-void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body,
-    Texture2D &texture_leaf, Music &MenuMusic, Music &GameMusic)
+void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 {
-    model = LoadModel("assets/korok.glb");
+    Model &model = objectPool.models.dynamicLoad("korok", "assets/korok.glb");
+    Music &MenuMusic = objectPool.musics.dynamicLoad("menu", "assets/menu.mp3");
+    Music &GameMusic = objectPool.musics.dynamicLoad("game", "assets/game.mp3");
+    Texture2D &texture_body = objectPool.textures.dynamicLoad("makarbody", "assets/MakarBody.png");
+    Texture2D &texture_leaf = objectPool.textures.dynamicLoad("makaleaf", "assets/MakarLeaf.png");
+
     if (model.meshCount == 0) {
-        std::cerr
-            << "Erreur : Impossible de charger le modèle 'assets/korok.glb'"
-            << std::endl;
-        exit(1);
+       std::cerr
+           << "Erreur : Impossible de charger le modèle 'assets/korok.glb'"
+           << std::endl;
+       exit(1);
     }
-
-    MenuMusic = LoadMusicStream("assets/menu.mp3");
     SetMusicVolume(MenuMusic, 0.5f);
-
-    GameMusic = LoadMusicStream("assets/game.mp3");
     SetMusicVolume(GameMusic, 0.5f);
-
-    texture_body = LoadTexture("assets/MakarBody.png");
     if (texture_body.id == 0) {
         std::cerr << "Erreur : Impossible de charger la texture "
                      "'assets/MakarBody.png'"
                   << std::endl;
         exit(1);
     }
-
-    texture_leaf = LoadTexture("assets/MakarLeaf.png");
     if (texture_leaf.id == 0) {
         std::cerr << "Erreur : Impossible de charger la texture "
                      "'assets/MakarLeaf.png'"
                   << std::endl;
         exit(1);
     }
-
     if (model.materialCount < 2) {
         model.materialCount = 2;
         model.materials = (Material *) realloc(
@@ -71,10 +67,8 @@ void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body,
         model.materials[0] = LoadMaterialDefault();
         model.materials[1] = LoadMaterialDefault();
     }
-
     model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = texture_body;
     model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_leaf;
-
     for (int i = 0; i < model.meshCount; i++) {
         model.meshMaterial[i] = (i == 0) ? 0 : 1;
     }
@@ -131,12 +125,6 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds,
     player = LoadModel("assets/korok.glb");
 
     Vector3 cubePosition = {0.0f, 0.0f, 0.0f};
-
-    water = LoadModel("assets/item/water.glb");
-    heart = LoadModel("assets/item/heart.glb");
-    chest = LoadModel("assets/item/chest_island.glb");
-    tree = LoadModel("assets/item/palm_tree_island.glb");
-    island = LoadModel("assets/item/basic_island.glb");
     PlayMusicStream(music);
 
     DisableCursor();
@@ -218,9 +206,8 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds,
     CloseWindow();
 }
 
-void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera,
-    Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic,
-    Music &GameMusic)
+void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
+    Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
     Zappy::Server server;
     SetTargetFPS(60);
@@ -230,7 +217,11 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera,
     Settings s;
     bool resIsClick = false;
     double volume = 0.5f;
-    Music music = MenuMusic;
+
+    Texture2D &background = objectPool.textures.getRessource("background");
+    Music &music = objectPool.musics.getRessource("menu");
+    Music &GameMusic = objectPool.musics.getRessource("game");
+    Model &model = objectPool.models.getRessource("korok");
 
     TextInput textInputPort(1350, 200, 320, 50);
     TextInput textInputIP(1350, 100, 320, 50);
@@ -298,14 +289,4 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera,
         }
         EndDrawing();
     }
-}
-void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body,
-    Texture2D texture_leaf, Music MenuMusic, Music GameMusic)
-{
-    UnloadTexture(texture_body);
-    UnloadTexture(texture_leaf);
-    UnloadModel(model);
-    UnloadMusicStream(MenuMusic);
-    UnloadMusicStream(GameMusic);
-    CloseWindow();
 }

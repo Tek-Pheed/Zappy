@@ -7,19 +7,20 @@
 
 NAME    =   zappy_gui
 
-SRC		= src/main.cpp \
-		  src/Menu.cpp \
-		  src/Utils.cpp \
-		  src/Input.cpp \
-		  src/Settings.cpp \
-		  src/Draw.cpp \
-		  src/Parser.cpp \
-		  src/Player.cpp \
-		  src/VectorPlayers.cpp \
-		  src/Map.cpp \
-		  src/Bloc.cpp \
-		  src/ConfirmButton.cpp	\
-		  src/Server.cpp \
+SRC		= src/main.cpp              \
+		  src/Menu.cpp              \
+		  src/Utils.cpp             \
+		  src/Input.cpp             \
+		  src/Settings.cpp          \
+		  src/Draw.cpp              \
+		  src/Parser.cpp            \
+		  src/Player.cpp            \
+		  src/VectorPlayers.cpp     \
+		  src/Map.cpp               \
+		  src/Bloc.cpp              \
+		  src/ConfirmButton.cpp	    \
+		  src/Server.cpp            \
+		  src/RessourcePool.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 

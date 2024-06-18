@@ -32,6 +32,7 @@ namespace Zappy
 
         void setPlayers(std::vector<Zappy::Player> players);
         std::vector<Zappy::Player> getPlayers();
+        void display();
 
       private:
         int _x;

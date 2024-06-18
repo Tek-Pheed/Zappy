@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iostream>
+#include "RessourcePool.hpp"
 #include "Draw.hpp"
 #include "raylib.h"
 #include "ServerData.hpp"
@@ -35,10 +36,9 @@ class Menu {
         void setHost(std::string host);
         void setPort(std::string port);
         bool InitWindowAndResources(int screenWidth, int screenHeight);
-        void LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf, Music &MenuMusic, Music &GameMusic);
+        void LoadResources(RessourceManager &objectPool);
         void ConfigureCamera(Camera &camera);
-        void MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw, Music &MenuMusic, Music &GameMusic);
-        void UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf, Music MenuMusic, Music GameMusic);
+        void MainLoop(RessourceManager &objectPool, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw);
         void LoopForTextbox(Rectangle textBox, bool &mouseOnText, char name[MAX_INPUT_CHARS + 1], int &letterCount, int &framesCounter);
         void GameScene(Model model, Vector3 position, BoundingBox bounds, Zappy::Server server, Music music);
         void TextBoxForIp(Rectangle textBox, bool mouseOnText, char ip[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter);
