@@ -33,13 +33,13 @@ class Player {
         int getPositionE();
         void setID(int id);
         int getID();
-        void createModel(std::string modelPath);
+        // void createModel(std::string modelPath);
         std::vector <std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 
     protected:
     private:
-        Model _model;
+        // Model _model;
         std::map<std::string, int> _position;
         std::map<std::string, int> _inventory;
         int _playerId;
@@ -55,11 +55,12 @@ class Player {
 class Players
 {
 private:
-    std::map<int, Player *> _players;
+    std::map<int, Player *> _playerslist;
 public:
     Players();
     ~Players();
     void mapPlayers(Player *player);
-    std::map<int, Player *> getPlayers();
+    std::map<int, Player *> getPlayersList();
+    void setPlayersList(std::map<int, Player *> playerslist);
 };
 }

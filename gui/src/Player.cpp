@@ -101,9 +101,9 @@ int Zappy::Player::getID()
     return _id;
 }
 
-void Zappy::Player::createModel(std::string modelPath)
-{
-    Utils utils;
+// void Zappy::Player::createModel(std::string modelPath)
+// {
+//     Utils utils;
 
-    _model = utils.createModel(modelPath.c_str());
-}
+//     _model = utils.createModel(modelPath.c_str());
+// }

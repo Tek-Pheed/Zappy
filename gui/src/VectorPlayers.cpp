@@ -19,10 +19,15 @@ Zappy::Players::~Players()
 
 void Zappy::Players::mapPlayers(Player *player)
 {
-    _players[player->getID()] = player;
+    _playerslist[player->getID()] = player;
 }
 
-std::map<int, Zappy::Player *> Zappy::Players::getPlayers()
+std::map<int, Zappy::Player *> Zappy::Players::getPlayersList()
 {
-    return _players;
-} 
+    return _playerslist;
+}
+
+void Zappy::Players::setPlayersList(std::map<int, Zappy::Player *> playerlist)
+{
+    _playerslist = playerlist;
+}

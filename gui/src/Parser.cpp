@@ -147,7 +147,7 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player)
     _player.setPositionS(south);
     _player.setPositionW(west);
     _player.setPositionE(est);
-    _player.createModel("../assets/korok.obj");
+    // _player.createModel("../assets/korok.obj");
 }
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
@@ -295,8 +295,6 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
-    Players playList;
-    // Player player;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -320,7 +318,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
             newPlayer(tmpFront);
-            playList.mapPlayers(&_player);
+            _playersMap.mapPlayers(&_player);
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();
@@ -419,4 +417,14 @@ Zappy::Player Zappy::Parser::getPlayer()
 void Zappy::Parser::setPlayer(Zappy::Player player)
 {
     _player = player;
+}
+
+Zappy::Players Zappy::Parser::getPlayersList()
+{
+    return _playersMap;
+}
+
+void Zappy::Parser::setPlayersList(Zappy::Players list)
+{
+    _playersMap = list;
 }

@@ -83,6 +83,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
     Model phiras;
     Model thystame;
     Model player;
+    Players listPlayers;
     Camera3D camera = { 0 };
     std::list<Bloc *> blocks;
     (void) bounds;
@@ -116,6 +117,7 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
 
     while (!WindowShouldClose()) {
         blocks = parser.getMap().getBloc();
+        listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
 
         BeginDrawing();
@@ -127,6 +129,10 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
                     for (int z = 0; z < parser.getMap().getY(); z++) {
                         DrawModel(water, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
                         DrawModel(island, (Vector3){ x * 5.0f, 0.0f, z * 5.0f }, 0.5f, WHITE);
+                        for (const auto &pair : listPlayers.getPlayersList()) {
+                            if (pair.second->getPositionX() == x && pair.second->getPositionY() == z)
+                                DrawModel(player, (Vector3){ x * 5.0f, 0.0f, z * 5.0f}, 0.5f, WHITE);
+                        }
                     }
                 }
 
@@ -182,6 +188,8 @@ void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds, Z
 
         EndDrawing();
         firstDrop = false;
+        // server.receiveMess();
+        // parser.parsing(server.getData());
     }
 
     CloseWindow();

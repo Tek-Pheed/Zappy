@@ -27,7 +27,7 @@ namespace Zappy {
 
 class Menu {
 
-#define MAX_INPUT_CHARS     9
+#define MAX_INPUT_CHARS     15
 
     public:
         Menu();
