@@ -14,7 +14,6 @@
 
 namespace Zappy
 {
-
     class Bloc {
       public:
         Bloc(int x, int y);

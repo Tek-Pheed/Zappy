@@ -9,8 +9,8 @@
 #include "Items.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
+#include "RessourcePool.hpp"
 #include "ServerData.hpp"
-#include "Utils.hpp"
 
 Zappy::Parser::Parser()
 {
@@ -32,7 +32,7 @@ std::vector<Zappy::items> Zappy::Parser::createItems(
             break;
         while (nbElem != 0) {
             if (i <= 6 && i >= 0)
-                listOfItems.push_back(static_cast<Zappy::items> (i));
+                listOfItems.push_back(static_cast<Zappy::items>(i));
             nbElem--;
         }
         i++;
@@ -104,7 +104,7 @@ int Zappy::Parser::createFrequ(std::queue<std::string> freq)
     return nbFreq;
 }
 
-void Zappy::Parser::newPlayer(std::queue<std::string> player)
+void Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::string> player)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -130,7 +130,7 @@ void Zappy::Parser::newPlayer(std::queue<std::string> player)
     _player.setPositionS(south);
     _player.setPositionW(west);
     _player.setPositionE(est);
-    _player.createModel("../assets/korok.obj");
+    _player.createModel(objectPool, "../assets/korok.obj");
 }
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
@@ -275,11 +275,10 @@ void Zappy::Parser::unknowCommand()
     std::cout << "WRONG" << std::endl;
 }
 
-void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
+void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
     Players playList;
-    // Player player;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -302,7 +301,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
-            newPlayer(tmpFront);
+            newPlayer(objectPool, tmpFront);
             playList.mapPlayers(&_player);
         }
         if (tmpFront.front() == "ppo") {

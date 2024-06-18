@@ -9,12 +9,10 @@
 
 Zappy::Players::Players()
 {
-
 }
 
 Zappy::Players::~Players()
 {
-
 }
 
 void Zappy::Players::mapPlayers(Player *player)
@@ -25,4 +23,4 @@ void Zappy::Players::mapPlayers(Player *player)
 std::map<int, Zappy::Player *> Zappy::Players::getPlayers()
 {
     return _players;
-} 
+}

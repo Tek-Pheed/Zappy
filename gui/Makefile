@@ -9,7 +9,6 @@ NAME    =   zappy_gui
 
 SRC		= src/main.cpp \
 		  src/Menu.cpp \
-		  src/Utils.cpp \
 		  src/Input.cpp \
 		  src/Settings.cpp \
 		  src/Draw.cpp \
@@ -45,7 +44,7 @@ fclean: clean
 
 re: fclean all
 
-debug:	CFLAGS	+= -O0	-g -ggdb3 -Wpedantic
+debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
 debug:	re
 
 asan: CFLAGS += -g3 -fsanitize=address

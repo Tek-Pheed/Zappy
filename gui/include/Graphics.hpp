@@ -8,7 +8,6 @@
 #pragma once
 
 #include <vector>
-#include "Items.hpp"
 #include "Player.hpp"
 
 namespace Zappy

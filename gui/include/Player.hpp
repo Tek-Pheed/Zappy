@@ -8,13 +8,15 @@
 #pragma once
 
 #include <map>
-#include <vector>
-#include <string>
 #include <raylib.h>
+#include <string>
+#include <vector>
+#include "RessourcePool.hpp"
 
-namespace Zappy { 
-class Player {
-    public:
+namespace Zappy
+{
+    class Player {
+      public:
         Player();
         ~Player();
         std::map<std::string, int> getPosition();
@@ -33,12 +35,11 @@ class Player {
         int getPositionE();
         void setID(int id);
         int getID();
-        void createModel(std::string modelPath);
-        std::vector <std::map<std::string, int>> getInventory();
+        void createModel(RessourceManager &objectPool, const std::string &modelPath);
+        std::vector<std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 
-    protected:
-    private:
+      private:
         Model _model;
         std::map<std::string, int> _position;
         std::map<std::string, int> _inventory;
@@ -50,16 +51,16 @@ class Player {
         int _est;
         int _west;
         int _id;
-};
+    };
 
-class Players
-{
-private:
-    std::map<int, Player *> _players;
-public:
-    Players();
-    ~Players();
-    void mapPlayers(Player *player);
-    std::map<int, Player *> getPlayers();
-};
-}
+    class Players {
+      private:
+        std::map<int, Player *> _players;
+
+      public:
+        Players();
+        ~Players();
+        void mapPlayers(Player *player);
+        std::map<int, Player *> getPlayers();
+    };
+} // namespace Zappy

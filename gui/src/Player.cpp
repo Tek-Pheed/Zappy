@@ -6,7 +6,8 @@
 */
 
 #include "Player.hpp"
-#include "Utils.hpp"
+#include <string>
+#include "RessourcePool.hpp"
 
 Zappy::Player::Player()
 {
@@ -101,9 +102,8 @@ int Zappy::Player::getID()
     return _id;
 }
 
-void Zappy::Player::createModel(std::string modelPath)
+void Zappy::Player::createModel(
+    RessourceManager &objectPool, const std::string &modelPath)
 {
-    Utils utils;
-
-    _model = utils.createModel(modelPath.c_str());
+    _model = objectPool.models.dynamicLoad("player", modelPath.c_str());
 }

@@ -11,7 +11,6 @@
 
 namespace Zappy
 {
-
     enum items {
         food = 0,
         linemate = 1,
