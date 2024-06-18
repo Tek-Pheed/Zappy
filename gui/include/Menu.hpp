@@ -15,7 +15,7 @@
 #include "ServerData.hpp"
 #include <string>
 
-#define MAX_INPUT_CHARS 9
+#define MAX_INPUT_CHARS 15
 
 namespace Zappy
 {
