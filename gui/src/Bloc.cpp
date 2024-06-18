@@ -80,3 +80,22 @@ std::vector<Zappy::items> Zappy::Bloc::getItems()
     }
     return (vect);
 }
+
+void Zappy::Bloc::display(RessourceManager &objectPool)
+{
+    Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
+    Model island =
+        objectPool.models.dynamicLoad("island", "assets/island.obj");
+    Vector3 pos = {getX() * 5.0f, 1.0f, getY() * 5.0f};
+    std::vector<Zappy::items> items = getItems();
+
+    DrawModel(
+        water, (Vector3){getX() * 5.0f, 0.0f, getY() * 5.0f}, 0.5f, WHITE);
+    DrawModel(
+        island, (Vector3){getX() * 5.0f, 0.0f, getY() * 5.0f}, 0.5f, WHITE);
+    for (const auto &item : items) {
+        DrawModel(
+            objectPool.models.getRessource(Zappy::itemNames[item]), pos, 1.0f, WHITE);
+        pos.y += 0.75f;
+    }
+}

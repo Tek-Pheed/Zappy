@@ -8,6 +8,7 @@
 #include "Menu.hpp"
 #include <iostream>
 #include "Draw.hpp"
+#include "Items.hpp"
 #include "Map.hpp"
 #include "RessourcePool.hpp"
 #include "ServerData.hpp"
@@ -88,26 +89,23 @@ void Zappy::Menu::ConfigureCamera(Camera &camera)
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
+void loadItems(RessourceManager &objectPool)
+{
+    constexpr const char *models[] = {"assets/rubis/rubis_yigas.glb",
+        "assets/rubis/rubis_korok.glb", "assets/rubis/rubis_goron.glb",
+        "assets/rubis/rubis_zora.glb", "assets/rubis/rubis_crepuscule.glb",
+        "assets/rubis/rubis_piaf.glb", "assets/rubis/rubis_divin.glb"};
+
+    for (size_t i = 0; i != Zappy::ITEM_MAX; i++)
+        objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
+}
+
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
     Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
     Model island =
         objectPool.models.dynamicLoad("island", "assets/island.obj");
-    Model food =
-        objectPool.models.dynamicLoad("food", "assets/rubis/rubis_yigas.glb");
-    Model linemate = objectPool.models.dynamicLoad(
-        "linemate", "assets/rubis/rubis_korok.glb");
-    Model deraumere = objectPool.models.dynamicLoad(
-        "deraumere", "assets/rubis/rubis_goron.glb");
-    Model sibur =
-        objectPool.models.dynamicLoad("sibur", "assets/rubis/rubis_zora.glb");
-    Model mendiane = objectPool.models.dynamicLoad(
-        "mendiane", "assets/rubis/rubis_crepuscule.glb");
-    Model phiras =
-        objectPool.models.dynamicLoad("phiras", "assets/rubis/rubis_piaf.glb");
-    Model thystame = objectPool.models.dynamicLoad(
-        "thystame", "assets/rubis/rubis_divin.glb");
     Model player = objectPool.models.dynamicLoad("player", "assets/korok.glb");
     Zappy::Parser parser;
     std::string response;
@@ -117,7 +115,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     float velocityY = 0.0f;
     const float gravity = -9.81f;
     const float bounceFactor = 0.7f;
-    bool firstDrop = true;
+    loadItems(objectPool);
 
     (void) bounds;
     (void) position;
@@ -141,51 +139,12 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-        for (int x = 0; x < parser.getMap().getX(); x++) {
-            for (int z = 0; z < parser.getMap().getY(); z++) {
-                DrawModel(
-                    water, (Vector3){x * 5.0f, 0.0f, z * 5.0f}, 0.5f, WHITE);
-                DrawModel(
-                    island, (Vector3){x * 5.0f, 0.0f, z * 5.0f}, 0.5f, WHITE);
-            }
-        }
         while (blocks.size() != 0) {
-            std::vector<Zappy::items> items = blocks.front()->getItems();
-            int i = 0;
-            while (items.size() != 0) {
-                Vector3 pos = {blocks.front()->getX() * 5.0f,
-                    1.0f + (0.75f * i), blocks.front()->getY() * 5.0f};
-
-                i++;
-                if (pos.y <= (1.2f - (items.size() / 10))) {
-                    pos.y = (1.2f - (items.size() / 10));
-                    velocityY = -velocityY * bounceFactor;
-
-                    if (fabs(velocityY) < 0.1f) {
-                        velocityY = 0.0f;
-                    }
-                }
-                if (items.back() == Zappy::items::food)
-                    DrawModel(food, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::linemate)
-                    DrawModel(linemate, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::deraumere)
-                    DrawModel(deraumere, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::sibur)
-                    DrawModel(sibur, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::mendiane)
-                    DrawModel(mendiane, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::phiras)
-                    DrawModel(phiras, pos, 1.0f, WHITE);
-                if (items.back() == Zappy::items::thystame)
-                    DrawModel(thystame, pos, 1.0f, WHITE);
-                items.pop_back();
-            }
+            blocks.front()->display(objectPool);
             blocks.pop_front();
         }
         EndMode3D();
         EndDrawing();
-        firstDrop = false;
     }
     CloseWindow();
 }

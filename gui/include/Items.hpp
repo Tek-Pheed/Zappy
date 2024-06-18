@@ -6,7 +6,6 @@
 */
 
 #pragma once
-#include <cstddef>
 #include <raylib.h>
 
 namespace Zappy
@@ -18,6 +17,9 @@ namespace Zappy
         sibur = 3,
         mendiane = 4,
         phiras = 5,
-        thystame = 6
+        thystame = 6,
+        ITEM_MAX
     };
+    constexpr const char *itemNames[] = {"food", "linemate", "deraumere",
+        "sibur", "mendiane", "phiras", "thystame"};
 } // namespace Zappy

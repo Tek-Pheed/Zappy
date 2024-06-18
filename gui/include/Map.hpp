@@ -11,6 +11,7 @@
 #include "Items.hpp"
 #include "Player.hpp"
 #include <unordered_map>
+#include "RessourcePool.hpp"
 
 namespace Zappy
 {
@@ -31,7 +32,7 @@ namespace Zappy
 
         void setPlayers(std::vector<Zappy::Player> players);
         std::vector<Zappy::Player> getPlayers();
-        void display();
+        void display(RessourceManager &objectPool);
 
       private:
         int _x;
