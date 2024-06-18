@@ -9,8 +9,6 @@
 
 #include <arpa/inet.h>
 #include <fcntl.h>
-#include <iostream>
-#include <list>
 #include <queue>
 #include <string>
 #include <sys/socket.h>
@@ -31,8 +29,9 @@ namespace Zappy
         std::queue<std::queue<std::string>> _data;
 
       public:
-        Server(int port, char *ip);
+        Server();
         ~Server();
+        void init_connection(std::string ip, int port);
         bool getIsconnect();
         void receiveMess();
         void messConnect();
@@ -47,14 +46,15 @@ namespace Zappy
       public:
         Parser();
         ~Parser();
-        std::vector<IItems *> createItems(std::queue<std::string> items);
+        std::vector<Zappy::items> createItems(std::queue<std::string> items);
         Bloc *createBloc(std::queue<std::string> bloc);
         void createMap(std::queue<std::string> size, Map realmap);
+        void createMap(std::queue<std::string> size);
         void createTeams(std::queue<std::string> teams);
         int createFrequ(std::queue<std::string> freq);
-        void parsing(std::queue<std::queue<std::string>> data);
-        void newPlayer(std::queue<std::string> player, Player realplayer);
-        void positionPlayer(std::queue<std::string> player, Player realplayer);
+        void parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data);
+        void newPlayer(RessourceManager &objectPool, std::queue<std::string> player);
+        void positionPlayer(std::queue<std::string> player);
         void levelPlayer(std::queue<std::string> player);
         void inventoryPlayer(std::queue<std::string> player);
         void expulsion(std::queue<std::string> exp);
@@ -72,6 +72,19 @@ namespace Zappy
         void endGame(std::queue<std::string> team);
         void messServer(std::queue<std::string> mess);
         void unknowCommand();
-        //sbp
+
+        Map getMap();
+        void setMap(Map map);
+        Player getPlayer();
+        void setPlayer(Player player);
+        Players getPlayersList();
+        void setPlayersList(Players list);
+
+        private:
+          Map _map;
+          Player _player;
+          Players _playersMap;
+          //std::vector<IItems *> _items;
+          std::vector<Model> _itemsModelList;
     };
 } // namespace Zappy

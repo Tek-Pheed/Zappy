@@ -6,39 +6,34 @@
 */
 
 #include <iostream>
-#include "raylib.h"
-#include "Menu.hpp"
 #include "Draw.hpp"
-#include "ServerData.hpp"
+#include "Menu.hpp"
+#include "RessourcePool.hpp"
+#include "raylib.h"
 
 int main(void)
 {
-    const int screenWidth = 1920;
-    const int screenHeight = 1080;
-    Model model;
-    Music MenuMusic;
-    Music GameMusic;
+    constexpr int screenWidth = 1920;
+    constexpr int screenHeight = 1080;
+
+    RessourceManager objectPool;
     Zappy::Draw draw;
     Zappy::Menu menu;
-    Texture2D texture_body, texture_leaf;
+    Camera camera;
+    Vector3 position = {0.0f, 0.0f, 0.0f};
 
+    srand(time(0));
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
-        std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les ressources." << std::endl;
+        std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les "
+                     "ressources."
+                  << std::endl;
         return 1;
     }
-
-    menu.LoadResources(model, texture_body, texture_leaf, MenuMusic, GameMusic);
-
-    Camera camera;
+    menu.LoadResources(objectPool);
     menu.ConfigureCamera(camera);
-
-    Vector3 position = { 0.0f, 0.0f, 0.0f };
-    BoundingBox bounds = GetMeshBoundingBox(model.meshes[0]);
-
-    Texture2D background = LoadTexture("assets/background.png");
-
-    menu.MainLoop(model, background, camera, position, bounds, draw, MenuMusic, GameMusic);
-
-    menu.UnloadResources(model, texture_body, texture_leaf, MenuMusic, GameMusic);
+    objectPool.textures.loadRessource("background", "assets/background.png");
+    BoundingBox bounds =
+        GetMeshBoundingBox(objectPool.models.getRessource("korok").meshes[0]);
+    menu.MainLoop(objectPool, camera, position, bounds, draw);
     return 0;
 }

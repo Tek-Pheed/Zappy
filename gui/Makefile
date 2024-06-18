@@ -9,23 +9,17 @@ NAME    =   zappy_gui
 
 SRC		= src/main.cpp \
 		  src/Menu.cpp \
-		  src/Utils.cpp \
 		  src/Input.cpp \
 		  src/Settings.cpp \
 		  src/Draw.cpp \
 		  src/Parser.cpp \
 		  src/Player.cpp \
+		  src/VectorPlayers.cpp \
 		  src/Map.cpp \
 		  src/Bloc.cpp \
-		  src/AItems.cpp \
-		  src/Items/Food.cpp \
-		  src/Items/Deraumere.cpp \
-		  src/Items/Linemate.cpp \
-		  src/Items/Mendiane.cpp \
-		  src/Items/Phiras.cpp \
-		  src/Items/Sibur.cpp \
-		  src/Items/Thystame.cpp \
 		  src/ConfirmButton.cpp	\
+		  src/Server.cpp \
+		  src/RessourcePool.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -50,4 +44,11 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
+debug:	re
+
+asan: CFLAGS += -g3 -fsanitize=address
+asan: LDFLAGS += -fsanitize=address
+asan: re
+
+.PHONY: all clean fclean asan re

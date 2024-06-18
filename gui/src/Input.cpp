@@ -8,9 +8,13 @@
 #include "Menu.hpp"
 
 Zappy::TextInput::TextInput(float x, float y, float width, float height)
-    : bounds{ x, y, width, height }, text(""), letterCount(0), mouseOnText(false), framesCounter(0) {}
+    : bounds{x, y, width, height}, text(""), letterCount(0),
+      mouseOnText(false), framesCounter(0)
+{
+}
 
-void Zappy::TextInput::UpdateInput() {
+void Zappy::TextInput::UpdateInput()
+{
     if (CheckCollisionPointRec(GetMousePosition(), bounds)) {
         mouseOnText = true;
     } else {
@@ -20,8 +24,9 @@ void Zappy::TextInput::UpdateInput() {
     if (mouseOnText) {
         int key = GetCharPressed();
         while (key > 0) {
-            if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS)) {
-                text.push_back((char)key);
+            if ((key >= 32) && (key <= 125)
+                && (letterCount < MAX_INPUT_CHARS)) {
+                text.push_back((char) key);
                 letterCount++;
             }
             key = GetCharPressed();
@@ -44,9 +49,11 @@ void Zappy::TextInput::DrawInput()
 {
     DrawRectangleRec(bounds, LIGHTGRAY);
     if (mouseOnText) {
-        DrawRectangleLines(bounds.x, bounds.y, bounds.width, bounds.height, WHITE);
+        DrawRectangleLines(
+            bounds.x, bounds.y, bounds.width, bounds.height, WHITE);
     } else {
-        DrawRectangleLines(bounds.x, bounds.y, bounds.width, bounds.height, DARKGRAY);
+        DrawRectangleLines(
+            bounds.x, bounds.y, bounds.width, bounds.height, DARKGRAY);
     }
     DrawText(text.c_str(), bounds.x + 5, bounds.y + 7, 40, BLACK);
 
@@ -56,6 +63,7 @@ void Zappy::TextInput::DrawInput()
     }
 }
 
-std::string Zappy::TextInput::GetText() const {
+std::string Zappy::TextInput::GetText() const
+{
     return text;
 }
