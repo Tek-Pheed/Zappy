@@ -187,7 +187,6 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
 
             playClicked = false;
             settingsClicked = false;
-
             draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN,
                 "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {

@@ -261,7 +261,6 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
-    Players playList;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -285,7 +284,7 @@ void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
             newPlayer(objectPool, tmpFront);
-            playList.mapPlayers(&_player);
+            _playersMap.mapPlayers(&_player);
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();

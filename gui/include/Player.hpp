@@ -29,8 +29,7 @@ namespace Zappy
         int getPositionN();
         void setID(int id);
         int getID();
-        void createModel(
-            RessourceManager &objectPool, const std::string &modelPath);
+        void createModel(RessourceManager &objectPool, const std::string &modelPath);
         std::vector<std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 

@@ -5,9 +5,9 @@
 ** Player.cpp
 */
 
-#include "Player.hpp"
 #include <string>
 #include "RessourcePool.hpp"
+#include "Player.hpp"
 
 Zappy::Player::Player()
 {

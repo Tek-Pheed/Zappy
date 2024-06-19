@@ -18,6 +18,5 @@ void Zappy::Thread::ManageServer(Server &s, Parser &p, RessourceManager &objectP
     while (1) {
         s.receiveMess();
         p.parsing(objectPool, s.getData());
-        //std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
