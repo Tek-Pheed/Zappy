@@ -9,7 +9,7 @@ NAME    =   zappy_gui
 
 SRC		= src/main.cpp \
 		  src/Menu.cpp \
-		  src/Input.cpp \
+		  src/Utils.cpp \
 		  src/Settings.cpp \
 		  src/Draw.cpp \
 		  src/Parser.cpp \

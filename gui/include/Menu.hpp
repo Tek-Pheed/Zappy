@@ -61,26 +61,8 @@ namespace Zappy
         std::string _port;
     };
 
-    class TextInput {
-      public:
-        TextInput(float x, float y, float width, float height);
-        void UpdateInput();
-        void DrawInput();
-        std::string GetText() const;
-
-      private:
-        Rectangle bounds;
-        std::string text;
-        int letterCount;
-        bool mouseOnText;
-        int framesCounter;
-    };
-
-    class ConfirmButton {
-      public:
-        bool createButton(float width, float height, float posX, float posY,
-            float borderThickness, Color borderColor, Color hoverColor,
-            Color pressColor, const char *text, float textSize,
-            Color textColor, bool &clicked);
+class ConfirmButton {
+    public:
+        bool createButton(float width, float height, float posX, float posY, float borderThickness, Color borderColor, Color hoverColor, Color pressColor, const char* text, float textSize, Color textColor, Shape shape, bool &clicked);
     };
 } // namespace Zappy
