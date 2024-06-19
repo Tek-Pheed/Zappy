@@ -89,7 +89,7 @@ static int mark_player_elevating(server_t *serv, client_t *cli)
     cli->player.elevating = true;
     client_len = list_get_size(serv->client);
     for (int i = 0;
-         i != client_len && count <= p_required[cli->player.level - 1]; i++) {
+        i != client_len && count <= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp != NULL && tmp->state == AI && tmp->player.x == cli->player.x
             && tmp->player.y == cli->player.y

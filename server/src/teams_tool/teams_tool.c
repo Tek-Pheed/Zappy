@@ -55,8 +55,10 @@ static egg_t *get_last_egg(list_t *eggs)
 }
 
 static bool check_egg(
-    server_t *serv, client_t *client, egg_t *egg, team_t *team)
+    server_t *serv, client_t *client, team_t *team)
 {
+    egg_t *egg = NULL;
+
     if (team != NULL
         && strncmp(team->name, client->team_name, strlen(team->name)) == 0
         && team_can_add_player(serv, team)) {
@@ -77,14 +79,13 @@ bool team_add_client(server_t *serv, client_t *client)
 {
     size_t nb_teams = list_get_size(serv->teams);
     team_t *team = NULL;
-    egg_t *egg = NULL;
     bool val;
 
     for (size_t i = 0; i != nb_teams; i++) {
         team = list_get_elem_at_position(serv->teams, i);
         if (team == NULL)
             continue;
-        val = check_egg(serv, client, egg, team);
+        val = check_egg(serv, client, team);
         if (val == true)
             return val;
     }
