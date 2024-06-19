@@ -228,7 +228,6 @@ class Player:
             else:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
-            print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
         elif self.step == 1:
             if (self.incantation_possible()):
                 self.step = 11
@@ -263,7 +262,6 @@ class Player:
                     self.action = self.action[1:]
                 else:
                     self.data_to_send = "Inventory\n"
-                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
         elif self.step == 6:
             if self.action:
                 self.data_to_send = self.action[0]
@@ -272,17 +270,15 @@ class Player:
             self.data_to_send = ""
         elif self.step == 8:
             self.data_to_send = "Connect_nbr\n"
-            print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
             self.step += 1
         elif self.step == 9:
             if self.team_slot == 0:
                 self.data_to_send = "Fork\n"
-                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.can_fork = True
+                self.step = 8
             else:
-                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
                 self.data_to_send = "Look\n"
-            self.step = 0
+                self.step = 0
         elif self.step == 10:
             self.data_to_send = "Connect_nbr\n"
             time.sleep(1)
@@ -308,6 +304,5 @@ class Player:
             if self.action:
                 self.data_to_send = self.action[0]
                 self.action = self.action[1:]
-                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
             else:
                 self.step = 11
