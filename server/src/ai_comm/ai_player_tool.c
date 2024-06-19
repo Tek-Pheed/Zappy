@@ -42,7 +42,7 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
-    int value = team_get_free_space(team_get_client(serv, cli)) - 1;
+    int value = team_get_free_space(team_get_client(serv, cli));
     char str[32];
 
     if (value < 0)

@@ -20,7 +20,6 @@ bool ai_end_fork(server_t *serv, client_t *cli, UNUSED const char *obj)
 
     egg = list_get_elem_at_back(tmp->eggs);
     event_egg_laid(serv, cli, egg->number, &((ivect2D_t){egg->x, egg->y}));
-    server_send_data(cli, "ok\n");
     return true;
 }
 

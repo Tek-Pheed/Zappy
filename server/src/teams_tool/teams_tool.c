@@ -17,7 +17,7 @@ team_t *team_get_client(server_t *serv, const client_t *cli)
     team_t *tmp = NULL;
 
     for (int i = 0; i != len; i++) {
-        tmp = list_get_elem_at_position(serv->teams, 1);
+        tmp = list_get_elem_at_position(serv->teams, i);
         if (tmp == NULL)
             continue;
         if (strcmp(cli->team_name, tmp->name) == 0)
@@ -52,8 +52,7 @@ static egg_t *get_last_egg(list_t *eggs)
     return (NULL);
 }
 
-static bool check_egg(
-    server_t *serv, client_t *client, team_t *team)
+static bool check_egg(server_t *serv, client_t *client, team_t *team)
 {
     egg_t *egg = NULL;
 
@@ -111,5 +110,5 @@ int team_get_free_space(team_t *team)
 {
     if (team == NULL)
         return (0);
-    return list_get_size(team->eggs);
+    return list_get_size(team->eggs) - 1;
 }
