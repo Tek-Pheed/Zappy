@@ -27,12 +27,6 @@ namespace Zappy
         int getPositionY();
         void setPositionN(int north);
         int getPositionN();
-        void setPositionS(int south);
-        int getPositionS();
-        void setPositionW(int west);
-        int getPositionW();
-        void setPositionE(int est);
-        int getPositionE();
         void setID(int id);
         int getID();
         void createModel(
@@ -47,10 +41,7 @@ namespace Zappy
         int _playerId;
         int _x;
         int _y;
-        int _south;
-        int _north;
-        int _est;
-        int _west;
+        int _orien;
         int _id;
     };
 

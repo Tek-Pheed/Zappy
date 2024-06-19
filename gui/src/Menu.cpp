@@ -7,15 +7,17 @@
 
 #include "Menu.hpp"
 #include <iostream>
-#include "Draw.hpp"
-#include "Items.hpp"
-#include "Map.hpp"
-#include "Menu.hpp"
-#include "RessourcePool.hpp"
-#include "ServerData.hpp"
-#include "Settings.hpp"
+#include <thread>
 #include "raylib.h"
 #include "raymath.h"
+#include "Menu.hpp"
+#include "Draw.hpp"
+#include "Settings.hpp"
+#include "ServerData.hpp"
+#include "Map.hpp"
+#include "Thread.hpp"
+#include "Items.hpp"
+#include "RessourcePool.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
@@ -96,13 +98,14 @@ void loadItems(RessourceManager &objectPool)
         "assets/rubis/rubis_zora.glb", "assets/rubis/rubis_crepuscule.glb",
         "assets/rubis/rubis_piaf.glb", "assets/rubis/rubis_divin.glb"};
 
-    for (size_t i = 0; i != Zappy::ITEM_MAX; i++)
+    for (std::size_t i = 0; i != Zappy::ITEM_MAX; i++)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
+    Zappy::Thread threadZappy;
     Zappy::Parser parser;
     std::string response;
     Players listPlayers;
@@ -122,8 +125,12 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     PlayMusicStream(music);
     DisableCursor();
     SetTargetFPS(60);
-    server.receiveMess();
-    parser.parsing(objectPool, server.getData());
+    float velocityY = 0.0f;
+    const float gravity = -9.81f;
+    const float bounceFactor = 0.7f;
+    bool firstDrop = true;
+    std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy, std::ref(server), std::ref(parser), std::ref(objectPool));
+
     while (!WindowShouldClose()) {
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
@@ -140,8 +147,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         }
         EndMode3D();
         EndDrawing();
-        // server.receiveMess();
-        // parser.parsing(server.getData());
     }
     CloseWindow();
 }
