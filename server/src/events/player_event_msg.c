@@ -48,6 +48,8 @@ void event_player_death(const server_t *serv, client_t *client)
 {
     char buff[DEFAULT_BUFFER_SIZE];
 
+    if (client->state != AI)
+        return;
     memset(buff, 0, sizeof(buff));
     server_log(serv, EVENT, client->fd, "player dead");
     sprintf(buff, "pdi %d\n", client->player.number);

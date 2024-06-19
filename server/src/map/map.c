@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "commands.h"
 #include "server.h"
 
 void calculate_quantity(const server_t *serv, float quantity[7])
