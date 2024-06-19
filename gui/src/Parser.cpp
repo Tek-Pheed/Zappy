@@ -102,24 +102,16 @@ void Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::stri
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    int north = std::stoi(player.front());
+    int orien = std::stoi(player.front());
     player.pop();
-    int est = std::stoi(player.front());
-    player.pop();
-    int south = std::stoi(player.front());
-    player.pop();
-    int west = std::stoi(player.front());
-    player.pop();
+
     // int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
     _player.setID(nb_p);
     _player.setPositionX(x);
     _player.setPositionY(y);
-    _player.setPositionN(north);
-    _player.setPositionS(south);
-    _player.setPositionW(west);
-    _player.setPositionE(est);
+    _player.setPositionN(orien);
     _player.createModel(objectPool, "../assets/korok.obj");
 }
 
@@ -131,19 +123,10 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player)
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
-    int north = std::stoi(player.front());
-    player.pop();
-    int est = std::stoi(player.front());
-    player.pop();
-    int south = std::stoi(player.front());
-    player.pop();
-    int west = std::stoi(player.front());
+    int orien = std::stoi(player.front());
     _player.setPositionX(x);
     _player.setPositionY(y);
-    _player.setPositionN(north);
-    _player.setPositionS(south);
-    _player.setPositionW(west);
-    _player.setPositionE(est);
+    _player.setPositionN(orien);
 }
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
@@ -278,7 +261,6 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
-    Players playList;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -295,14 +277,14 @@ void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<
             tmpFront.pop();
             createMap(tmpFront);
         }
-        if (tmpFront.front() == "bct") {
+        if (tmpFront.front() == "bct" && _map.getBloc().size() != (_map.getX() * _map.getY())) {
             tmpFront.pop();
             _map.pushBloc(createBloc(tmpFront));
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
             newPlayer(objectPool, tmpFront);
-            playList.mapPlayers(&_player);
+            _playersMap.mapPlayers(&_player);
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();

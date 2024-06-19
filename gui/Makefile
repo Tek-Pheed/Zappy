@@ -19,7 +19,8 @@ SRC		= src/main.cpp \
 		  src/Bloc.cpp \
 		  src/ConfirmButton.cpp	\
 		  src/Server.cpp \
-		  src/RessourcePool.cpp
+		  src/RessourcePool.cpp \
+		  src/Thread.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
