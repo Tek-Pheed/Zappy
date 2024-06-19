@@ -60,6 +60,9 @@ class AI:
                             else:
                                 self.player.step = 0
                                 self.player.team_slot = int(elem)
+                        elif "ko" in elem:
+                            self.player.player_incantation = 0
+                            self.player.step = 0
                         elif self.player.data_to_send == "Fork\n":
                             if self.args.thread == True and self.player.can_fork:
                                 subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])

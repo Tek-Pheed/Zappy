@@ -295,7 +295,7 @@ class Player:
                 self.action.append("Inventory\n")
                 self.step += 2
             else:
-                self.player_incantation = 1
+                #self.player_incantation = 1
                 self.ready_to_level_up = True
                 self.step = 4
         elif self.step == 12:
