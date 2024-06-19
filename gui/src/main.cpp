@@ -19,6 +19,18 @@ void print_help(char **args)
     }
 }
 
+void Zappy::Menu::getPort(char **args)
+{
+    for (int i = 0; args[i] != nullptr; i++) {
+        if (std::string(args[i]) == "-p") {
+            _port = args[i + 1];
+        }
+        if (std::string(args[i]) == "-h") {
+            _host = args[i + 1];
+        }
+    }
+}
+
 int main(int ac, char **av)
 {
     constexpr int screenWidth = 1920;
@@ -31,6 +43,7 @@ int main(int ac, char **av)
     Vector3 position = {0.0f, 0.0f, 0.0f};
 
     print_help(av);
+    menu.getPort(av);
 
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les "
