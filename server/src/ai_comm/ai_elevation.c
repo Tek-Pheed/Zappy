@@ -64,7 +64,7 @@ static void level_up_all(server_t *serv, client_t *cli)
             printf("Level up player\n");
             tmp->player.level += 1;
             tmp->player.elevating = false;
-            event_player_level(serv, cli);
+            event_player_level(serv, tmp);
         }
     }
 }
@@ -79,10 +79,11 @@ static void remove_stone_used(server_t *serv, client_t *cli)
 
 static int mark_player_elevating(server_t *serv, client_t *cli)
 {
-    int count = 0;
+    int count = 1;
     int client_len = 0;
     client_t *tmp;
 
+    cli->player.elevating = true;
     client_len = list_get_size(serv->client);
     for (int i = 0;
         i != client_len && count <= p_required[cli->player.level - 1]; i++) {
