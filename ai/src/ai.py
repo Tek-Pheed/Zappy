@@ -5,6 +5,7 @@ from ai.src.server import *
 from ai.src.action import *
 from ai.src.player import Player
 from ai.src.utils import print_verbose
+
 class AI:
     def __init__(self) -> None:
         self.args = None
@@ -48,6 +49,7 @@ class AI:
                             self.player.ready_to_level_up = False
                             self.player.step = 0
                         elif "message" in elem:
+                            self.player.no_response = 0
                             self.player.broadcast_receive = elem
                             self.player.parse_broadcast()
                             message = message.split("\n")[-1]

@@ -37,6 +37,7 @@ class Player:
         self.verbose = False
         self.can_fork = True
         self.client_id = uuid.uuid4()
+        self.no_response = 0
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -166,39 +167,57 @@ class Player:
         direction = int(self.broadcast_receive[8])
         if self.team in message:
             if "incantation" in message:
-                message = message.split(";")[3]
-                self.action = self.walk_to_broadcast_emitter(direction, message)
-                self.step = 0
-            if "wainting_you" in message and str(self.client_id) in message:
-                message = message.split(";")[3]
-                self.action = self.walk_to_broadcast_emitter(direction, message)
-                self.step = 0
-            if "i_am_comming" in message and str(self.client_id) in message:
-                message = message.split(";")[3]
-                self.action = [f"Broadcast {self.team};waiting_you;{self.level};{message}\n"]
-            if "ready" in message and str(self.client_id) in message:
+                if self.level == int(message.split(";")[2]):
+                    sender_id = message.split(";")[3]
+                    self.action = self.walk_to_broadcast_emitter(direction, sender_id)
+                else:
+                    self.step = 0
+        elif str(self.client_id) in message:
+            if "ready" in message:
                 self.player_incantation += 1
                 self.data_to_send = ""
-                self.step = 5
+                self.step = 4
+
 
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
         if self.ready_to_level_up:
-            return
+            return []
         action = []
         if direction == 0:
-            self.action = [f"Broadcast {self.team};ready;{self.level};{sender_id}\n"]
-            self.ready_to_level_up = True
-            return []
-        action.append("Forward\n")
-        if direction in (2, 1, 8):
+            action = [f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"]
+            self.data_to_send = f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"
+            self.step = 12
+            return action
+        if direction == 1:
             action.append("Forward\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
-        elif direction in (5, 6, 7):
-            action.append("Right\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
-        else:
+        elif direction == 2:
+            action.append("Forward\n")
             action.append("Left\n")
-            action.append(f"Broadcast {self.team};i_am_comming;{self.level};{sender_id}")
+            action.append("Forward\n")
+        elif direction == 3:
+            action.append("Left\n")
+            action.append("Forward\n")
+        elif direction == 4:
+            action.append("Left\n")
+            action.append("Forward\n")
+            action.append("Left\n")
+            action.append("Forward\n")
+        elif direction == 5:
+            action.append("Left\n")
+            action.append("Left\n")
+            action.append("Forward\n")
+        elif direction == 6:
+            action.append("Right\n")
+            action.append("Forward\n")
+            action.append("Right\n")
+            action.append("Forward\n")
+        elif direction == 7:
+            action.append("Right\n")
+            action.append("Forward\n")
+        elif direction == 8:
+            action.append("Forward\n")
+            action.append("Right\n")
+            action.append("Forward\n")
         return action
 
     def take_action(self):
@@ -212,14 +231,9 @@ class Player:
             print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
         elif self.step == 1:
             if (self.incantation_possible()):
-                if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
-                    message = f"{self.team};incantation;{self.level};{self.client_id}"
-                    self.data_to_send = f"Broadcast {message}\n"
-                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
-                self.player_incantation = 1
-                self.ready_to_level_up = True
-                self.step = 4
+                self.step = 11
             else:
+                self.ready_to_level_up = False
                 self.step += 1
         elif self.step == 2:
             self.data_to_send = "Look\n"
@@ -272,3 +286,28 @@ class Player:
         elif self.step == 10:
             self.data_to_send = "Connect_nbr\n"
             time.sleep(1)
+        elif self.step == 11:
+            if self.inventory["food"] < 9:
+                self.step = 0
+            if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
+                message = f"{self.team};incantation;{self.level};{self.client_id}"
+                self.action = [f"Broadcast {message}\n"]
+                self.action.append("Inventory\n")
+                self.step += 2
+            else:
+                self.player_incantation = 1
+                self.ready_to_level_up = True
+                self.step = 4
+        elif self.step == 12:
+            if self.action:
+                self.data_to_send = self.action[0]
+                self.action = self.action[1:]
+            else:
+                self.data_to_send = ""
+        elif self.step == 13:
+            if self.action:
+                self.data_to_send = self.action[0]
+                self.action = self.action[1:]
+                print_verbose(self.verbose, f"[SEND] {self.data_to_send}")
+            else:
+                self.step = 11
