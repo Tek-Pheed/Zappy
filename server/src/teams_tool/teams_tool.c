@@ -26,13 +26,11 @@ team_t *team_get_client(server_t *serv, const client_t *cli)
     return NULL;
 }
 
-static bool team_can_add_player(const server_t *serv, team_t *team)
+static bool team_can_add_player(team_t *team)
 {
     size_t nb_eggs = list_get_size(team->eggs);
 
     if (nb_eggs == 0)
-        return (false);
-    if (team->nb_player >= serv->clientNb)
         return (false);
     return (true);
 }
@@ -61,7 +59,7 @@ static bool check_egg(
 
     if (team != NULL
         && strncmp(team->name, client->team_name, strlen(team->name)) == 0
-        && team_can_add_player(serv, team)) {
+        && team_can_add_player(team)) {
         egg = get_last_egg(team->eggs);
         if (egg != NULL) {
             team->nb_player++;
