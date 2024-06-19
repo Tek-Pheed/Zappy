@@ -174,7 +174,6 @@ class Player:
                     self.step = 0
         elif str(self.client_id) in message:
             if "ready" in message:
-                print(f"{self.client_id} is ready to help to level up !")
                 self.player_incantation += 1
                 self.data_to_send = ""
                 self.step = 4
@@ -254,7 +253,6 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 5:
-            print("OUAIS")
             print_verbose(self.verbose, f"[LEVEL] Player necessary: {self.player_incantation >= PLAYER_MANDATORY[self.level - 1]}\n")
             if self.player_incantation >= PLAYER_MANDATORY[self.level - 1]:
                 self.begin_incantation()
