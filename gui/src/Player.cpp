@@ -77,3 +77,10 @@ void Zappy::Player::createModel(
 {
     _model = objectPool.models.dynamicLoad("player", modelPath.c_str());
 }
+
+void Zappy::Player::displayPlayer(RessourceManager &objPool)
+{
+    Model player = objPool.models.dynamicLoad("Player", "assets/korok.obj");
+    Vector3 pos = {getPositionX() * 5.0f, 1.5f, getPositionY() * 5.0f};
+    DrawModel(player, pos, 5.0f, WHITE);
+}
