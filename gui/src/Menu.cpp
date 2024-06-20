@@ -152,6 +152,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         EndDrawing();
     }
     CloseWindow();
+    threadZappy.setRunningFalse();
+    SPThread.join();
 }
 
 void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,

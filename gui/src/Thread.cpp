@@ -9,14 +9,23 @@
 #include "Thread.hpp"
 #include "RessourcePool.hpp"
 
-Zappy::Thread::Thread(){}
+Zappy::Thread::Thread()
+{
+    _running = true;
+}
 
 Zappy::Thread::~Thread(){}
 
 void Zappy::Thread::ManageServer(Server &s, Parser &p, RessourceManager &objectPool)
 {
-    while (1) {
+    while (_running) {
         s.receiveMess();
         p.parsing(objectPool, s.getData());
+        s.popData();
     }
+}
+
+void Zappy::Thread::setRunningFalse()
+{
+    _running = false;
 }

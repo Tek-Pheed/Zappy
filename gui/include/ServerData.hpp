@@ -53,7 +53,7 @@ namespace Zappy
         void createTeams(std::queue<std::string> teams);
         int createFrequ(std::queue<std::string> freq);
         void parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data);
-        void newPlayer(RessourceManager &objectPool, std::queue<std::string> player);
+        Player *newPlayer(RessourceManager &objectPool, std::queue<std::string> player);
         void positionPlayer(std::queue<std::string> player);
         void levelPlayer(std::queue<std::string> player);
         void inventoryPlayer(std::queue<std::string> player);
@@ -75,14 +75,11 @@ namespace Zappy
 
         Map getMap();
         void setMap(Map map);
-        Player getPlayer();
-        void setPlayer(Player player);
         Players getPlayersList();
         void setPlayersList(Players list);
 
         private:
           Map _map;
-          Player _player;
           Players _playersMap;
           //std::vector<IItems *> _items;
           std::vector<Model> _itemsModelList;

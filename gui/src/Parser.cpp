@@ -94,7 +94,7 @@ int Zappy::Parser::createFrequ(std::queue<std::string> freq)
     return nbFreq;
 }
 
-void Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::string> player)
+Zappy::Player *Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::string> player)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -104,29 +104,30 @@ void Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::stri
     player.pop();
     int orien = std::stoi(player.front());
     player.pop();
-
     // int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
-    _player.setID(nb_p);
-    _player.setPositionX(x);
-    _player.setPositionY(y);
-    _player.setPositionN(orien);
-    _player.createModel(objectPool, "../assets/korok.obj");
+    Player *newPlayer = new Player();
+    newPlayer->setID(nb_p);
+    newPlayer->setPositionX(x);
+    newPlayer->setPositionY(y);
+    newPlayer->setPositionN(orien);
+    return newPlayer;
+    // _player.createModel(objectPool, "../assets/korok.obj");
 }
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 {
-    // int nb_p = std::stoi(player.front());
+    int nb_p = std::stoi(player.front());
     player.pop();
     int x = std::stoi(player.front());
     player.pop();
     int y = std::stoi(player.front());
     player.pop();
     int orien = std::stoi(player.front());
-    _player.setPositionX(x);
-    _player.setPositionY(y);
-    _player.setPositionN(orien);
+    _playersMap.getPlayersList()[nb_p]->setPositionX(x);
+    _playersMap.getPlayersList()[nb_p]->setPositionY(y);
+    _playersMap.getPlayersList()[nb_p]->setPositionN(orien);
 }
 
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
@@ -207,8 +208,15 @@ void Zappy::Parser::collectRess(std::queue<std::string> player)
 
 void Zappy::Parser::death(std::queue<std::string> player)
 {
-    (void) player;
-    // int nb_p = std::stoi(player.front());
+    int nb_p = std::stoi(player.front());
+    std::map<int, Player *> doppel;
+    doppel = _playersMap.getPlayersList();
+    auto keydelete = doppel.find(nb_p);
+    if (keydelete != doppel.end()) {
+        delete keydelete->second;
+        doppel.erase(keydelete);
+    }
+    _playersMap.setPlayersList(doppel);
 }
 
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
@@ -283,8 +291,7 @@ void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
-            newPlayer(objectPool, tmpFront);
-            _playersMap.mapPlayers(&_player);
+            _playersMap.mapPlayers(newPlayer(objectPool, tmpFront));
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();
@@ -373,16 +380,6 @@ Zappy::Map Zappy::Parser::getMap()
 void Zappy::Parser::setMap(Zappy::Map map)
 {
     _map = map;
-}
-
-Zappy::Player Zappy::Parser::getPlayer()
-{
-    return _player;
-}
-
-void Zappy::Parser::setPlayer(Zappy::Player player)
-{
-    _player = player;
 }
 
 void Zappy::Parser::createMap(std::queue<std::string> map)
