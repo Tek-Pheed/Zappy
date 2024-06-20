@@ -42,6 +42,10 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
         objectPool.musics.dynamicLoad("menu", "assets/menu.mp3");
     Music &GameMusic =
         objectPool.musics.dynamicLoad("game", "assets/game.mp3");
+    Music &IncMusic = 
+        objectPool.musics.dynamicLoad("inc", "assets/Zelda_Noïa_dance_song.mp3");
+    Music &BroadMusic =
+        objectPool.musics.dynamicLoad("broad", "assets/Zelda_Korok_Yahaha.mp3");
 
     if (model.meshCount == 0) {
         std::cerr
@@ -51,6 +55,8 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
     }
     SetMusicVolume(MenuMusic, 0.5f);
     SetMusicVolume(GameMusic, 0.5f);
+    SetMusicVolume(IncMusic, 1.0f);
+    SetMusicVolume(BroadMusic, 1.0f);
 }
 
 void Zappy::Menu::ConfigureCamera(Camera &camera)
@@ -74,10 +80,12 @@ void loadItems(RessourceManager &objectPool)
 }
 
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
-    BoundingBox bounds, Zappy::Server server, Music music)
+    BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic)
 {
     Zappy::Thread threadZappy;
     Zappy::Parser parser;
+    bool isBroadMusicPlaying = false;
+
     std::string response;
     Players listPlayers;
     objectPool.models.loadRessource("water", "assets/water.obj");
@@ -94,6 +102,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     (void) position;
 
     PlayMusicStream(music);
+    PlayMusicStream(incMusic);
+
     DisableCursor();
     SetTargetFPS(60);
     // float velocityY = 0.0f;
@@ -107,7 +117,19 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
-        UpdateMusicStream(music);
+        if (parser.getInc())
+            UpdateMusicStream(incMusic);
+        else
+            UpdateMusicStream(music);
+        if (parser.getBroadcast() && !isBroadMusicPlaying) {
+            PlayMusicStream(broadMusic);
+            isBroadMusicPlaying = true;
+            parser.setBroadcast(false);
+        }
+        if (isBroadMusicPlaying && IsMusicStreamPlaying(broadMusic))
+            UpdateMusicStream(broadMusic);
+        if (isBroadMusicPlaying && !IsMusicStreamPlaying(broadMusic))
+            isBroadMusicPlaying = false;
         if (IsKeyPressed('Z'))
             camera.target = (Vector3){0.0f, 0.0f, 0.0f};
         BeginDrawing();
@@ -143,6 +165,8 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
     objectPool.textures.getRessource("background");
     Music &music = objectPool.musics.getRessource("menu");
     Music &GameMusic = objectPool.musics.getRessource("game");
+    Music &IncMusic = objectPool.musics.getRessource("inc");
+    Music &BroadMusic = objectPool.musics.getRessource("broad");
     Model &model = objectPool.models.getRessource("korok");
 
     PlayMusicStream(music);
@@ -195,7 +219,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
             server.init_connection(this->_host, std::stoi(this->_port));
             server.messConnect();
             music = GameMusic;
-            GameScene(objectPool, position, bounds, server, music);
+            GameScene(objectPool, position, bounds, server, music, IncMusic, BroadMusic);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);

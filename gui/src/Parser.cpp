@@ -14,6 +14,8 @@
 
 Zappy::Parser::Parser()
 {
+    _ifInc = false;
+    _ifBroadcast = false;
 }
 
 Zappy::Parser::~Parser()
@@ -159,6 +161,7 @@ void Zappy::Parser::broadcast(std::queue<std::string> player)
     // int nb_p = std::stoi(player.front());
     player.pop();
     std::queue<std::string> message = player;
+    _ifBroadcast = true;
 }
 
 void Zappy::Parser::startInc(std::queue<std::string> player)
@@ -174,6 +177,7 @@ void Zappy::Parser::startInc(std::queue<std::string> player)
         list_n.push_back(std::stoi(player.front()));
         player.pop();
     }
+    _ifInc = true;
 }
 
 void Zappy::Parser::endInc(std::queue<std::string> player)
@@ -183,6 +187,7 @@ void Zappy::Parser::endInc(std::queue<std::string> player)
     // int y = std::stoi(player.front());
     player.pop();
     std::string result = player.front();
+    _ifInc = false;
 }
 
 void Zappy::Parser::layingEgg(std::queue<std::string> player)
@@ -400,4 +405,24 @@ Zappy::Players Zappy::Parser::getPlayersList()
 void Zappy::Parser::setPlayersList(Zappy::Players list)
 {
     _playersMap = list;
+}
+
+void Zappy::Parser::setInc(bool ifInc)
+{
+    _ifInc = ifInc;
+}
+
+bool Zappy::Parser::getInc()
+{
+    return _ifInc;
+}
+
+void Zappy::Parser::setBroadcast(bool ifBroadcast)
+{
+    _ifBroadcast = ifBroadcast;
+}
+
+bool Zappy::Parser::getBroadcast()
+{
+    return _ifBroadcast;
 }
