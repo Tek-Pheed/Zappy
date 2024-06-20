@@ -187,11 +187,10 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
             playClicked = false;
             settingsClicked = false;
 
+            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, playButtonYOffset, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
             if (playClicked == 1) {
                 currentScene = Zappy::GAME;
             }
-
-            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, playButtonYOffset, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
             draw.createButton(buttonWidth, buttonHeight, buttonXOffset, settingsButtonYOffset, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
@@ -201,6 +200,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
             else if (!settingsIsClicked)
                 resIsClick = false;
         } else if (currentScene == Zappy::GAME) {
+            server.init_connection(this->_host, std::stoi(this->_port));
             music = GameMusic;
             GameScene(objectPool, position, bounds, server, music);
         } else if (currentScene == Zappy::SETTINGS) {
