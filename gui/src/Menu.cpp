@@ -176,6 +176,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        UpdateMusicStream(music);
 
         if (currentScene == Zappy::MENU) {
             DrawRectangle(0, 0, screenWidth, screenHeight, DARKGREEN);
