@@ -1,0 +1,47 @@
+# Blender 4.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl Material.002
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Pr MakarLeafRoughness.png
+
+newmtl Material.005
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd MakarBody.png
+map_Pr MakarBodyRoughness.png
+
+newmtl Material.006
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd MakarLeaf.png
+map_Ks MakarLeafSpec.png
+map_Pr MakarLeafRoughness.png
