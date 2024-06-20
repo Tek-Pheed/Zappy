@@ -35,7 +35,6 @@ class Player:
         self.player_incantation = 1
         self.team_slot = 0
         self.verbose = False
-        self.can_fork = True
         self.client_id = uuid.uuid4()
         self.no_response = 0
 
@@ -157,8 +156,10 @@ class Player:
                 if r == r2:
                     required_ressources[r] -= 1
         for r in required_ressources:
+            print(f"{r} > 0 --> {required_ressources[r] > 0}")
             if required_ressources[r] > 0:
                 return
+        self.action = ["Incantation\n"]
         self.data_to_send = "Incantation\n"
         self.step += 1
 
@@ -180,12 +181,11 @@ class Player:
 
 
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
-        if self.ready_to_level_up:
+        if self.ready_to_level_up or self.action:
             return []
         action = []
         if direction == 0:
             action = [f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"]
-            self.data_to_send = f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"
             self.step = 12
             return action
         if direction == 1:
@@ -274,7 +274,6 @@ class Player:
         elif self.step == 9:
             if self.team_slot == 0:
                 self.data_to_send = "Fork\n"
-                self.can_fork = True
                 self.step = 8
             else:
                 self.data_to_send = "Look\n"
@@ -283,7 +282,8 @@ class Player:
             self.data_to_send = "Connect_nbr\n"
             time.sleep(1)
         elif self.step == 11:
-            if self.inventory["food"] < 9:
+            if self.inventory["food"] < 7:
+                self.player_incantation = 1
                 self.step = 0
             if self.player_incantation < PLAYER_MANDATORY[self.level - 1]:
                 message = f"{self.team};incantation;{self.level};{self.client_id}"
@@ -291,7 +291,6 @@ class Player:
                 self.action.append("Inventory\n")
                 self.step += 2
             else:
-                #self.player_incantation = 1
                 self.ready_to_level_up = True
                 self.step = 4
         elif self.step == 12:
