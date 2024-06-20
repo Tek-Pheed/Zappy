@@ -80,7 +80,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     Players listPlayers;
     objectPool.models.loadRessource("water", "assets/water.obj");
     objectPool.models.loadRessource("island", "assets/island.obj");
-    objectPool.models.loadRessource("player", "assets/korok.glb");
+    objectPool.models.loadRessource("player", "assets/korok.obj");
 
     Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
         45.0f, CAMERA_PERSPECTIVE};
