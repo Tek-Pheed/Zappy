@@ -16,11 +16,11 @@ Zappy::Thread::Thread()
 
 Zappy::Thread::~Thread(){}
 
-void Zappy::Thread::ManageServer(Server &s, Parser &p, RessourceManager &objectPool)
+void Zappy::Thread::ManageServer(Server &s, Parser &p)
 {
     while (_running) {
         s.receiveMess();
-        p.parsing(objectPool, s.getData());
+        p.parsing(s.getData());
         s.popData();
     }
 }

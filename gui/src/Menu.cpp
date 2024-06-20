@@ -5,28 +5,33 @@
 ** Menu.cpp
 */
 
+#include "Menu.hpp"
 #include <iostream>
-#include <thread>
 #include <raylib.h>
 #include <raymath.h>
-#include "Menu.hpp"
+#include <thread>
 #include "Draw.hpp"
-#include "Settings.hpp"
-#include "ServerData.hpp"
-#include "Map.hpp"
-#include "Thread.hpp"
 #include "Items.hpp"
+#include "Map.hpp"
 #include "RessourcePool.hpp"
+#include "ServerData.hpp"
+#include "Settings.hpp"
+#include "Thread.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-Zappy::Menu::Menu() {}
-Zappy::Menu::~Menu() {}
+Zappy::Menu::Menu()
+{
+}
+Zappy::Menu::~Menu()
+{
+}
 
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitAudioDevice();
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(
+        screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
@@ -96,7 +101,6 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
-
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
@@ -108,8 +112,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     objectPool.models.loadRessource("island", "assets/island.obj");
     objectPool.models.loadRessource("player", "assets/korok.glb");
 
-    Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 45.0f,
-    CAMERA_PERSPECTIVE};
+    Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        45.0f, CAMERA_PERSPECTIVE};
 
     std::list<Bloc *> blocks;
     loadItems(objectPool);
@@ -120,11 +124,12 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     PlayMusicStream(music);
     DisableCursor();
     SetTargetFPS(60);
-    //float velocityY = 0.0f;
-    //const float gravity = -9.81f;
-    //const float bounceFactor = 0.7f;
-    //bool firstDrop = true;
-    std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy, std::ref(server), std::ref(parser), std::ref(objectPool));
+    // float velocityY = 0.0f;
+    // const float gravity = -9.81f;
+    // const float bounceFactor = 0.7f;
+    // bool firstDrop = true;
+    std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
+        std::ref(server), std::ref(parser));
 
     while (!WindowShouldClose()) {
         blocks = parser.getMap().getBloc();
@@ -151,7 +156,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     SPThread.join();
 }
 
-void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
+    Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
     Zappy::Server server;
     SetTargetFPS(60);
@@ -176,8 +182,10 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
         int buttonHeight = screenHeight / 10;
         int buttonHeightSettings = screenHeight / 7;
         int buttonXOffset = screenWidth / 2 - buttonWidth / 2;
-        int playButtonYOffset = screenHeight / 2 - buttonHeightSettings / 2 + buttonHeightSettings * 2;
-        int settingsButtonYOffset = screenHeight / 2 + buttonHeightSettings / 2 + buttonHeightSettings * 2;
+        int playButtonYOffset = screenHeight / 2 - buttonHeightSettings / 2
+            + buttonHeightSettings * 2;
+        int settingsButtonYOffset = screenHeight / 2 + buttonHeightSettings / 2
+            + buttonHeightSettings * 2;
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -189,16 +197,21 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
             DrawModel(model, position, 40.0f, WHITE);
             DrawBoundingBox(bounds, GREEN);
             EndMode3D();
-            DrawText("MENU", screenWidth / 2 - MeasureText("MENU", 100) / 2, 100, 100, LIGHTGRAY);
+            DrawText("MENU", screenWidth / 2 - MeasureText("MENU", 100) / 2,
+                100, 100, LIGHTGRAY);
 
             playClicked = false;
             settingsClicked = false;
 
-            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, playButtonYOffset, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
+            draw.createButton(buttonWidth, buttonHeight, buttonXOffset,
+                playButtonYOffset, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE,
+                Zappy::RECT, playClicked);
             if (playClicked == 1) {
                 currentScene = Zappy::GAME;
             }
-            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, settingsButtonYOffset, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
+            draw.createButton(buttonWidth, buttonHeight, buttonXOffset,
+                settingsButtonYOffset, 10, GREEN, BLACK, GREEN, "SETTINGS", 20,
+                WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
             }
@@ -214,14 +227,17 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
-            DrawText("SETTINGS SCENE", screenWidth / 2 - MeasureText("SETTINGS SCENE", 40) / 2, screenHeight / 2 - 20, 40, DARKGRAY);
+            DrawText("SETTINGS SCENE",
+                screenWidth / 2 - MeasureText("SETTINGS SCENE", 40) / 2,
+                screenHeight / 2 - 20, 40, DARKGRAY);
             DrawFPS(10, 10);
         }
         EndDrawing();
     }
 }
 
-void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
+void Zappy::Menu::UnloadResources(
+    Model model, Texture2D texture_body, Texture2D texture_leaf)
 {
     UnloadTexture(texture_body);
     UnloadTexture(texture_leaf);
