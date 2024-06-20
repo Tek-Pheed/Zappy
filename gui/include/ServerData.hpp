@@ -77,11 +77,17 @@ namespace Zappy
         void setMap(Map map);
         Players getPlayersList();
         void setPlayersList(Players list);
+        void setInc(bool ifInc);
+        bool getInc();
+        void setBroadcast(bool ifBroadcast);
+        bool getBroadcast();
 
         private:
           Map _map;
           Players _playersMap;
           //std::vector<IItems *> _items;
           std::vector<Model> _itemsModelList;
+          bool _ifInc;
+          bool _ifBroadcast;
     };
 } // namespace Zappy

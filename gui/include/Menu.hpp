@@ -42,7 +42,7 @@ namespace Zappy
             char name[MAX_INPUT_CHARS + 1], int &letterCount,
             int &framesCounter);
         void GameScene(RessourceManager &objectPool, Vector3 position,
-            BoundingBox bounds, Zappy::Server server, Music music);
+            BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic);
         void TextBoxForIp(Rectangle textBox, bool mouseOnText,
             char ip[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter);
         void LoopForTextboxIp(Rectangle textBox, bool &mouseOnText,
