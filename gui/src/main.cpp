@@ -45,6 +45,10 @@ int main(int ac, char **av)
     print_help(av);
     menu.getPort(av);
 
+    if (ac < 3) {
+        std::cout << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+        exit(84);
+    }
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les "
                      "ressources."

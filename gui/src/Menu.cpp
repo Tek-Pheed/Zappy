@@ -119,10 +119,10 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     PlayMusicStream(music);
     DisableCursor();
     SetTargetFPS(60);
-    float velocityY = 0.0f;
-    const float gravity = -9.81f;
-    const float bounceFactor = 0.7f;
-    bool firstDrop = true;
+    //float velocityY = 0.0f;
+    //const float gravity = -9.81f;
+    //const float bounceFactor = 0.7f;
+    //bool firstDrop = true;
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy, std::ref(server), std::ref(parser), std::ref(objectPool));
 
     while (!WindowShouldClose()) {
@@ -156,7 +156,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
     bool resIsClick = false;
     double volume = 0.5f;
 
-    Texture2D &background = objectPool.textures.getRessource("background");
+    objectPool.textures.getRessource("background");
     Music &music = objectPool.musics.getRessource("menu");
     Music &GameMusic = objectPool.musics.getRessource("game");
     Model &model = objectPool.models.getRessource("korok");
