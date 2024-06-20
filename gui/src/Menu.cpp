@@ -51,6 +51,8 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
     }
     SetMusicVolume(MenuMusic, 0.5f);
     SetMusicVolume(GameMusic, 0.5f);
+}
+
 void Zappy::Menu::ConfigureCamera(Camera &camera)
 {
     camera.position = (Vector3){0.0f, 2.0f, 25.0f};
