@@ -186,8 +186,6 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
 
             playClicked = false;
             settingsClicked = false;
-            exitClicked = false;
-            confirmClicked = false;
 
             if (playClicked == 1) {
                 currentScene = Zappy::GAME;
