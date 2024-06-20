@@ -54,7 +54,7 @@ namespace Zappy
         int createFrequ(std::queue<std::string> freq);
         void parsing(RessourceManager &objectPool,
             std::queue<std::queue<std::string>> data);
-        void newPlayer(
+        Zappy::Player *newPlayer(
             RessourceManager &objectPool, std::queue<std::string> player);
         void positionPlayer(std::queue<std::string> player);
         void levelPlayer(std::queue<std::string> player);
