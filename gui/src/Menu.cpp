@@ -37,15 +37,11 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 
 void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 {
-    Model &model = objectPool.models.dynamicLoad("korok", "assets/korok.glb");
+    Model &model = objectPool.models.dynamicLoad("korok", "assets/makar.obj");
     Music &MenuMusic =
         objectPool.musics.dynamicLoad("menu", "assets/menu.mp3");
     Music &GameMusic =
         objectPool.musics.dynamicLoad("game", "assets/game.mp3");
-    Texture2D &texture_body =
-        objectPool.textures.dynamicLoad("makarbody", "assets/MakarBody.png");
-    Texture2D &texture_leaf =
-        objectPool.textures.dynamicLoad("makaleaf", "assets/MakarLeaf.png");
 
     if (model.meshCount == 0) {
         std::cerr
@@ -55,32 +51,6 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
     }
     SetMusicVolume(MenuMusic, 0.5f);
     SetMusicVolume(GameMusic, 0.5f);
-    if (texture_body.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture "
-                     "'assets/MakarBody.png'"
-                  << std::endl;
-        exit(1);
-    }
-    if (texture_leaf.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture "
-                     "'assets/MakarLeaf.png'"
-                  << std::endl;
-        exit(1);
-    }
-    if (model.materialCount < 2) {
-        model.materialCount = 2;
-        model.materials = (Material *) realloc(
-            model.materials, model.materialCount * sizeof(Material));
-        model.materials[0] = LoadMaterialDefault();
-        model.materials[1] = LoadMaterialDefault();
-    }
-    model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = texture_body;
-    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_leaf;
-    for (int i = 0; i < model.meshCount; i++) {
-        model.meshMaterial[i] = (i == 0) ? 0 : 1;
-    }
-}
-
 void Zappy::Menu::ConfigureCamera(Camera &camera)
 {
     camera.position = (Vector3){0.0f, 2.0f, 25.0f};
