@@ -156,7 +156,7 @@ class Player:
                 if r == r2:
                     required_ressources[r] -= 1
         for r in required_ressources:
-            print(f"{r} > 0 --> {required_ressources[r] > 0}")
+            print(f"{r} {required_ressources[r]} > 0 --> {required_ressources[r] > 0}")
             if required_ressources[r] > 0:
                 return
         self.action = ["Incantation\n"]
