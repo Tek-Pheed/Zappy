@@ -53,7 +53,7 @@ char *all_content(const server_t *serv)
 
 static char *team_name(team_t *team)
 {
-    char *buff = calloc(strlen(team->name + 7), sizeof(char));
+    char *buff = calloc(strlen(team->name) + 7, sizeof(char));
 
     if (!buff)
         return NULL;
