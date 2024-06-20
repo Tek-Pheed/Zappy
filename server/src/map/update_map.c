@@ -47,8 +47,8 @@ void distribute_items_after(
     int x = 0;
     int y = 0;
 
-    srand(time(NULL));
     for (int i = 0; i < quant; ++i) {
+        srand(time(NULL));
         x = rand() % serv->resX;
         y = rand() % serv->resY;
         if (item_type == 6) {
