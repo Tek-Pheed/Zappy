@@ -152,7 +152,7 @@ static void fail_elevation(server_t *serv, client_t *cli)
 
     for (int i = 0; i != len; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
-        if (tmp == NULL && tmp->state == GRAPHICAL)
+        if (tmp == NULL || tmp->state == GRAPHICAL)
             continue;
         if (tmp->player.elevating == cli->player.number) {
             tmp->player.elevating = -1;
