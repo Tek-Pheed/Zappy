@@ -94,4 +94,12 @@ void Zappy::Player::displayPlayer(RessourceManager &objPool)
     // player.transform = MatrixRotateXYZ((Vector3){0.0f, DEG2RAD * rot, 0.0f});
     // DrawModel(player, pos, 5.0f, WHITE);
     DrawModelEx(player, pos, (Vector3){0.0f, 1.0f, 0.0f}, rot, (Vector3){5.0f, 5.0f, 5.0f}, WHITE);
+
+	oid Zappy::Player::incantationMusic()
+{
+    Music music = LoadMusicStream("assets/Zelda_Noïa_dance_song.mp3");
+    SetMusicVolume(music, 0.5f);
+    PlayMusicStream(music);
+    UpdateMusicStream(music);
+}
 }

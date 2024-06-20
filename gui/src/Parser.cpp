@@ -269,6 +269,7 @@ void Zappy::Parser::unknowCommand()
 void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
+    Zappy::Player p;
 
     while (!data.empty()) {
         tmpFront = data.front();
@@ -316,6 +317,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         if (tmpFront.front() == "pic") {
             tmpFront.pop();
             startInc(tmpFront);
+            p.incantationMusic();
         }
         if (tmpFront.front() == "pie") {
             tmpFront.pop();
