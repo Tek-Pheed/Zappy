@@ -19,7 +19,7 @@ SRC		= src/main.cpp \
 		  src/ConfirmButton.cpp	\
 		  src/Server.cpp \
 		  src/RessourcePool.cpp \
-		  src/Thread.cpp
+		  src/Thread.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
@@ -40,7 +40,7 @@ clean:
 	rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf ../$(NAME)
 
 re: fclean all
 

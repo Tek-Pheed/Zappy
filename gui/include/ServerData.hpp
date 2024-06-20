@@ -77,16 +77,13 @@ namespace Zappy
 
         Map getMap();
         void setMap(Map map);
-        Player getPlayer();
-        void setPlayer(Player player);
         Players getPlayersList();
         void setPlayersList(Players list);
 
-      private:
-        Map _map;
-        Player _player;
-        Players _playersMap;
-        // std::vector<IItems *> _items;
-        std::vector<Model> _itemsModelList;
+        private:
+          Map _map;
+          Players _playersMap;
+          //std::vector<IItems *> _items;
+          std::vector<Model> _itemsModelList;
     };
 } // namespace Zappy

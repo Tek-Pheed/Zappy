@@ -80,7 +80,6 @@ void Zappy::Server::parseBuffer(char *buffer)
         if (!data.empty()) {
             std::queue<std::string> response = splitData(data);
             _data.push(response);
-            std::cout << _data.front().front() << std::endl;
         }
     }
 }
@@ -102,7 +101,9 @@ void Zappy::Server::receiveMess()
 
 void Zappy::Server::popData()
 {
-    _data.pop();
+    while (!_data.empty()){
+        _data.pop();
+    }
 }
 
 std::queue<std::queue<std::string>> Zappy::Server::getData()

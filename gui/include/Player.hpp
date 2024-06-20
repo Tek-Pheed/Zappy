@@ -33,6 +33,7 @@ namespace Zappy
             RessourceManager &objectPool, const std::string &modelPath);
         std::vector<std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
+        void displayPlayer(RessourceManager &objPool);
 
       private:
         Model _model;

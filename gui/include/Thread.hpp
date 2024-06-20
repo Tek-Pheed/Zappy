@@ -12,10 +12,13 @@
 namespace Zappy
 {
     class Thread {
-      public:
-        Thread();
-        ~Thread();
-        void ManageServer(
-            Zappy::Server &s, Zappy::Parser &p, RessourceManager &objectPool);
+        public:
+            Thread();
+            ~Thread();
+            void ManageServer(
+              Zappy::Server &s, Zappy::Parser &p, RessourceManager &objectPool);
+            void setRunningFalse();
+        private:
+            bool _running;
     };
 } // namespace Zappy

@@ -140,10 +140,15 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             blocks.front()->display(objectPool);
             blocks.pop_front();
         }
+        for (const auto &variable : listPlayers.getPlayersList()) {
+            variable.second->displayPlayer(objectPool);
+        }
         EndMode3D();
         EndDrawing();
     }
     CloseWindow();
+    threadZappy.setRunningFalse();
+    SPThread.join();
 }
 
 void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
