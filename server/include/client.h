@@ -27,7 +27,7 @@ struct player_s {
     int level;
     int orient;
     int number;
-    bool elevating;
+    int elevating;
     bool is_dead;
     struct timeval last_food_update;
 };

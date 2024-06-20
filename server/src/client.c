@@ -57,7 +57,7 @@ static void send_login_answer(server_t *serv, client_t *client)
 static bool create_player(server_t *serv, client_t *client, int index)
 {
     client->player.food = 10;
-    client->player.elevating = false;
+    client->player.elevating = -1;
     client->player.level = 1;
     client->player.number = index;
     client->player.orient = 1;

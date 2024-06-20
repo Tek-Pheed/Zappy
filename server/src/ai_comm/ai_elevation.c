@@ -61,10 +61,9 @@ static void level_up_all(server_t *serv, UNUSED client_t *cli)
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp == NULL)
             continue;
-        if (tmp->state == AI && tmp->player.elevating == true) {
-            printf("Level up player\n");
+        if (tmp->state == AI && tmp->player.elevating == cli->player.number) {
             tmp->player.level += 1;
-            tmp->player.elevating = false;
+            tmp->player.elevating = -1;
             sprintf(msg, "Current level: %d\n", tmp->player.level);
             server_send_data(tmp, msg);
             event_player_level(serv, tmp);
@@ -86,7 +85,7 @@ static int mark_player_elevating(server_t *serv, client_t *cli)
     int client_len = 0;
     client_t *tmp;
 
-    cli->player.elevating = true;
+    cli->player.elevating = cli->player.number;
     client_len = list_get_size(serv->client);
     for (int i = 0;
         i != client_len && count <= p_required[cli->player.level - 1]; i++) {
@@ -95,7 +94,7 @@ static int mark_player_elevating(server_t *serv, client_t *cli)
             && tmp->player.y == cli->player.y
             && tmp->player.level == cli->player.level) {
             count++;
-            tmp->player.elevating = true;
+            tmp->player.elevating = cli->player.number;
             tmp->cmd_duration = 300;
             gettimeofday(&tmp->last_cmd_time, NULL);
         }
@@ -146,11 +145,20 @@ bool ai_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
     return val;
 }
 
-static void end_elv(server_t *serv, client_t *cli)
+static void fail_elevation(server_t *serv, client_t *cli)
 {
-    check_lvl_player(serv);
-    cli->cmd_duration = 300;
-    gettimeofday(&cli->last_cmd_time, NULL);
+    int len = list_get_size(serv->client);
+    client_t *tmp;
+
+    for (int i = 0; i != len; i++) {
+        tmp = list_get_elem_at_position(serv->client, i);
+        if (tmp == NULL && tmp->state == GRAPHICAL)
+            continue;
+        if (tmp->player.elevating == cli->player.number) {
+            tmp->player.elevating = -1;
+            server_send_data(tmp, "ko\n");
+        }
+    }
 }
 
 bool ai_end_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
@@ -166,11 +174,11 @@ bool ai_end_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
             serv, cli, &((ivect2D_t){cli->player.x, cli->player.y}), "ok");
         val = true;
     } else {
-        server_send_data(cli, "ko\n");
+        fail_elevation(serv, cli);
         val = false;
         event_end_incantation(
             serv, cli, &((ivect2D_t){cli->player.x, cli->player.y}), "ko");
     }
-    end_elv(serv, cli);
+    check_lvl_player(serv);
     return val;
 }
