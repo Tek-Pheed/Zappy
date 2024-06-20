@@ -201,6 +201,7 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 
                 resIsClick = false;
         } else if (currentScene == Zappy::GAME) {
             server.init_connection(this->_host, std::stoi(this->_port));
+            server.messConnect();
             music = GameMusic;
             GameScene(objectPool, position, bounds, server, music);
         } else if (currentScene == Zappy::SETTINGS) {
