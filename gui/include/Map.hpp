@@ -10,8 +10,8 @@
 #include <vector>
 #include "Items.hpp"
 #include "Player.hpp"
-#include <unordered_map>
 #include "RessourcePool.hpp"
+#include <unordered_map>
 
 namespace Zappy
 {

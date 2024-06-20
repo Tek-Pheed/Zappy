@@ -12,8 +12,6 @@
 #include "RessourcePool.hpp"
 #include "ServerData.hpp"
 #include "raylib.h"
-#include "ServerData.hpp"
-#include <string>
 
 #define MAX_INPUT_CHARS 15
 
@@ -38,11 +36,13 @@ namespace Zappy
         void ConfigureCamera(Camera &camera);
         void MainLoop(RessourceManager &objectPool, Camera camera,
             Vector3 position, BoundingBox bounds, Zappy::Draw &draw);
+        void UnloadResources(
+            Model model, Texture2D texture_body, Texture2D texture_leaf);
         void LoopForTextbox(Rectangle textBox, bool &mouseOnText,
             char name[MAX_INPUT_CHARS + 1], int &letterCount,
             int &framesCounter);
-        void GameScene(RessourceManager &objectPool, Vector3 position, BoundingBox bounds,
-            Zappy::Server server, Music music);
+        void GameScene(RessourceManager &objectPool, Vector3 position,
+            BoundingBox bounds, Zappy::Server server, Music music);
         void TextBoxForIp(Rectangle textBox, bool mouseOnText,
             char ip[MAX_INPUT_CHARS + 1], int letterCount, int framesCounter);
         void LoopForTextboxIp(Rectangle textBox, bool &mouseOnText,
@@ -54,26 +54,12 @@ namespace Zappy
         void LoopForTextboxPort(Rectangle textBox, bool &mouseOnText,
             char port[MAX_INPUT_CHARS + 1], int &letterCount,
             int &framesCounter);
+        void getPort(char **args);
 
       protected:
       private:
         std::string _host;
         std::string _port;
-    };
-
-    class TextInput {
-      public:
-        TextInput(float x, float y, float width, float height);
-        void UpdateInput();
-        void DrawInput();
-        std::string GetText() const;
-
-      private:
-        Rectangle bounds;
-        std::string text;
-        int letterCount;
-        bool mouseOnText;
-        int framesCounter;
     };
 
     class ConfirmButton {
