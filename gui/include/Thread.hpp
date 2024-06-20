@@ -16,7 +16,7 @@ namespace Zappy
             Thread();
             ~Thread();
             void ManageServer(
-              Zappy::Server &s, Zappy::Parser &p, RessourceManager &objectPool);
+              Zappy::Server &s, Zappy::Parser &p);
             void setRunningFalse();
         private:
             bool _running;

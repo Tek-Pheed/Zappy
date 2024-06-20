@@ -94,7 +94,7 @@ int Zappy::Parser::createFrequ(std::queue<std::string> freq)
     return nbFreq;
 }
 
-Zappy::Player *Zappy::Parser::newPlayer(RessourceManager &objectPool, std::queue<std::string> player)
+Zappy::Player *Zappy::Parser::newPlayer(std::queue<std::string> player)
 {
     int nb_p = std::stoi(player.front());
     player.pop();
@@ -266,7 +266,7 @@ void Zappy::Parser::unknowCommand()
     std::cout << "WRONG" << std::endl;
 }
 
-void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<std::string>> data)
+void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
 {
     std::queue<std::string> tmpFront;
 
@@ -291,7 +291,7 @@ void Zappy::Parser::parsing(RessourceManager &objectPool, std::queue<std::queue<
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
-            _playersMap.mapPlayers(newPlayer(objectPool, tmpFront));
+            _playersMap.mapPlayers(newPlayer(tmpFront));
         }
         if (tmpFront.front() == "ppo") {
             tmpFront.pop();
