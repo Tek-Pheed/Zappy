@@ -9,11 +9,13 @@
 #include "Menu.hpp"
 #include "ServerData.hpp"
 
-namespace Zappy {
+namespace Zappy
+{
     class Thread {
-        public:
-            Thread();
-            ~Thread();
-            void ManageServer(Zappy::Server &s, Zappy::Parser &p, RessourceManager &objectPool);
+      public:
+        Thread();
+        ~Thread();
+        void ManageServer(
+            Zappy::Server &s, Zappy::Parser &p, RessourceManager &objectPool);
     };
-}
+} // namespace Zappy
