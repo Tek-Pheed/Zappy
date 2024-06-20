@@ -6,10 +6,17 @@
 */
 
 #include <iostream>
-#include "raylib.h"
+#include <thread>
+#include <raylib.h>
+#include <raymath.h>
 #include "Menu.hpp"
 #include "Draw.hpp"
 #include "Settings.hpp"
+#include "ServerData.hpp"
+#include "Map.hpp"
+#include "Thread.hpp"
+#include "Items.hpp"
+#include "RessourcePool.hpp"
 
 Zappy::Scene currentScene = Zappy::MENU;
 
@@ -22,122 +29,139 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
     return IsWindowReady();
 }
 
-void Zappy::Menu::LoadResources(Model &model, Texture2D &texture_body, Texture2D &texture_leaf)
+void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 {
-    model = LoadModel("assets/korok.glb");
+    Model &model = objectPool.models.dynamicLoad("korok", "assets/korok.glb");
+    Music &MenuMusic =
+        objectPool.musics.dynamicLoad("menu", "assets/menu.mp3");
+    Music &GameMusic =
+        objectPool.musics.dynamicLoad("game", "assets/game.mp3");
+    Texture2D &texture_body =
+        objectPool.textures.dynamicLoad("makarbody", "assets/MakarBody.png");
+    Texture2D &texture_leaf =
+        objectPool.textures.dynamicLoad("makaleaf", "assets/MakarLeaf.png");
+
     if (model.meshCount == 0) {
-        std::cerr << "Erreur : Impossible de charger le modèle 'assets/korok.glb'" << std::endl;
+        std::cerr
+            << "Erreur : Impossible de charger le modèle 'assets/korok.glb'"
+            << std::endl;
         exit(1);
     }
-
-    texture_body = LoadTexture("assets/MakarBody.png");
+    SetMusicVolume(MenuMusic, 0.5f);
+    SetMusicVolume(GameMusic, 0.5f);
     if (texture_body.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture 'assets/MakarBody.png'" << std::endl;
+        std::cerr << "Erreur : Impossible de charger la texture "
+                     "'assets/MakarBody.png'"
+                  << std::endl;
         exit(1);
     }
-
-    texture_leaf = LoadTexture("assets/MakarLeaf.png");
     if (texture_leaf.id == 0) {
-        std::cerr << "Erreur : Impossible de charger la texture 'assets/MakarLeaf.png'" << std::endl;
+        std::cerr << "Erreur : Impossible de charger la texture "
+                     "'assets/MakarLeaf.png'"
+                  << std::endl;
         exit(1);
     }
-
     if (model.materialCount < 2) {
         model.materialCount = 2;
-        model.materials = (Material *)realloc(model.materials, model.materialCount * sizeof(Material));
+        model.materials = (Material *) realloc(
+            model.materials, model.materialCount * sizeof(Material));
         model.materials[0] = LoadMaterialDefault();
         model.materials[1] = LoadMaterialDefault();
     }
-
     model.materials[1].maps[MATERIAL_MAP_DIFFUSE].texture = texture_body;
     model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_leaf;
-
     for (int i = 0; i < model.meshCount; i++) {
         model.meshMaterial[i] = (i == 0) ? 0 : 1;
     }
 }
 
-void Zappy::Menu::ConfigureCamera(Camera &camera) {
-    camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 2.0f, 25.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
+void Zappy::Menu::ConfigureCamera(Camera &camera)
+{
+    camera.position = (Vector3){0.0f, 2.0f, 25.0f};
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f};
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
     camera.fovy = 90.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 }
 
-void Zappy::Menu::GameScene(Model model, Vector3 position, BoundingBox bounds)
+void loadItems(RessourceManager &objectPool)
 {
-    Model water;
-    Model heart;
-    Model chest;
-    Model tree;
-    Model island;
-    Camera3D camera = { 0 };
-    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 45.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
+    constexpr const char *models[] = {"assets/rubis/rubis_yigas.glb",
+        "assets/rubis/rubis_korok.glb", "assets/rubis/rubis_goron.glb",
+        "assets/rubis/rubis_zora.glb", "assets/rubis/rubis_crepuscule.glb",
+        "assets/rubis/rubis_piaf.glb", "assets/rubis/rubis_divin.glb"};
 
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+    for (std::size_t i = 0; i != Zappy::ITEM_MAX; i++)
+        objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
+}
 
-    water = LoadModel("assets/item/water.glb");
-    heart = LoadModel("assets/item/heart.glb");
-    chest = LoadModel("assets/item/chest_island.glb");
-    tree = LoadModel("assets/item/palm_tree_island.glb");
-    island = LoadModel("assets/item/basic_island.glb");
 
+void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
+    BoundingBox bounds, Zappy::Server server, Music music)
+{
+    Zappy::Thread threadZappy;
+    Zappy::Parser parser;
+    std::string response;
+    Players listPlayers;
+    objectPool.models.loadRessource("water", "assets/water.obj");
+    objectPool.models.loadRessource("island", "assets/island.obj");
+    objectPool.models.loadRessource("player", "assets/korok.glb");
+
+    Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 45.0f,
+    CAMERA_PERSPECTIVE};
+
+    std::list<Bloc *> blocks;
+    loadItems(objectPool);
+
+    (void) bounds;
+    (void) position;
+
+    PlayMusicStream(music);
     DisableCursor();
-
     SetTargetFPS(60);
+    float velocityY = 0.0f;
+    const float gravity = -9.81f;
+    const float bounceFactor = 0.7f;
+    bool firstDrop = true;
+    std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy, std::ref(server), std::ref(parser), std::ref(objectPool));
 
     while (!WindowShouldClose()) {
+        blocks = parser.getMap().getBloc();
+        listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
-
-        if (IsKeyPressed('Z')) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-
+        UpdateMusicStream(music);
+        if (IsKeyPressed('Z'))
+            camera.target = (Vector3){0.0f, 0.0f, 0.0f};
         BeginDrawing();
-
-            ClearBackground(RAYWHITE);
-
-            BeginMode3D(camera);
-                for (int x = 0; x < 20; x++) {
-                    for (int z = 0; z < 20; z++) {
-                        DrawModel(water, (Vector3){ x * 2.0f, 0.0f, z * 2.0f }, 1.0f, WHITE);
-                    }
-                }
-                DrawModel(heart, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                // DrawModel(chest, (Vector3){ 2.0f, 0.0f, 0.0f }, 1.0f, WHITE);
-                DrawModel(tree, (Vector3){ 4.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                DrawModel(island, (Vector3){ 0.0f, 2.0f, 0.0f }, 1.0f, WHITE);
-                DrawGrid(10, 1.0f);
-
-            EndMode3D();
-
-            DrawText("Free camera default controls:", 20, 20, 10, BLACK);
-            DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-            DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-            DrawText("- Z to zoom to (0, 0, 0)", 40, 80, 10, DARKGRAY);
-
+        ClearBackground(RAYWHITE);
+        BeginMode3D(camera);
+        while (blocks.size() != 0) {
+            blocks.front()->display(objectPool);
+            blocks.pop_front();
+        }
+        EndMode3D();
         EndDrawing();
     }
-
     CloseWindow();
 }
 
-void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
+    Zappy::Server server;
     SetTargetFPS(60);
     int playClicked = 0;
     int settingsClicked = 0;
-    bool settingsIsClicked = false;
-    int exitClicked = 0;
-    int confirmClicked = 0;
+    bool settingsIsClicked = 0;
     Settings s;
     bool resIsClick = false;
-    Music music;
     double volume = 0.5f;
+
+    Texture2D &background = objectPool.textures.getRessource("background");
+    Music &music = objectPool.musics.getRessource("menu");
+    Music &GameMusic = objectPool.musics.getRessource("game");
+    Model &model = objectPool.models.getRessource("korok");
+
+    PlayMusicStream(music);
 
     while (!WindowShouldClose()) {
         int screenWidth = GetScreenWidth();
@@ -179,7 +203,8 @@ void Zappy::Menu::MainLoop(Model model, Texture2D background, Camera camera, Vec
             else if (!settingsIsClicked)
                 resIsClick = false;
         } else if (currentScene == Zappy::GAME) {
-            GameScene(model, position, bounds);
+            music = GameMusic;
+            GameScene(objectPool, position, bounds, server, music);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
