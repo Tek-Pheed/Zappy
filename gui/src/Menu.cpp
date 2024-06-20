@@ -5,11 +5,10 @@
 ** Menu.cpp
 */
 
-#include "Menu.hpp"
 #include <iostream>
 #include <thread>
-#include "raylib.h"
-#include "raymath.h"
+#include <raylib.h>
+#include <raymath.h>
 #include "Menu.hpp"
 #include "Draw.hpp"
 #include "Settings.hpp"
@@ -21,18 +20,13 @@
 
 Zappy::Scene currentScene = Zappy::MENU;
 
-Zappy::Menu::Menu()
-{
-}
-Zappy::Menu::~Menu()
-{
-}
+Zappy::Menu::Menu() {}
+Zappy::Menu::~Menu() {}
 
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitAudioDevice();
-    InitWindow(
-        screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     return IsWindowReady();
 }
 
@@ -102,6 +96,7 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
+
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
@@ -125,10 +120,10 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     PlayMusicStream(music);
     DisableCursor();
     SetTargetFPS(60);
-    float velocityY = 0.0f;
-    const float gravity = -9.81f;
-    const float bounceFactor = 0.7f;
-    bool firstDrop = true;
+    //float velocityY = 0.0f;
+    //const float gravity = -9.81f;
+    //const float bounceFactor = 0.7f;
+    //bool firstDrop = true;
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy, std::ref(server), std::ref(parser), std::ref(objectPool));
 
     while (!WindowShouldClose()) {
@@ -156,8 +151,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     SPThread.join();
 }
 
-void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
-    Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
+void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera, Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
 {
     Zappy::Server server;
     SetTargetFPS(60);
@@ -168,32 +162,43 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
     bool resIsClick = false;
     double volume = 0.5f;
 
-    Texture2D &background = objectPool.textures.getRessource("background");
+    objectPool.textures.getRessource("background");
     Music &music = objectPool.musics.getRessource("menu");
     Music &GameMusic = objectPool.musics.getRessource("game");
     Model &model = objectPool.models.getRessource("korok");
 
-    TextInput textInputPort(1350, 200, 320, 50);
-    TextInput textInputIP(1350, 100, 320, 50);
     PlayMusicStream(music);
 
     while (!WindowShouldClose()) {
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenHeight();
+        int buttonWidth = screenWidth / 6;
+        int buttonHeight = screenHeight / 10;
+        int buttonHeightSettings = screenHeight / 7;
+        int buttonXOffset = screenWidth / 2 - buttonWidth / 2;
+        int playButtonYOffset = screenHeight / 2 - buttonHeightSettings / 2 + buttonHeightSettings * 2;
+        int settingsButtonYOffset = screenHeight / 2 + buttonHeightSettings / 2 + buttonHeightSettings * 2;
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
         UpdateMusicStream(music);
 
         if (currentScene == Zappy::MENU) {
-            DrawTexture(background, 0, 0, WHITE);
+            DrawRectangle(0, 0, screenWidth, screenHeight, DARKGREEN);
             BeginMode3D(camera);
             DrawModel(model, position, 40.0f, WHITE);
             DrawBoundingBox(bounds, GREEN);
             EndMode3D();
-            DrawText("MENU", 775, 100, 100, LIGHTGRAY);
+            DrawText("MENU", screenWidth / 2 - MeasureText("MENU", 100) / 2, 100, 100, LIGHTGRAY);
 
             playClicked = false;
             settingsClicked = false;
-            draw.createButton(400, 75, 760, 900, 10, GREEN, BLACK, GREEN,
-                "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
+
+            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, playButtonYOffset, 10, GREEN, BLACK, GREEN, "PLAY", 20, WHITE, Zappy::RECT, playClicked);
+            if (playClicked == 1) {
+                currentScene = Zappy::GAME;
+            }
+            draw.createButton(buttonWidth, buttonHeight, buttonXOffset, settingsButtonYOffset, 10, GREEN, BLACK, GREEN, "SETTINGS", 20, WHITE, Zappy::RECT, settingsClicked);
             if (settingsClicked == 1) {
                 settingsIsClicked = !settingsIsClicked;
             }
@@ -201,39 +206,25 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
                 s.manageSettingsButton(resIsClick, music, volume);
             else if (!settingsIsClicked)
                 resIsClick = false;
-            draw.createButton(400, 75, 760, 800, 10, GREEN, BLACK, GREEN,
-                "PLAY", 20, WHITE, Zappy::RECT, playClicked);
-            if (playClicked == 1) {
-                std::string ip = textInputIP.GetText();
-                std::string port = textInputPort.GetText();
-                std::cout << "IP: " << ip << " Port: " << port << std::endl;
-                if (!port.empty()) {
-                    server.init_connection(ip, std::stoi(port));
-                    if (server.getIsconnect()) {
-                        std::cout << "Connected to server" << std::endl;
-                        server.messConnect();
-                        currentScene = Zappy::GAME;
-                    } else {
-                        std::cerr << "Error: Connection to server failed"
-                                  << std::endl;
-                    }
-                }
-            }
-            textInputPort.UpdateInput();
-            textInputIP.UpdateInput();
-            textInputPort.DrawInput();
-            textInputIP.DrawInput();
         } else if (currentScene == Zappy::GAME) {
+            server.init_connection(this->_host, std::stoi(this->_port));
+            server.messConnect();
             music = GameMusic;
             GameScene(objectPool, position, bounds, server, music);
         } else if (currentScene == Zappy::SETTINGS) {
             s.manageSettingsButton(resIsClick, music, volume);
             ClearBackground(RAYWHITE);
-            DrawText("SETTINGS SCENE",
-                GetScreenWidth() / 2 - MeasureText("SETTINGS SCENE", 40) / 2,
-                GetScreenHeight() / 2 - 20, 40, DARKGRAY);
+            DrawText("SETTINGS SCENE", screenWidth / 2 - MeasureText("SETTINGS SCENE", 40) / 2, screenHeight / 2 - 20, 40, DARKGRAY);
             DrawFPS(10, 10);
         }
         EndDrawing();
     }
+}
+
+void Zappy::Menu::UnloadResources(Model model, Texture2D texture_body, Texture2D texture_leaf)
+{
+    UnloadTexture(texture_body);
+    UnloadTexture(texture_leaf);
+    UnloadModel(model);
+    CloseWindow();
 }

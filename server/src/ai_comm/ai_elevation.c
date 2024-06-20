@@ -52,6 +52,7 @@ static bool check_stone(const server_t *serv, const client_t *cli)
 
 static void level_up_all(server_t *serv, UNUSED client_t *cli)
 {
+    char msg[BUFFER_MAX_SIZE];
     int client_len = 0;
     client_t *tmp;
 
@@ -64,6 +65,8 @@ static void level_up_all(server_t *serv, UNUSED client_t *cli)
             printf("Level up player\n");
             tmp->player.level += 1;
             tmp->player.elevating = false;
+            sprintf(msg, "Current level: %d\n", tmp->player.level);
+            server_send_data(tmp, msg);
             event_player_level(serv, tmp);
         }
     }
@@ -86,7 +89,7 @@ static int mark_player_elevating(server_t *serv, client_t *cli)
     cli->player.elevating = true;
     client_len = list_get_size(serv->client);
     for (int i = 0;
-         i != client_len && count <= p_required[cli->player.level - 1]; i++) {
+        i != client_len && count <= p_required[cli->player.level - 1]; i++) {
         tmp = list_get_elem_at_position(serv->client, i);
         if (tmp != NULL && tmp->state == AI && tmp->player.x == cli->player.x
             && tmp->player.y == cli->player.y
@@ -159,8 +162,6 @@ bool ai_end_elevation(server_t *serv, client_t *cli, UNUSED const char *obj)
     if (check_stone(serv, cli) && check_nb_players(serv, cli)) {
         remove_stone_used(serv, cli);
         level_up_all(serv, cli);
-        sprintf(msg, "Current level: %d\n", cli->player.level);
-        server_send_data(cli, msg);
         event_end_incantation(
             serv, cli, &((ivect2D_t){cli->player.x, cli->player.y}), "ok");
         val = true;

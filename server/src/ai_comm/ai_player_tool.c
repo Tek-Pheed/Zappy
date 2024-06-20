@@ -43,13 +43,13 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     int value = team_get_free_space(team_get_client(serv, cli));
-    char str[12];
+    char str[32];
 
+    if (value < 0)
+        value = 0;
     memset(str, '\0', sizeof(str));
-    if (value >= 0) {
-        sprintf(str, "%d\n", value);
-        server_send_data(cli, str);
-    }
+    sprintf(str, "%d\n", value);
+    server_send_data(cli, str);
     return true;
 }
 

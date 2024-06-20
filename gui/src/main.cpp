@@ -11,7 +11,27 @@
 #include "RessourcePool.hpp"
 #include "raylib.h"
 
-int main(void)
+void print_help(char **args)
+{
+    if (std::string(args[1]) == "-help") {
+        std::cout << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+        exit(0);
+    }
+}
+
+void Zappy::Menu::getPort(char **args)
+{
+    for (int i = 0; args[i] != nullptr; i++) {
+        if (std::string(args[i]) == "-p") {
+            _port = args[i + 1];
+        }
+        if (std::string(args[i]) == "-h") {
+            _host = args[i + 1];
+        }
+    }
+}
+
+int main(int ac, char **av)
 {
     constexpr int screenWidth = 1920;
     constexpr int screenHeight = 1080;
@@ -22,7 +42,13 @@ int main(void)
     Camera camera;
     Vector3 position = {0.0f, 0.0f, 0.0f};
 
-    srand(time(0));
+    print_help(av);
+    menu.getPort(av);
+
+    if (ac < 3) {
+        std::cout << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+        exit(84);
+    }
     if (!menu.InitWindowAndResources(screenWidth, screenHeight)) {
         std::cerr << "Erreur : Impossible d'initialiser la fenêtre et les "
                      "ressources."

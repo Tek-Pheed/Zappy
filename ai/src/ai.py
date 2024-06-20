@@ -54,16 +54,16 @@ class AI:
                             self.player.parse_broadcast()
                             message = message.split("\n")[-1]
                             continue
+                        elif "Incantation" in self.player.data_to_send:
+                            if "ko" in elem:
+                                self.player.data_to_send = ""
+                                self.player.player_incantation = 1
+                                self.player.step = 0
                         elif self.player.data_to_send == "Connect_nbr\n":
                             if "ko" in elem:
                                 self.player.step = 10
                             else:
-                                self.player.step = 0
                                 self.player.team_slot = int(elem)
-                        elif self.player.data_to_send == "Fork\n":
-                            if self.args.thread == True and self.player.can_fork:
-                                subprocess.Popen(["python3","zappy_ai","-p", str(self.args.p), "-n", self.player.team, "-h", self.args.h, "--thread"])
-                                self.player.can_fork = False
                         elif self.player.data_to_send == "Inventory\n":
                             try:
                                 self.player.inventory = get_inventory(elem, self.player.inventory)
@@ -82,6 +82,7 @@ class AI:
                         if self.player.logged == False and self.player.team in self.player.data_to_send:
                             self.player.logged = True
                         self.server.send_message(self.player.data_to_send)
+                        print_verbose(self.player.verbose, f"[SEND] {self.player.data_to_send}")
                         running = 0
 
 if __name__ == "__main__":
