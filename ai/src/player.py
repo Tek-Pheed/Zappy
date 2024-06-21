@@ -80,7 +80,7 @@ class Player:
         for i in range(len(tmp)):
             list.append(' '.join(re.split(r'\W+', tmp[i])[1:]))
         data = list
-        map = generate_empty_map()
+        map = generate_empty_map(data)
         map = fill_map_with_data(map, data)
         self.map = map
         coord = self.find_collectible(object)
