@@ -179,7 +179,6 @@ class Player:
                 self.data_to_send = ""
                 self.step = 4
 
-
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
         if self.ready_to_level_up or self.action or self.step == 12:
             return []
@@ -227,7 +226,7 @@ class Player:
                 self.action = self.action[1:]
             else:
                 self.data_to_send = "Inventory\n"
-            self.step += 1
+                self.step += 1
         elif self.step == 1:
             if (self.incantation_possible()):
                 self.step = 11
