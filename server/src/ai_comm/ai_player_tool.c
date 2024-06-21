@@ -36,6 +36,10 @@ bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 {
+    team_t *tmp = team_get_client(serv, cli);
+
+    if (tmp != NULL && cli->player.level == 8)
+        tmp->nb_level_max -= 1;
     server_send_data(cli, "dead\n");
     return true;
 }
