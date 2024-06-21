@@ -62,7 +62,6 @@ std::vector<Zappy::Player> createPlayerMap(
 
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
-    std::queue<std::string> tmpBloc = bloc;
     int x = std::stoi(bloc.front());
     bloc.pop();
     int y = std::stoi(bloc.front());
@@ -74,15 +73,9 @@ Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
         ptr->setPlayers(createPlayerMap(bloc, x, y));
         return ptr;
     }
-    while (!tmpBloc.empty()) {
-        printf("%s\n", tmpBloc.front().c_str());
-        tmpBloc.pop();
-    }
     if (!_map.getBloc().empty() && 
-    _map.getBloc().size() == (unsigned int)(_map.getX() * _map.getY())) {
+    _map.getBloc().size() == (unsigned int)(_map.getX() * _map.getY()))
         _map.popBloc();
-        printf("BOUH!\n");
-    }
     Bloc *newbloc = new Bloc(x, y);
     newbloc->setItems(createItems(bloc));
     newbloc->setPlayers(createPlayerMap(bloc, x, y));
