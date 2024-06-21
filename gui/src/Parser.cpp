@@ -167,12 +167,16 @@ void Zappy::Parser::levelPlayer(std::queue<std::string> player)
 void Zappy::Parser::inventoryPlayer(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
+
     // int nb_p = std::stoi(player.front());
-    player.pop();
+    if (player.size() > 0)
+        player.pop();
     // int x = std::stoi(player.front());
-    player.pop();
+    if (player.size() > 0)
+        player.pop();
     // int y = std::stoi(player.front());
-    player.pop();
+    if (player.size() > 0)
+        player.pop();
     // items;
 }
 
@@ -251,6 +255,7 @@ void Zappy::Parser::death(std::queue<std::string> player)
     doppel = _playersMap.getPlayersList();
     auto keydelete = doppel.find(nb_p);
     if (keydelete != doppel.end()) {
+        keydelete->second->getMutex().lock();
         delete keydelete->second;
         doppel.erase(keydelete);
     }
