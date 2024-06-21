@@ -34,39 +34,22 @@ static void create_cell(cell_t *cell, int x, int y)
         cell->stone[i] = 0;
 }
 
-static void shuffle_cell(int totalCells, int *cellIn)
-{
-    int j = 0;
-    int tmp = 0;
-
-    for (int i = totalCells - 1; i > 0; --i) {
-        j = rand() % (i + 1);
-        tmp = cellIn[i];
-        cellIn[i] = cellIn[j];
-        cellIn[j] = tmp;
-    }
-}
-
 void distribute_items(
     cell_t **map, const server_t *serv, int quant, int item_type)
 {
-    int totalCells = serv->resX * serv->resY;
-    int *cellIn = malloc(totalCells * sizeof(int));
+    int x = 0;
+    int y = 0;
 
     srand(time(NULL));
-    if (cellIn == NULL)
-        return;
-    for (int i = 0; i < totalCells; ++i)
-        cellIn[i] = i;
-    shuffle_cell(totalCells, cellIn);
-    for (int i = 0; i < quant; ++i) {
-        if (item_type == 6)
-            map[cellIn[i] % serv->resX][cellIn[i] / serv->resX].food++;
-        else
-            map[cellIn[i] % serv->resX][cellIn[i] / serv->resX]
-                .stone[item_type]++;
+    for (int i = 0; i < quant; i++) {
+        x = rand() % serv->resX;
+        y = rand() % serv->resY;
+        if (item_type == 6) {
+            map[x][y].food++;
+        } else {
+            map[x][y].stone[item_type]++;
+        }
     }
-    free(cellIn);
 }
 
 void free_map(server_t *serv)
