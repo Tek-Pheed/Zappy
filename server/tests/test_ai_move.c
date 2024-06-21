@@ -29,7 +29,7 @@ static client_t *create_client(int x, int y, int orient)
     client_t *tmp = calloc(1, sizeof(client_t));
 
     tmp->player.food = 10;
-    tmp->player.elevating = false;
+    tmp->player.elevating = -1;
     tmp->player.level = 1;
     tmp->player.orient = orient;
     tmp->player.x = x;

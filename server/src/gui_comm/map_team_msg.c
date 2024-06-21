@@ -51,25 +51,30 @@ char *all_content(const server_t *serv)
     return buff;
 }
 
-static char *team_name(const server_t *serv, int ind)
+static char *team_name(team_t *team)
 {
-    char *buff = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
+    char *buff = calloc(strlen(team->name) + 7, sizeof(char));
 
     if (!buff)
         return NULL;
-    sprintf(buff, "tna %s\n", serv->tName[ind]);
+    sprintf(buff, "tna %s\n", team->name);
     return buff;
 }
 
 char *all_name(const server_t *serv)
 {
-    char *buff = calloc(get_team_nb(serv) * DEFAULT_BUFFER_SIZE, sizeof(char));
+    int len_team = list_get_size(serv->teams);
+    char *buff = calloc(len_team * DEFAULT_BUFFER_SIZE, sizeof(char));
     char *team = NULL;
+    team_t *tmp;
 
     if (!buff)
         return NULL;
-    for (int i = 0; serv->tName[i] != NULL; i++) {
-        team = team_name(serv, i);
+    for (int i = 0; i != len_team; i++) {
+        tmp = list_get_elem_at_position(serv->teams, i);
+        if (tmp == NULL)
+            continue;
+        team = team_name(tmp);
         strcat(buff, team);
         free(team);
     }

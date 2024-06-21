@@ -57,7 +57,7 @@ static void send_login_answer(server_t *serv, client_t *client)
 static bool create_player(server_t *serv, client_t *client, int index)
 {
     client->player.food = 10;
-    client->player.elevating = false;
+    client->player.elevating = -1;
     client->player.level = 1;
     client->player.number = index;
     client->player.orient = 1;
@@ -67,11 +67,24 @@ static bool create_player(server_t *serv, client_t *client, int index)
 
 static void send_initial_gui_data(server_t *serv, client_t *client)
 {
+    client_t *cli = NULL;
+    char buff[BUFFER_MAX_SIZE + 100];
+
     server_log(serv, EVENT, client->fd, "logged in as GRAPHIC");
     event_teams_names(serv, client);
     gui_get_time_unit(serv, client, NULL);
     gui_map_size(serv, client, NULL);
     gui_map_content(serv, client, NULL);
+    for (size_t i = 0; i != list_get_size(serv->client); i++) {
+        cli = list_get_elem_at_position(serv->client, i);
+        if (cli == NULL || cli->state != AI)
+            continue;
+        memset(buff, 0, sizeof(buff));
+        sprintf(buff, "pnw %d %d %d %d %d %s\n", cli->player.number,
+            cli->player.x, cli->player.y, cli->player.orient,
+            cli->player.level, cli->team_name);
+        server_send_data(client, buff);
+    }
 }
 
 bool handle_client_login(server_t *serv, client_t *client, const char *cmd)

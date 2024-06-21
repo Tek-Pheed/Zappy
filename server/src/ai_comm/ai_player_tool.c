@@ -36,6 +36,10 @@ bool ai_inventory(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 
 bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 {
+    team_t *tmp = team_get_client(serv, cli);
+
+    if (tmp != NULL && cli->player.level == 8)
+        tmp->nb_level_max -= 1;
     server_send_data(cli, "dead\n");
     return true;
 }
@@ -43,13 +47,13 @@ bool ai_dead(UNUSED server_t *serv, client_t *cli, UNUSED const char *obj)
 bool ai_connect_nbr(server_t *serv, client_t *cli, UNUSED const char *obj)
 {
     int value = team_get_free_space(team_get_client(serv, cli));
-    char str[12];
+    char str[32];
 
+    if (value < 0)
+        value = 0;
     memset(str, '\0', sizeof(str));
-    if (value >= 0) {
-        sprintf(str, "%d\n", value);
-        server_send_data(cli, str);
-    }
+    sprintf(str, "%d\n", value);
+    server_send_data(cli, str);
     return true;
 }
 
@@ -88,9 +92,18 @@ static void sub_eject(server_t *serv, client_t *cli)
 {
     char msg[20];
     int len_client = list_get_size(serv->client);
+    int orient = cli->player.orient;
 
+    if (orient == cli->player.orient && orient == NORTH)
+        orient = SOUTH;
+    if (orient == cli->player.orient && orient == SOUTH)
+        orient = NORTH;
+    if (orient == cli->player.orient && orient == EAST)
+        orient = WEST;
+    if (orient == cli->player.orient && orient == WEST)
+        orient = EAST;
     memset(msg, '\0', sizeof(msg));
-    sprintf(msg, "eject: %d\n", cli->player.orient);
+    sprintf(msg, "eject: %d\n", orient);
     for (int i = 0; i != len_client; i++)
         eject_player(i, cli, serv, msg);
 }

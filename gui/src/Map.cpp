@@ -13,6 +13,8 @@ Zappy::Map::Map()
 
 Zappy::Map::~Map()
 {
+    while (!_bloc.empty())
+        _bloc.pop_back();
 }
 
 void Zappy::Map::setX(int x)
@@ -48,4 +50,21 @@ void Zappy::Map::setBloc(std::list<Zappy::Bloc *> blocs)
 void Zappy::Map::pushBloc(Bloc *bloc)
 {
     _bloc.push_back(bloc);
+}
+
+void Zappy::Map::popBloc()
+{
+    while (!_bloc.empty()) {
+        delete _bloc.front();
+        _bloc.pop_front();
+    }
+}
+
+Zappy::Bloc *Zappy::Map::getBloc(int x, int y)
+{
+    for (auto i : _bloc) {
+        if (i->getX() == x && i->getY() == y)
+            return (i);
+    }
+    return (nullptr);
 }

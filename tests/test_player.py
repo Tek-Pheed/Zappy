@@ -42,7 +42,9 @@ def test_parse_look_command():
 
     assert p.parse_look_command("[player food food, food, linemate, ]", "food") == ["Take food\n"]
 
-def test_wal_to_broadcast_emitter():
+def test_walk_to_broadcast_emitter():
     p: Player = Player("zap")
 
-    assert p.walk_to_broadcast_emitter(0) == []
+    action: list = p.walk_to_broadcast_emitter(0, "")
+
+    assert action[0].split(" ")[0] == "Broadcast"

@@ -11,11 +11,30 @@ def print_verbose(verbose: bool, str):
     if verbose:
         print(f"{str}", end="")
 
-def generate_empty_map() -> List:
+def generate_empty_map(data) -> List:
     res: List = []
     nbCase = 1
 
-    for _ in range(4):
+    line: int = 0
+
+    if (len(data) == 4):
+        line = 2
+    elif (len(data) == 9):
+        line = 3
+    elif (len(data) == 16):
+        line = 4
+    elif (len(data) == 25):
+        line = 5
+    elif (len(data) == 36):
+        line = 6
+    elif (len(data) == 49):
+        line = 7
+    elif (len(data) == 64):
+        line = 8
+    elif (len(data) == 81):
+        line = 9
+
+    for _ in range(line):
         res.append([[] for j in range(nbCase)])
         nbCase += 2
     return res

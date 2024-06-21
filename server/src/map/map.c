@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "commands.h"
 #include "server.h"
 
 void calculate_quantity(const server_t *serv, float quantity[7])
@@ -42,7 +41,7 @@ void distribute_items(
     int y = 0;
 
     srand(time(NULL));
-    for (int i = 0; i < quant; ++i) {
+    for (int i = 0; i < quant; i++) {
         x = rand() % serv->resX;
         y = rand() % serv->resY;
         if (item_type == 6) {

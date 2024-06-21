@@ -17,7 +17,7 @@ team_t *team_get_client(server_t *serv, const client_t *cli)
     team_t *tmp = NULL;
 
     for (int i = 0; i != len; i++) {
-        tmp = list_get_elem_at_position(serv->teams, 1);
+        tmp = list_get_elem_at_position(serv->teams, i);
         if (tmp == NULL)
             continue;
         if (strcmp(cli->team_name, tmp->name) == 0)
@@ -26,13 +26,11 @@ team_t *team_get_client(server_t *serv, const client_t *cli)
     return NULL;
 }
 
-static bool team_can_add_player(const server_t *serv, team_t *team)
+static bool team_can_add_player(team_t *team)
 {
     size_t nb_eggs = list_get_size(team->eggs);
 
     if (nb_eggs == 0)
-        return (false);
-    if (team->nb_player >= serv->clientNb)
         return (false);
     return (true);
 }
@@ -54,12 +52,13 @@ static egg_t *get_last_egg(list_t *eggs)
     return (NULL);
 }
 
-static bool check_egg(
-    server_t *serv, client_t *client, egg_t *egg, team_t *team)
+static bool check_egg(server_t *serv, client_t *client, team_t *team)
 {
+    egg_t *egg = NULL;
+
     if (team != NULL
         && strncmp(team->name, client->team_name, strlen(team->name)) == 0
-        && team_can_add_player(serv, team)) {
+        && team_can_add_player(team)) {
         egg = get_last_egg(team->eggs);
         if (egg != NULL) {
             team->nb_player++;
@@ -77,14 +76,13 @@ bool team_add_client(server_t *serv, client_t *client)
 {
     size_t nb_teams = list_get_size(serv->teams);
     team_t *team = NULL;
-    egg_t *egg = NULL;
     bool val;
 
     for (size_t i = 0; i != nb_teams; i++) {
         team = list_get_elem_at_position(serv->teams, i);
         if (team == NULL)
             continue;
-        val = check_egg(serv, client, egg, team);
+        val = check_egg(serv, client, team);
         if (val == true)
             return val;
     }
@@ -112,5 +110,5 @@ int team_get_free_space(team_t *team)
 {
     if (team == NULL)
         return (0);
-    return list_get_size(team->eggs);
+    return list_get_size(team->eggs) - 1;
 }

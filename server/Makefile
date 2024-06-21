@@ -101,11 +101,10 @@ TEST_GCDA   =   $(TEST_SRC:.c=.gcda)
 TEST_GCNO   =   $(TEST_SRC:.c=.gcno)
 
 TEST_NAME   =   test_run
-
-CFLAGS +=    --coverage -lcriterion
+CFLAGS_TEST =    $(CFLAGS) --coverage -lcriterion
 
 test_run:	re	clean	$(TEST_OBJ)
-	$(CC) $(CFLAGS) $(TEST_OBJ) -o $(TEST_NAME) -Wl,-rpath=.
+	$(CC) $(CFLAGS_TEST) $(TEST_OBJ) -o $(TEST_NAME) -Wl,-rpath=.
 	./$(TEST_NAME)	|| true
 	gcovr
 

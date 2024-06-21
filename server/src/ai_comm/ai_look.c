@@ -35,11 +35,11 @@ static cell_t *get_current_case(
 static void get_stone_cell_next(const cell_t *cell, char **ptr)
 {
     if (cell->stone[PHIRAS] > 0) {
-        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+        for (int i = 0; i != cell->stone[PHIRAS]; i++)
             *ptr += sprintf(*ptr, "phiras ");
     }
     if (cell->stone[THYSTAME] > 0) {
-        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+        for (int i = 0; i != cell->stone[THYSTAME]; i++)
             *ptr += sprintf(*ptr, "thystame ");
     }
 }
@@ -51,15 +51,15 @@ static void get_stone_cell(const cell_t *cell, char **ptr)
             *ptr += sprintf(*ptr, "linemate ");
     }
     if (cell->stone[DERAUMERE] > 0) {
-        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+        for (int i = 0; i != cell->stone[DERAUMERE]; i++)
             *ptr += sprintf(*ptr, "deraumere ");
     }
     if (cell->stone[SIBUR] > 0) {
-        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+        for (int i = 0; i != cell->stone[SIBUR]; i++)
             *ptr += sprintf(*ptr, "sibur ");
     }
     if (cell->stone[MENDIANE] > 0) {
-        for (int i = 0; i != cell->stone[LINEMATE]; i++)
+        for (int i = 0; i != cell->stone[MENDIANE]; i++)
             *ptr += sprintf(*ptr, "mendiane ");
     }
     get_stone_cell_next(cell, ptr);

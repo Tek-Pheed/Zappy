@@ -20,9 +20,9 @@ def test_print_no_verbose(capsys):
     assert out == ""
 
 def test_generate_empty_map():
-    list = generate_empty_map()
+    list = generate_empty_map(["", "", "", ""])
 
-    assert list == [[[]], [[], [], []], [[],[],[],[],[]], [[],[],[],[],[],[],[]]]
+    assert list == [[[]], [[], [], []]]
 
 def test_get_nb_of_line_in_array():
     data = ["player food food", "food", "linemate", " "]
@@ -30,13 +30,13 @@ def test_get_nb_of_line_in_array():
     assert get_nb_of_line_in_array(data) == 2
 
 def test_fill_empty_map_with_data():
-    list = generate_empty_map()
     data = ["player food food", "food", "linemate", " "]
+    list = generate_empty_map(data)
 
-    assert fill_map_with_data(list, data) == [[["player food food"]], [["food"], ["linemate"], [" "]], [[],[],[],[],[]], [[],[],[],[],[],[],[]]]
+    assert fill_map_with_data(list, data) == [[["player food food"]], [["food"], ["linemate"], [" "]]]
 
 def test_fill_empty_map_with_empty_data():
-    list = generate_empty_map()
     data = []
+    list = generate_empty_map(data)
 
-    assert fill_map_with_data(list, data) == [[[]], [[], [], []], [[],[],[],[],[]], [[],[],[],[],[],[],[]]]
+    assert fill_map_with_data(list, data) == []

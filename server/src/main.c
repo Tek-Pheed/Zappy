@@ -79,11 +79,17 @@ static int check_args(int argc, char *argv[], server_t *serv)
 
 static void print_serv(const server_t *serv)
 {
+    team_t *tmp;
+    int team_len = list_get_size(serv->teams);
+
     printf("P: %d\n", serv->port);
     printf("X: %d\n", serv->resX);
     printf("Y: %d\n", serv->resY);
-    for (int i = 0; serv->tName[i] != NULL; i++) {
-        printf("N: %s\n", serv->tName[i]);
+    for (int i = 0; i != team_len; i++) {
+        tmp = list_get_elem_at_position(serv->teams, i);
+        if (tmp == NULL)
+            continue;
+        printf("N: %s\n", tmp->name);
     }
     printf("C: %d\n", serv->clientNb);
     printf("F: %d\n", serv->freq);

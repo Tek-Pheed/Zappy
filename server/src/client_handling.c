@@ -23,7 +23,7 @@ void server_send_data(client_t *client, const char *data)
         return;
     if (client->write_buffer[0] == '\0') {
         strcpy(client->write_buffer, data);
-    } else if (strlen(client->write_buffer) + strlen(client->read_buffer)
+    } else if (strlen(client->write_buffer) + strlen(data)
         < BUFFER_MAX_SIZE) {
         strcat(client->write_buffer, data);
     } else {

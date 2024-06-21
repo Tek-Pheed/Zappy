@@ -9,27 +9,21 @@ NAME    =   zappy_gui
 
 SRC		= src/main.cpp \
 		  src/Menu.cpp \
-		  src/Utils.cpp \
-		  src/Input.cpp \
 		  src/Settings.cpp \
 		  src/Draw.cpp \
 		  src/Parser.cpp \
 		  src/Player.cpp \
+		  src/VectorPlayers.cpp \
 		  src/Map.cpp \
 		  src/Bloc.cpp \
-		  src/AItems.cpp \
-		  src/Items/Food.cpp \
-		  src/Items/Deraumere.cpp \
-		  src/Items/Linemate.cpp \
-		  src/Items/Mendiane.cpp \
-		  src/Items/Phiras.cpp \
-		  src/Items/Sibur.cpp \
-		  src/Items/Thystame.cpp \
 		  src/ConfirmButton.cpp	\
+		  src/Server.cpp \
+		  src/RessourcePool.cpp \
+		  src/Thread.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
-CFLAGS = -W -Wall -Wextra -I./include
+CFLAGS = -W -Wall -Wextra -I./include -std=c++20
 
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lX11
 
@@ -38,7 +32,7 @@ LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lX11
 
 $(NAME): $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(LDFLAGS)
-	@cp $(NAME) ../
+	@mv $(NAME) ../
 
 all: $(NAME)
 
@@ -46,8 +40,15 @@ clean:
 	rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf ../$(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+debug:	CFLAGS	+= -O0	-g3 -ggdb3 -Wpedantic
+debug:	re
+
+asan: CFLAGS += -g3 -fsanitize=address
+asan: LDFLAGS += -fsanitize=address
+asan: re
+
+.PHONY: all clean fclean asan re
