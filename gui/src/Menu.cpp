@@ -73,6 +73,29 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
+void Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
+{
+    Vector2 mousePoint = GetMousePosition();
+    std::list <Bloc *> tmp = bloc;
+    std::list <Rectangle> rectList;
+    bool isHovered = false;
+    int i = 0;
+    std::cout << "bonjour je rentre dans displayInventory" << std::endl;
+    while(!tmp.empty()) {
+        rectList.push_front({(float)tmp.front()->getX(), (float)tmp.front()->getY(), 5.0f, 5.0f});
+        tmp.pop_front();
+    }
+
+    while (!rectList.empty() && isHovered != true) {
+        printf("%f - %f, %f- %f- %f\n", mousePoint.x, mousePoint.y, rectList.front().x, rectList.front().y, rectList.front().height, rectList.front().width);
+        isHovered = CheckCollisionPointRec(mousePoint, rectList.front());
+        if (isHovered)
+            printf("%i\n", i);
+        rectList.pop_front();
+        i++;
+    }
+}
+
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music)
 {
@@ -104,6 +127,9 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         std::ref(server), std::ref(parser));
 
     while (!WindowShouldClose()) {
+        EnableCursor();
+        displayInventory(parser.getMap().getBloc());
+        printf("aa passe\n");
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
