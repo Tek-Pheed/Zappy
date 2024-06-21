@@ -46,6 +46,7 @@ namespace Zappy
         Map();
         ~Map();
         void pushBloc(Bloc *bloc);
+        void popBloc();
         std::list<Bloc *> getBloc();
         void setBloc(std::list<Bloc *> blocs);
         void setX(int x);

@@ -62,6 +62,16 @@ std::vector<Zappy::Player> createPlayerMap(
 
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
+    std::queue<std::string> tmpBloc = bloc;
+    while (!tmpBloc.empty()) {
+        printf("%s\n", tmpBloc.front().c_str());
+        tmpBloc.pop();
+    }
+    if (!_map.getBloc().empty() && 
+    _map.getBloc().size() == (unsigned int)(_map.getX() * _map.getY())) {
+        _map.popBloc();
+        printf("BOUH!\n");
+    }
     int x = std::stoi(bloc.front());
     bloc.pop();
     int y = std::stoi(bloc.front());
@@ -290,7 +300,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
             tmpFront.pop();
             createMap(tmpFront);
         }
-        if (tmpFront.front() == "bct" && _map.getBloc().size() != (unsigned int)(_map.getX() * _map.getY())) {
+        if (tmpFront.front() == "bct") {
             tmpFront.pop();
             _map.pushBloc(createBloc(tmpFront));
         }
