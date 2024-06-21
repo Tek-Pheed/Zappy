@@ -55,6 +55,7 @@ namespace Zappy
             char port[MAX_INPUT_CHARS + 1], int &letterCount,
             int &framesCounter);
         void getPort(char **args);
+        void displayInventory(std::list<Bloc *> bloc);
 
       protected:
       private:
