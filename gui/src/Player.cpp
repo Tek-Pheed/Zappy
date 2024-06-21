@@ -137,6 +137,6 @@ void Zappy::Player::displayPlayer(RessourceManager &objPool)
     }
     // player.transform = MatrixRotateXYZ((Vector3){0.0f, DEG2RAD * rot,
     // 0.0f}); DrawModel(player, pos, 5.0f, WHITE);
-    DrawModelEx(player, pos, (Vector3){0.0f, 1.0f, 0.0f}, rot,
-        (Vector3){5.0f, 5.0f, 5.0f}, WHITE);
+    DrawModelEx(player, pos, (Vector3){0.0f, 1.5f, 0.0f}, rot,
+        (Vector3){2.5f, 2.5f, 2.5f}, WHITE);
 }

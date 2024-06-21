@@ -100,7 +100,7 @@ std::vector<Zappy::items> Zappy::Bloc::getItems()
 Vector3 getItemPosition(Vector3 &bloc_pos, int nbItems, int index)
 {
     size_t gridSize = std::sqrt(nbItems);
-    Vector3 position = {0, 1.5, 0};
+    Vector3 position = {0, 1.2, 0};
     size_t counter = 0;
     float step = 1.0f / (float) gridSize;
 
@@ -129,7 +129,7 @@ void Zappy::Bloc::display(RessourceManager &objectPool)
     Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
     Model island =
         objectPool.models.dynamicLoad("island", "assets/island.obj");
-    Vector3 pos = {(getX() * 5.0f), 1.5f, (getY() * 5.0f)};
+    Vector3 pos = {(getX() * 5.0f), 1.2f, (getY() * 5.0f)};
     Vector3 Ipos;
     std::vector<Zappy::items> items = getItems();
     size_t i = 0;
