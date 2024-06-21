@@ -37,19 +37,19 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 
 void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 {
-    Model &model = objectPool.models.dynamicLoad("korok", "assets/makar.obj");
+    Model &model = objectPool.models.dynamicLoad("korok", "assets/players/makar.obj");
     Music &MenuMusic =
-        objectPool.musics.dynamicLoad("menu", "assets/menu.mp3");
+        objectPool.musics.dynamicLoad("menu", "assets/musics/menu.mp3");
     Music &GameMusic =
-        objectPool.musics.dynamicLoad("game", "assets/game.mp3");
-    Music &IncMusic = 
+        objectPool.musics.dynamicLoad("game", "assets/musics/game.mp3");
+    Music &IncMusic =
         objectPool.musics.dynamicLoad("inc", "assets/Zelda_Noïa_dance_song.mp3");
     Music &BroadMusic =
         objectPool.musics.dynamicLoad("broad", "assets/Zelda_Korok_Yahaha.mp3");
 
     if (model.meshCount == 0) {
         std::cerr
-            << "Erreur : Impossible de charger le modèle 'assets/korok.glb'"
+            << "Erreur : Impossible de charger le modèle 'assets/players/makar.obj'"
             << std::endl;
         exit(1);
     }
@@ -70,10 +70,10 @@ void Zappy::Menu::ConfigureCamera(Camera &camera)
 
 void loadItems(RessourceManager &objectPool)
 {
-    constexpr const char *models[] = {"assets/rubis/rubis_yigas.glb",
-        "assets/rubis/rubis_korok.glb", "assets/rubis/rubis_goron.glb",
-        "assets/rubis/rubis_zora.glb", "assets/rubis/rubis_crepuscule.glb",
-        "assets/rubis/rubis_piaf.glb", "assets/rubis/rubis_divin.glb"};
+    constexpr const char *models[] = {"assets/objects/food.obj",
+        "assets/objects/rubis_korok.glb", "assets/objects/rubis_goron.glb",
+        "assets/objects/rubis_zora.glb", "assets/objects/rubis_crepuscule.glb",
+        "assets/objects/rubis_piaf.glb", "assets/objects/rubis_divin.glb"};
 
     for (std::size_t i = 0; i != Zappy::ITEM_MAX; i++)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
@@ -88,9 +88,9 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
 
     std::string response;
     Players listPlayers;
-    objectPool.models.loadRessource("water", "assets/water.obj");
-    objectPool.models.loadRessource("island", "assets/island.obj");
-    objectPool.models.loadRessource("player", "assets/makar.obj");
+    objectPool.models.loadRessource("water", "assets/environments/water.obj");
+    objectPool.models.loadRessource("island", "assets/environments/island.obj");
+    objectPool.models.loadRessource("player", "assets/players/makar.obj");
 
     Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
         45.0f, CAMERA_PERSPECTIVE};
