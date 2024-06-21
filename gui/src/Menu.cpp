@@ -93,7 +93,7 @@ void Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
     }
 
     while (!rectList.empty() && isHovered != true) {
-        printf("%f - %f, %f- %f- %f\n", mousePoint.x, mousePoint.y, rectList.front().x, rectList.front().y, rectList.front().height, rectList.front().width);
+        printf("%f - %f, %f- %f- %f - %f\n", mousePoint.x, mousePoint.y, rectList.front().x, rectList.front().y, rectList.front().height, rectList.front().width);
         isHovered = CheckCollisionPointRec(mousePoint, rectList.front());
         if (isHovered)
             printf("%i\n", i);
@@ -137,8 +137,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         std::ref(server), std::ref(parser));
 
     while (!WindowShouldClose()) {
-        EnableCursor();
-        displayInventory(parser.getMap().getBloc());
+        // displayInventory(parser.getMap().getBloc());
         printf("aa passe\n");
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
