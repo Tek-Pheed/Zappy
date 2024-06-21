@@ -90,7 +90,7 @@ Vector3 getItemPosition(Vector3 &bloc_pos, int nbItems, int index)
     size_t counter = 0;
     float step = 1.0f / (float) gridSize;
 
-    for (size_t i = 0; i < nbItems; i++) {
+    for (int i = 0; i < nbItems; i++) {
         if (counter == gridSize) {
             position.z += step;
             position.x = 0;
