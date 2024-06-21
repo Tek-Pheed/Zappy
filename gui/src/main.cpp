@@ -57,7 +57,6 @@ int main(int ac, char **av)
     }
     menu.LoadResources(objectPool);
     menu.ConfigureCamera(camera);
-    objectPool.textures.loadRessource("background", "assets/background.png");
     BoundingBox bounds =
         GetMeshBoundingBox(objectPool.models.getRessource("korok").meshes[0]);
     menu.MainLoop(objectPool, camera, position, bounds, draw);

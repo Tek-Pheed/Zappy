@@ -162,7 +162,6 @@ void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
     bool resIsClick = false;
     double volume = 0.5f;
 
-    objectPool.textures.getRessource("background");
     Music &music = objectPool.musics.getRessource("menu");
     Music &GameMusic = objectPool.musics.getRessource("game");
     Music &IncMusic = objectPool.musics.getRessource("inc");

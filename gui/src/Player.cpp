@@ -124,8 +124,9 @@ void Zappy::Player::createModel(
 
 void Zappy::Player::displayPlayer(RessourceManager &objPool)
 {
-    Model player = objPool.models.dynamicLoad("player", "assets/korok.obj");
     Vector3 pos = {getPositionX() * 5.0f, 1.5f, getPositionY() * 5.0f};
+    std::unique_lock lock(_mut);
+    Model player = objPool.models.dynamicLoad("player", "assets/korok.obj");
     float rot = 270.0f;
     switch (_orien) {
         case 1: rot -= 270.0f; break;

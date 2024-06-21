@@ -139,6 +139,8 @@ Zappy::Player *Zappy::Parser::newPlayer(std::queue<std::string> player)
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 {
+    if (player.size() <= 3)
+        return;
     std::unique_lock lock(_mut);
     int nb_p = std::stoi(player.front());
     player.pop();
