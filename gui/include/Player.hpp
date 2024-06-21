@@ -10,6 +10,7 @@
 #include <map>
 #include <raylib.h>
 #include <string>
+#include <mutex>
 #include <vector>
 #include "RessourcePool.hpp"
 
@@ -18,6 +19,7 @@ namespace Zappy
     class Player {
       public:
         Player();
+        Player(const Zappy::Player &player);
         ~Player();
         std::map<std::string, int> getPosition();
         void setPosition(std::map<std::string, int>);
@@ -34,6 +36,7 @@ namespace Zappy
         std::vector<std::map<std::string, int>> getInventory();
         void setInventory(std::map<std::string, int> inventory);
 		    void displayPlayer(RessourceManager &objPool);
+        Zappy::Player& operator=(const Zappy::Player &player);
 
       private:
         Model _model;
@@ -44,6 +47,7 @@ namespace Zappy
         int _y;
         int _orien;
         int _id;
+        std::mutex _mut;
     };
 
     class Players {
