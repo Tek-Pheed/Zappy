@@ -181,7 +181,7 @@ class Player:
 
 
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
-        if self.ready_to_level_up or self.action:
+        if self.ready_to_level_up or self.action or self.step == 12:
             return []
         action = []
         if direction == 0:
@@ -227,7 +227,7 @@ class Player:
                 self.action = self.action[1:]
             else:
                 self.data_to_send = "Inventory\n"
-                self.step += 1
+            self.step += 1
         elif self.step == 1:
             if (self.incantation_possible()):
                 self.step = 11
@@ -252,7 +252,6 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 5:
-            print_verbose(self.verbose, f"[LEVEL] Player necessary: {self.player_incantation >= PLAYER_MANDATORY[self.level - 1]}\n")
             if self.player_incantation >= PLAYER_MANDATORY[self.level - 1]:
                 self.begin_incantation()
             if self.step != 6:
