@@ -180,7 +180,7 @@ class Player:
                 self.step = 4
 
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
-        if self.ready_to_level_up or self.action or self.step == 12:
+        if self.ready_to_level_up or self.action:
             return []
         action = []
         if direction == 0:
@@ -297,6 +297,7 @@ class Player:
                 self.action = self.action[1:]
             else:
                 self.data_to_send = ""
+                self.ready_to_level_up = True
         elif self.step == 13:
             if self.action:
                 self.data_to_send = self.action[0]
