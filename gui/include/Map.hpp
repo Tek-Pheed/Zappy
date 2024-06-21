@@ -7,6 +7,7 @@
 
 #pragma once
 #include <list>
+#include <mutex>
 #include <vector>
 #include "Items.hpp"
 #include "Player.hpp"
@@ -20,8 +21,8 @@ namespace Zappy
         Bloc(int x, int y);
         ~Bloc();
 
-        int getX() const;
-        int getY() const;
+        int getX();
+        int getY();
         void setX(int X);
         void setY(int Y);
 
@@ -35,6 +36,7 @@ namespace Zappy
         void display(RessourceManager &objectPool);
 
       private:
+        std::mutex _mut;
         int _x;
         int _y;
         std::unordered_map<enum items, size_t> _items;

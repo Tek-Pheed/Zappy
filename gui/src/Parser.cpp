@@ -63,6 +63,8 @@ std::vector<Zappy::Player> createPlayerMap(
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
     std::queue<std::string> tmpBloc = bloc;
+    if (bloc.size() < 3)
+        return nullptr;
     int x = std::stoi(bloc.front());
     bloc.pop();
     int y = std::stoi(bloc.front());

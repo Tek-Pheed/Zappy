@@ -5,6 +5,7 @@
 ** Bloc.cpp
 */
 
+#include <mutex>
 #include "Items.hpp"
 #include "Map.hpp"
 
@@ -16,39 +17,46 @@ Zappy::Bloc::~Bloc()
 {
 }
 
-int Zappy::Bloc::getX() const
+int Zappy::Bloc::getX()
 {
+    std::unique_lock lock(_mut);
     return this->_x;
 }
 
-int Zappy::Bloc::getY() const
+int Zappy::Bloc::getY()
 {
+    std::unique_lock lock(_mut);
     return this->_y;
 }
 
 void Zappy::Bloc::setX(int x)
 {
+    std::unique_lock lock(_mut);
     this->_x = x;
 }
 
 void Zappy::Bloc::setY(int y)
 {
+    std::unique_lock lock(_mut);
     this->_y = y;
 }
 
 std::vector<Zappy::Player> Zappy::Bloc::getPlayers()
 {
+    std::unique_lock lock(_mut);
     return this->_players;
 }
 
 void Zappy::Bloc::setPlayers(std::vector<Zappy::Player> players)
 {
+    std::unique_lock lock(_mut);
     this->_players.clear();
     this->_players = players;
 }
 
 void Zappy::Bloc::addItem(Zappy::items item, size_t quantity)
 {
+    std::unique_lock lock(_mut);
     if (_items.find(item) == _items.end())
         _items[item] = 0;
     _items[item] += quantity;
@@ -56,6 +64,7 @@ void Zappy::Bloc::addItem(Zappy::items item, size_t quantity)
 
 void Zappy::Bloc::removeItem(Zappy::items item, size_t quantity)
 {
+    std::unique_lock lock(_mut);
     if (_items.find(item) == _items.end())
         return;
     _items[item] -= quantity;
@@ -65,13 +74,16 @@ void Zappy::Bloc::removeItem(Zappy::items item, size_t quantity)
 
 void Zappy::Bloc::setItems(std::vector<Zappy::items> items)
 {
+    _mut.lock();
     _items.clear();
+    _mut.unlock();
     for (size_t i = 0; i != items.size(); i++)
         addItem(items[i], 1);
 }
 
 std::vector<Zappy::items> Zappy::Bloc::getItems()
 {
+    std::unique_lock lock(_mut);
     std::vector<Zappy::items> vect;
 
     vect.reserve(_items.size());

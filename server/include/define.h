@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#define BUFFER_MAX_SIZE        8192
+#define BUFFER_MAX_SIZE        10240
 #define MAX_CONCURENT_COMMANDS 10
 
 #define OFFSET_ARGS           8
