@@ -31,7 +31,7 @@ bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitAudioDevice();
     InitWindow(
-        screenWidth, screenHeight, "raylib [core] example - basic window");
+        screenWidth, screenHeight, "Zappy");
     return IsWindowReady();
 }
 

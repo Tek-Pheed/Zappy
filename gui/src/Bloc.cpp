@@ -43,6 +43,7 @@ std::vector<Zappy::Player> Zappy::Bloc::getPlayers()
 
 void Zappy::Bloc::setPlayers(std::vector<Zappy::Player> players)
 {
+    this->_players.clear();
     this->_players = players;
 }
 
@@ -64,6 +65,7 @@ void Zappy::Bloc::removeItem(Zappy::items item, size_t quantity)
 
 void Zappy::Bloc::setItems(std::vector<Zappy::items> items)
 {
+    _items.clear();
     for (size_t i = 0; i != items.size(); i++)
         addItem(items[i], 1);
 }

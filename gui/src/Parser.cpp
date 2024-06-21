@@ -63,6 +63,17 @@ std::vector<Zappy::Player> createPlayerMap(
 Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
 {
     std::queue<std::string> tmpBloc = bloc;
+    int x = std::stoi(bloc.front());
+    bloc.pop();
+    int y = std::stoi(bloc.front());
+    bloc.pop();
+    Bloc *ptr = _map.getBloc(x,y);
+
+    if (ptr != nullptr) {
+        ptr->setItems(createItems(bloc));
+        ptr->setPlayers(createPlayerMap(bloc, x, y));
+        return ptr;
+    }
     while (!tmpBloc.empty()) {
         printf("%s\n", tmpBloc.front().c_str());
         tmpBloc.pop();
@@ -72,13 +83,10 @@ Zappy::Bloc *Zappy::Parser::createBloc(std::queue<std::string> bloc)
         _map.popBloc();
         printf("BOUH!\n");
     }
-    int x = std::stoi(bloc.front());
-    bloc.pop();
-    int y = std::stoi(bloc.front());
-    bloc.pop();
     Bloc *newbloc = new Bloc(x, y);
     newbloc->setItems(createItems(bloc));
     newbloc->setPlayers(createPlayerMap(bloc, x, y));
+    _map.pushBloc(newbloc);
     return newbloc;
 }
 
@@ -302,7 +310,7 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
         }
         if (tmpFront.front() == "bct") {
             tmpFront.pop();
-            _map.pushBloc(createBloc(tmpFront));
+            createBloc(tmpFront);
         }
         if (tmpFront.front() == "pnw") {
             tmpFront.pop();
