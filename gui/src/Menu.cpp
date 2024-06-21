@@ -43,9 +43,9 @@ void Zappy::Menu::LoadResources(RessourceManager &objectPool)
     Music &GameMusic =
         objectPool.musics.dynamicLoad("game", "assets/musics/game.mp3");
     Music &IncMusic =
-        objectPool.musics.dynamicLoad("inc", "assets/Zelda_Noïa_dance_song.mp3");
+        objectPool.musics.dynamicLoad("inc", "assets/musics/Zelda_Noïa_dance_song.mp3");
     Music &BroadMusic =
-        objectPool.musics.dynamicLoad("broad", "assets/Zelda_Korok_Yahaha.mp3");
+        objectPool.musics.dynamicLoad("broad", "assets/musics/Zelda_Korok_Yahaha.mp3");
 
     if (model.meshCount == 0) {
         std::cerr
