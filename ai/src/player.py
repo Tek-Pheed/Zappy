@@ -185,6 +185,7 @@ class Player:
         action = []
         if direction == 0:
             action = [f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"]
+            self.data_to_send = f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"
             self.step = 12
             return action
         if direction == 1:
@@ -292,12 +293,9 @@ class Player:
                 self.ready_to_level_up = True
                 self.step = 4
         elif self.step == 12:
-            if self.action:
-                self.data_to_send = self.action[0]
-                self.action = self.action[1:]
-            else:
+            if "ready" in self.data_to_send and self.ready_to_level_up:
                 self.data_to_send = ""
-                self.ready_to_level_up = True
+            self.ready_to_level_up = True
         elif self.step == 13:
             if self.action:
                 self.data_to_send = self.action[0]
