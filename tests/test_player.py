@@ -45,4 +45,6 @@ def test_parse_look_command():
 def test_walk_to_broadcast_emitter():
     p: Player = Player("zap")
 
-    assert "Broadcast" in p.walk_to_broadcast_emitter(0, "")
+    action: list = p.walk_to_broadcast_emitter(0, "")
+
+    assert action[0].split(" ")[0] == "Broadcast"
