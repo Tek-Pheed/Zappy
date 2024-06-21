@@ -89,5 +89,6 @@ namespace Zappy
           std::vector<Model> _itemsModelList;
           bool _ifInc;
           bool _ifBroadcast;
+          std::mutex _mut;
     };
 } // namespace Zappy

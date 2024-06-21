@@ -31,6 +31,7 @@ namespace Zappy
         int getPositionN();
         void setID(int id);
         int getID();
+        std::mutex &getMutex();
         void createModel(
         RessourceManager &objectPool, const std::string &modelPath);
         std::vector<std::map<std::string, int>> getInventory();

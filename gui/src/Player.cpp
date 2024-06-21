@@ -110,6 +110,11 @@ int Zappy::Player::getID()
     return this->_id;
 }
 
+std::mutex &Zappy::Player::getMutex()
+{
+    return (_mut);
+}
+
 void Zappy::Player::createModel(
     RessourceManager &objectPool, const std::string &modelPath)
 {
