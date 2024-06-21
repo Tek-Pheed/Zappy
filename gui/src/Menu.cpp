@@ -137,8 +137,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         std::ref(server), std::ref(parser));
 
     while (!WindowShouldClose()) {
-        EnableCursor();
-        displayInventory(parser.getMap().getBloc());
+        // displayInventory(parser.getMap().getBloc());
         printf("aa passe\n");
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
