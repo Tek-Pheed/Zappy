@@ -68,7 +68,7 @@ static bool create_player(server_t *serv, client_t *client, int index)
 static void send_initial_gui_data(server_t *serv, client_t *client)
 {
     client_t *cli = NULL;
-    char buff[8300];
+    char buff[BUFFER_MAX_SIZE + 100];
 
     server_log(serv, EVENT, client->fd, "logged in as GRAPHIC");
     event_teams_names(serv, client);
