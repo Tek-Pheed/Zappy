@@ -79,27 +79,21 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
-void Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
+std::list <BoundingBox> Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
 {
+
     Vector2 mousePoint = GetMousePosition();
     std::list <Bloc *> tmp = bloc;
-    std::list <Rectangle> rectList;
+    std::list <BoundingBox> rectList;
     bool isHovered = false;
     int i = 0;
     std::cout << "bonjour je rentre dans displayInventory" << std::endl;
     while(!tmp.empty()) {
-        rectList.push_front({(float)tmp.front()->getX(), (float)tmp.front()->getY(), 5.0f, 5.0f});
+        rectList.push_front({{(float)tmp.front()->getX(), 0.0f, (float)tmp.front()->getY()},
+                            {(float)tmp.front()->getX(), 0.0f, (float)tmp.front()->getY()}});
         tmp.pop_front();
     }
-
-    while (!rectList.empty() && isHovered != true) {
-        printf("%f - %f, %f- %f- %f - %f\n", mousePoint.x, mousePoint.y, rectList.front().x, rectList.front().y, rectList.front().height, rectList.front().width);
-        isHovered = CheckCollisionPointRec(mousePoint, rectList.front());
-        if (isHovered)
-            printf("%i\n", i);
-        rectList.pop_front();
-        i++;
-    }
+    return rectList;
 }
 
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
@@ -129,19 +123,44 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
 
     DisableCursor();
     SetTargetFPS(60);
+    EnableCursor();
     // float velocityY = 0.0f;
     // const float gravity = -9.81f;
     // const float bounceFactor = 0.7f;
     // bool firstDrop = true;
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
+    bool cursorVisible = true;
+    std::list <BoundingBox> rectList = displayInventory(parser.getMap().getBloc());
 
     while (!WindowShouldClose()) {
-        // displayInventory(parser.getMap().getBloc());
-        printf("aa passe\n");
+        if (!cursorVisible) {
+            UpdateCamera(&camera, CAMERA_FREE);
+        }
+
+        if (IsKeyPressed(KEY_C)) {
+            cursorVisible = !cursorVisible;
+            if (cursorVisible) {
+                EnableCursor();
+            } else {
+                DisableCursor();
+            }
+        }
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            std::list <BoundingBox> rectListTmp = rectList;
+            Ray ray = GetMouseRay(GetMousePosition(), camera);
+            while (!rectListTmp.empty()) {
+                if (CheckCollisionRayBox(ray, rectListTmp.front()))
+                   std::cout << "hitbox est cliqué" << std::endl;
+                rectListTmp.pop_front();
+            }
+        }
+
         if (parser.getInc())
             UpdateMusicStream(incMusic);
         else
@@ -166,6 +185,11 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         }
         for (const auto &variable : listPlayers.getPlayersList()) {
             variable.second->displayPlayer(objectPool);
+        }
+        std::list <BoundingBox> rectTmp = rectList;
+        while (!rectTmp.empty()) {
+            DrawBoundingBox(rectTmp.front(), RED);
+            rectTmp.pop_front();
         }
         EndMode3D();
         EndDrawing();
