@@ -41,24 +41,40 @@ void calculate_quantity_after(const server_t *serv, float *quantity)
     quantity[6] = (total * FOOD_R) - quantity[6];
 }
 
+static void shuffle_cell(int totalCells, int *cellIn)
+{
+    int j = 0;
+    int tmp = 0;
+
+    for (int i = totalCells - 1; i > 0; --i) {
+        j = rand() % (i + 1);
+        tmp = cellIn[i];
+        cellIn[i] = cellIn[j];
+        cellIn[j] = tmp;
+    }
+}
+
 void distribute_items_after(
     cell_t **map, const server_t *serv, int quant, int item_type)
 {
-    int x = 0;
-    int y = 0;
+    int totalCells = serv->resX * serv->resY;
+    int *cellIn = malloc(totalCells * sizeof(int));
 
+    srand(time(NULL));
+    if (cellIn == NULL)
+        return;
+    for (int i = 0; i < totalCells; ++i)
+        cellIn[i] = i;
+    shuffle_cell(totalCells, cellIn);
     for (int i = 0; i < quant; ++i) {
-        srand(time(NULL));
-        x = rand() % serv->resX;
-        y = rand() % serv->resY;
         if (item_type == 6) {
+            map[cellIn[i] % serv->resX][cellIn[i] / serv->resX].food++;
             server_log(serv, INFO, 0, "Adding food on map");
-            map[x][y].food++;
-            event_tile_update(serv, x, y);
         } else {
+            map[cellIn[i] % serv->resX][cellIn[i] / serv->resX]
+                .stone[item_type]++;
             server_log(serv, INFO, 0, "Adding stone on map");
-            map[x][y].stone[item_type]++;
-            event_tile_update(serv, x, y);
         }
     }
+    free(cellIn);
 }
