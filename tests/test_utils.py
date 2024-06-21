@@ -20,9 +20,9 @@ def test_print_no_verbose(capsys):
     assert out == ""
 
 def test_generate_empty_map():
-    list = generate_empty_map()
+    list = generate_empty_map(["", "", "", ""])
 
-    assert list == [[[]], [[], [], []], [[],[],[],[],[]], [[],[],[],[],[],[],[]]]
+    assert list == [[[]], [[], [], []]]
 
 def test_get_nb_of_line_in_array():
     data = ["player food food", "food", "linemate", " "]

@@ -80,7 +80,7 @@ class Player:
         for i in range(len(tmp)):
             list.append(' '.join(re.split(r'\W+', tmp[i])[1:]))
         data = list
-        map = generate_empty_map()
+        map = generate_empty_map(data)
         map = fill_map_with_data(map, data)
         self.map = map
         coord = self.find_collectible(object)
@@ -179,7 +179,6 @@ class Player:
                 self.data_to_send = ""
                 self.step = 4
 
-
     def walk_to_broadcast_emitter(self, direction: int, sender_id: str) -> list:
         if self.ready_to_level_up or self.action:
             return []
@@ -252,7 +251,6 @@ class Player:
             self.data_to_send = "Look\n"
             self.step += 1
         elif self.step == 5:
-            print_verbose(self.verbose, f"[LEVEL] Player necessary: {self.player_incantation >= PLAYER_MANDATORY[self.level - 1]}\n")
             if self.player_incantation >= PLAYER_MANDATORY[self.level - 1]:
                 self.begin_incantation()
             if self.step != 6:
@@ -299,6 +297,7 @@ class Player:
                 self.action = self.action[1:]
             else:
                 self.data_to_send = ""
+                self.ready_to_level_up = True
         elif self.step == 13:
             if self.action:
                 self.data_to_send = self.action[0]
