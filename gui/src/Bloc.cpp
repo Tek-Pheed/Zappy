@@ -5,6 +5,8 @@
 ** Bloc.cpp
 */
 
+#include <cmath>
+#include <raylib.h>
 #include "Items.hpp"
 #include "Map.hpp"
 
@@ -81,21 +83,51 @@ std::vector<Zappy::items> Zappy::Bloc::getItems()
     return (vect);
 }
 
+Vector3 getItemPosition(Vector3 &bloc_pos, int nbItems, int index)
+{
+    size_t gridSize = std::sqrt(nbItems);
+    Vector3 position = {0, 1.5, 0};
+    size_t counter = 0;
+    float step = 1.0f / (float) gridSize;
+
+    for (size_t i = 0; i < nbItems; i++) {
+        if (counter == gridSize) {
+            position.z += step;
+            position.x = 0;
+            counter = 0;
+        }
+        if (i == index)
+            break;
+        position.x += step;
+        counter++;
+    }
+    position.x += bloc_pos.x;
+    position.z += bloc_pos.z;
+    if (gridSize > 1) {
+        position.x -= (gridSize / 2.0f) * step;
+        position.z -= (gridSize / 2.0f) * step;
+    }
+    return (position);
+}
+
 void Zappy::Bloc::display(RessourceManager &objectPool)
 {
     Model water = objectPool.models.dynamicLoad("water", "assets/water.obj");
     Model island =
         objectPool.models.dynamicLoad("island", "assets/island.obj");
-    Vector3 pos = {getX() * 5.0f, 1.0f, getY() * 5.0f};
+    Vector3 pos = {(getX() * 5.0f), 1.5f, (getY() * 5.0f)};
+    Vector3 Ipos;
     std::vector<Zappy::items> items = getItems();
+    size_t i = 0;
 
     DrawModel(
         water, (Vector3){getX() * 5.0f, 0.0f, getY() * 5.0f}, 0.5f, WHITE);
     DrawModel(
         island, (Vector3){getX() * 5.0f, 0.0f, getY() * 5.0f}, 0.5f, WHITE);
     for (const auto &item : items) {
-        DrawModel(
-            objectPool.models.getRessource(Zappy::itemNames[item]), pos, 1.0f, WHITE);
-        pos.y += 0.75f;
+        Ipos = getItemPosition(pos, items.size(), i);
+        DrawModel(objectPool.models.getRessource(Zappy::itemNames[item]), Ipos,
+            1.0f, WHITE);
+        i++;
     }
 }
