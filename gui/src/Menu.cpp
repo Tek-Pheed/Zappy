@@ -88,8 +88,10 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     int mapY = 0;
     Vector3 mapCenter = {0.0f, 0.0f, 0.0f};
 
-    Camera3D camera = {0};
-    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
+    Camera3D camera;
+    camera.position = {0.0f, 0.0f, 0.0f}; // Initialisation explicite
+    camera.target = {0.0f, 0.0f, 0.0f};   // Initialisation explicite
+    camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
@@ -159,7 +161,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     threadZappy.setRunningFalse();
     SPThread.join();
 }
-
 
 void Zappy::Menu::MainLoop(RessourceManager &objectPool, Camera camera,
     Vector3 position, BoundingBox bounds, Zappy::Draw &draw)
