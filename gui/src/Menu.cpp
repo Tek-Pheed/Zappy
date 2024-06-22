@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** Zappy
-** File description:
-** Menu.cpp
-*/
-
 #include "Menu.hpp"
 #include <iostream>
 #include <raylib.h>
@@ -17,12 +10,14 @@
 #include "ServerData.hpp"
 #include "Settings.hpp"
 #include "Thread.hpp"
+#include <cmath>
 
 Zappy::Scene currentScene = Zappy::MENU;
 
 Zappy::Menu::Menu()
 {
 }
+
 Zappy::Menu::~Menu()
 {
 }
@@ -30,27 +25,20 @@ Zappy::Menu::~Menu()
 bool Zappy::Menu::InitWindowAndResources(int screenWidth, int screenHeight)
 {
     InitAudioDevice();
-    InitWindow(
-        screenWidth, screenHeight, "Zappy");
+    InitWindow(screenWidth, screenHeight, "Zappy");
     return IsWindowReady();
 }
 
 void Zappy::Menu::LoadResources(RessourceManager &objectPool)
 {
     Model &model = objectPool.models.dynamicLoad("korok", "assets/players/makar.obj");
-    Music &MenuMusic =
-        objectPool.musics.dynamicLoad("menu", "assets/musics/menu.mp3");
-    Music &GameMusic =
-        objectPool.musics.dynamicLoad("game", "assets/musics/game.mp3");
-    Music &IncMusic =
-        objectPool.musics.dynamicLoad("inc", "assets/musics/Zelda_Noïa_dance_song.mp3");
-    Music &BroadMusic =
-        objectPool.musics.dynamicLoad("broad", "assets/musics/Zelda_Korok_Yahaha.mp3");
+    Music &MenuMusic = objectPool.musics.dynamicLoad("menu", "assets/musics/menu.mp3");
+    Music &GameMusic = objectPool.musics.dynamicLoad("game", "assets/musics/game.mp3");
+    Music &IncMusic = objectPool.musics.dynamicLoad("inc", "assets/musics/Zelda_Noïa_dance_song.mp3");
+    Music &BroadMusic = objectPool.musics.dynamicLoad("broad", "assets/musics/Zelda_Korok_Yahaha.mp3");
 
     if (model.meshCount == 0) {
-        std::cerr
-            << "Erreur : Impossible de charger le modèle 'assets/players/makar.obj'"
-            << std::endl;
+        std::cerr << "Erreur : Impossible de charger le modèle 'assets/players/makar.obj'" << std::endl;
         exit(1);
     }
     SetMusicVolume(MenuMusic, 0.5f);
@@ -70,10 +58,12 @@ void Zappy::Menu::ConfigureCamera(Camera &camera)
 
 void loadItems(RessourceManager &objectPool)
 {
-    constexpr const char *models[] = {"assets/objects/food.obj",
+    constexpr const char *models[] = {
+        "assets/objects/food.obj",
         "assets/objects/rubis_korok.glb", "assets/objects/rubis_goron.glb",
         "assets/objects/rubis_zora.glb", "assets/objects/rubis_crepuscule.glb",
-        "assets/objects/rubis_piaf.glb", "assets/objects/rubis_divin.glb"};
+        "assets/objects/rubis_piaf.glb", "assets/objects/rubis_divin.glb"
+    };
 
     for (std::size_t i = 0; i != Zappy::ITEM_MAX; i++)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
@@ -82,6 +72,8 @@ void loadItems(RessourceManager &objectPool)
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic)
 {
+    float cameraAngle = 0.0f;
+    float cameraDistance = 50.0f;
     Zappy::Thread threadZappy;
     Zappy::Parser parser;
     bool isBroadMusicPlaying = false;
@@ -92,31 +84,46 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     objectPool.models.loadRessource("island", "assets/environments/island.obj");
     objectPool.models.loadRessource("player", "assets/players/makar.obj");
 
-    Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        45.0f, CAMERA_PERSPECTIVE};
+    int mapX = 0;
+    int mapY = 0;
+    Vector3 mapCenter = {0.0f, 0.0f, 0.0f};
+
+    Camera3D camera;
+    camera.position = {0.0f, 0.0f, 0.0f}; // Initialisation explicite
+    camera.target = {0.0f, 0.0f, 0.0f};   // Initialisation explicite
+    camera.up = {0.0f, 1.0f, 0.0f};
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
 
     std::list<Bloc *> blocks;
     loadItems(objectPool);
 
-    (void) bounds;
-    (void) position;
+    (void)bounds;
+    (void)position;
 
     PlayMusicStream(music);
     PlayMusicStream(incMusic);
 
     DisableCursor();
     SetTargetFPS(60);
-    // float velocityY = 0.0f;
-    // const float gravity = -9.81f;
-    // const float bounceFactor = 0.7f;
-    // bool firstDrop = true;
+
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
 
     while (!WindowShouldClose()) {
         blocks = parser.getMap().getBloc();
         listPlayers = parser.getPlayersList();
-        UpdateCamera(&camera, CAMERA_FREE);
+
+        if (IsKeyDown(KEY_RIGHT)) {
+            cameraAngle += GetFrameTime();
+        }
+        if (IsKeyDown(KEY_LEFT)) {
+            cameraAngle -= GetFrameTime();
+        }
+
+        camera.position.x = mapCenter.x + cameraDistance * cos(cameraAngle);
+        camera.position.z = mapCenter.z + cameraDistance * sin(cameraAngle);
+
         if (parser.getInc())
             UpdateMusicStream(incMusic);
         else
@@ -131,8 +138,13 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         if (isBroadMusicPlaying && !IsMusicStreamPlaying(broadMusic))
             isBroadMusicPlaying = false;
         if (IsKeyPressed('Z'))
-            camera.target = (Vector3){0.0f, 0.0f, 0.0f};
+            camera.target = mapCenter;
         BeginDrawing();
+            mapX = parser.getMap().getX();
+            mapY = parser.getMap().getY();
+            mapCenter = {(mapX / 2.0f) * 5 - 2.5f, 0.0f, (mapY / 2.0f) * 5 - 2.5f};
+            camera.position = (Vector3){mapCenter.x + cameraDistance * cos(cameraAngle), 30.0f, mapCenter.z + cameraDistance * sin(cameraAngle)};
+            camera.target = mapCenter;
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
         while (blocks.size() != 0) {
