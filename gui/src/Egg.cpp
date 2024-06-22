@@ -19,11 +19,6 @@ Zappy::Egg::~Egg()
 {
 }
 
-void Zappy::Egg::displayEggs(RessourceManager &objPool)
-{
-
-}
-
 int Zappy::Egg::getID()
 {
     return this->_id;
@@ -37,4 +32,13 @@ int Zappy::Egg::getX()
 int Zappy::Egg::getY()
 {
     return this->_y;
+}
+
+void Zappy::Egg::displayEggs(RessourceManager &objPool)
+{
+    std::cout << "X: " << getX() << std::endl;
+    Vector3 pos = {getX() * 5.0f, 1.5f, getY() * 5.0f};
+    Model egg = objPool.models.dynamicLoad("egg", "assets/object/egg.obj");
+    DrawModelEx(egg, pos, (Vector3){0.0f, 1.5f, 0.0f}, 0,
+        (Vector3){10.0f, 10.0f, 10.0f}, WHITE);
 }

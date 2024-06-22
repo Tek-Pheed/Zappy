@@ -73,6 +73,7 @@ namespace Zappy
         int getID();
         int getX();
         int getY();
+        
       private:
         int _x;
         int _y;

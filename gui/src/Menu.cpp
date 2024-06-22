@@ -140,7 +140,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             variable.second->displayPlayer(objectPool);
         }
         for (const auto &variable : parser.getEggs()) {
-            variable.second.displayEggs(objectPool);
+            variable.second->displayEggs(objectPool);
         }
         EndMode3D();
         EndDrawing();

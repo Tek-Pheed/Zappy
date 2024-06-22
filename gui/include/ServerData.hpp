@@ -81,7 +81,7 @@ namespace Zappy
         bool getInc();
         void setBroadcast(bool ifBroadcast);
         bool getBroadcast();
-        std::map<int, Zappy::Egg> getEggs();
+        std::map<int, Zappy::Egg *> getEggs();
 
         private:
           Map _map;

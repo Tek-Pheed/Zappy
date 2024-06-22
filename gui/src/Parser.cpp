@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <memory>
 #include "Items.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
@@ -271,16 +272,19 @@ void Zappy::Parser::laidEgg(std::queue<std::string> egg)
     int x = std::stoi(egg.front());
     egg.pop();
     int y = std::stoi(egg.front());
-    Zappy::Egg *egg = new Zappy::Egg(x, y, egg_nb);
-    std::unique_ptr<Zappy::Egg> uptr (static_cast<Zappy::Egg *>(egg));
-    _eggs[egg_nb] = uptr.get();
+    Zappy::Egg *new_egg = new Zappy::Egg(x, y, egg_nb);
+    std::unique_ptr<Zappy::Egg> egg_ptr(static_cast<Zappy::Egg *>(new_egg));
+    _eggs[egg_nb] = egg_ptr.get();
 }
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
     std::unique_lock lock(_mut);
     int nb_e = std::stoi(egg.front());
-    _eggs[nb_e];
+    auto keydelete = _eggs.find(nb_e);
+    if (keydelete != _eggs.end()) {
+        _eggs.erase(keydelete);
+    }
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
@@ -468,7 +472,7 @@ bool Zappy::Parser::getBroadcast()
     return _ifBroadcast;
 }
 
-std::map<int, Zappy::Egg> Zappy::Parser::getEggs()
+std::map<int, Zappy::Egg *> Zappy::Parser::getEggs()
 {
     return this->_eggs;
 }
