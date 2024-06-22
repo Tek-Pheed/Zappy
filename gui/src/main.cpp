@@ -13,7 +13,13 @@
 
 void print_help(char **args)
 {
-    if (std::string(args[1]) == "-help") {
+    std::string help("-help");
+
+    if (args == NULL || args[1] == NULL) {
+        std::cout << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+        exit(84);
+    }
+    if (help.compare(args[1]) == 0) {
         std::cout << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
         exit(0);
     }
