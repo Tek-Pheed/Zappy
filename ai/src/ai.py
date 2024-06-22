@@ -22,68 +22,72 @@ class AI:
         message = ""
         running = 0
         while True:
-            event = self.server.selectors.select(timeout=None)
-            for _, mask in event:
-                if mask & selectors.EVENT_READ:
-                    data = self.server.receive_message()
-                    if data:
-                        message += data
-                    else:
-                        self.server.selectors.unregister(self.server.socket)
-                        self.server.close_connection()
-                    tmp = message.split("\n")
-                    for elem in tmp[:-1]:
-                        print_verbose(self.player.verbose, f"[RECEIVE] {elem}\n")
-                        if "dead" in elem:
-                            print("I'm dead")
+            try:
+                event = self.server.selectors.select(timeout=None)
+                for _, mask in event:
+                    if mask & selectors.EVENT_READ:
+                        data = self.server.receive_message()
+                        if data:
+                            message += data
+                        else:
+                            self.server.selectors.unregister(self.server.socket)
                             self.server.close_connection()
-                            exit(0)
-                        if "Elevation underway" in elem:
-                            self.player.step = 7
-                        elif "Current level:" in elem:
-                            self.player.level = int(''.join(filter(str.isdigit, elem)))
-                            if self.player.level == 8:
+                        tmp = message.split("\n")
+                        for elem in tmp[:-1]:
+                            print_verbose(self.player.verbose, f"[RECEIVE] {elem}\n")
+                            if "dead" in elem:
+                                print("I'm dead")
+                                self.server.close_connection()
                                 exit(0)
-                            print_verbose(self.player.verbose, f"[INFO] {elem}\n")
-                            self.player.player_incantation = 1
-                            self.player.ready_to_level_up = False
-                            self.player.step = 0
-                        elif "message" in elem:
-                            self.player.no_response = 0
-                            self.player.broadcast_receive = elem
-                            self.player.parse_broadcast()
-                            message = message.split("\n")[-1]
-                            continue
-                        elif "Incantation" in self.player.data_to_send:
-                            if "ko" in elem:
-                                self.player.data_to_send = ""
+                            if "Elevation underway" in elem:
+                                self.player.step = 7
+                            elif "Current level:" in elem:
+                                self.player.level = int(''.join(filter(str.isdigit, elem)))
+                                if self.player.level == 8:
+                                    exit(0)
+                                print_verbose(self.player.verbose, f"[INFO] {elem}\n")
                                 self.player.player_incantation = 1
+                                self.player.ready_to_level_up = False
                                 self.player.step = 0
-                        elif self.player.data_to_send == "Connect_nbr\n":
-                            if "ko" in elem:
-                                self.player.step = 10
-                            else:
-                                self.player.team_slot = int(elem)
-                        elif self.player.data_to_send == "Inventory\n":
-                            try:
-                                self.player.inventory = get_inventory(elem, self.player.inventory)
-                            except (ValueError, IndexError):
-                                print_verbose(self.player.verbose, f"[ERROR] {elem}\n")
-                                pass
-                        elif self.player.data_to_send == "Look\n":
-                            self.player.look_arround = elem
-                        message = message.split("\n")[-1]
-                        running = 1
+                            elif "message" in elem:
+                                self.player.no_response = 0
+                                self.player.broadcast_receive = elem
+                                self.player.parse_broadcast()
+                                message = message.split("\n")[-1]
+                                continue
+                            elif "Incantation" in self.player.data_to_send:
+                                if "ko" in elem:
+                                    self.player.data_to_send = ""
+                                    self.player.player_incantation = 1
+                                    self.player.step = 0
+                            elif self.player.data_to_send == "Connect_nbr\n":
+                                if "ko" in elem:
+                                    self.player.step = 10
+                                else:
+                                    self.player.team_slot = int(elem)
+                            elif self.player.data_to_send == "Inventory\n":
+                                try:
+                                    self.player.inventory = get_inventory(elem, self.player.inventory)
+                                except (ValueError, IndexError):
+                                    print_verbose(self.player.verbose, f"[ERROR] {elem}\n")
+                                    pass
+                            elif self.player.data_to_send == "Look\n":
+                                self.player.look_arround = elem
+                            message = message.split("\n")[-1]
+                            running = 1
 
-                if mask & selectors.EVENT_WRITE:
-                    if self.player.logged and running == 1:
-                        self.player.take_action()
-                    if running != 0 and self.player.data_to_send:
-                        if self.player.logged == False and self.player.team in self.player.data_to_send:
-                            self.player.logged = True
-                        self.server.send_message(self.player.data_to_send)
-                        print_verbose(self.player.verbose, f"[SEND] {self.player.data_to_send}")
-                        running = 0
+                    if mask & selectors.EVENT_WRITE:
+                        if self.player.logged and running == 1:
+                            self.player.take_action()
+                        if running != 0 and self.player.data_to_send:
+                            if self.player.logged == False and self.player.team in self.player.data_to_send:
+                                self.player.logged = True
+                            self.server.send_message(self.player.data_to_send)
+                            print_verbose(self.player.verbose, f"[SEND] {self.player.data_to_send}")
+                            running = 0
+            except KeyboardInterrupt:
+                print_verbose(self.player.verbose, "[RECEIVE] CTRL+C\n")
+                exit(0)
 
 if __name__ == "__main__":
     ai: AI = AI()
