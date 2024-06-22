@@ -54,6 +54,10 @@ class AI:
                             self.player.parse_broadcast()
                             message = message.split("\n")[-1]
                             continue
+                        elif self.player.team in self.player.data_to_send:
+                            if "ko" in elem:
+                                print(f"{self.player.team} doesn't exist !")
+                                exit(0)
                         elif "Incantation" in self.player.data_to_send:
                             if "ko" in elem:
                                 self.player.data_to_send = ""
