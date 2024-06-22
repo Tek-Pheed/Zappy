@@ -265,20 +265,22 @@ void Zappy::Parser::death(std::queue<std::string> player)
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 {
     std::unique_lock lock(_mut);
-    (void) egg;
-    // int nb_e = std::stoi(egg.front());
+    int egg_nb = std::stoi(egg.front());
     egg.pop();
-    // int nb_p = std::stoi(egg.front());
     egg.pop();
-    // int x = std::stoi(egg.front());
+    int x = std::stoi(egg.front());
     egg.pop();
-    // int y = std::stoi(egg.front());
+    int y = std::stoi(egg.front());
+    Zappy::Egg *egg = new Zappy::Egg(x, y, egg_nb);
+    std::unique_ptr<Zappy::Egg> uptr (static_cast<Zappy::Egg *>(egg));
+    _eggs[egg_nb] = uptr.get();
 }
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
-    (void) egg;
-    // int nb_e = std::stoi(egg.front());
+    std::unique_lock lock(_mut);
+    int nb_e = std::stoi(egg.front());
+    _eggs[nb_e];
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
@@ -464,4 +466,9 @@ void Zappy::Parser::setBroadcast(bool ifBroadcast)
 bool Zappy::Parser::getBroadcast()
 {
     return _ifBroadcast;
+}
+
+std::map<int, Zappy::Egg> Zappy::Parser::getEggs()
+{
+    return this->_eggs;
 }

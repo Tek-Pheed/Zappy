@@ -20,6 +20,7 @@ SRC		= src/main.cpp \
 		  src/Server.cpp \
 		  src/RessourcePool.cpp \
 		  src/Thread.cpp \
+		  src/Egg.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 

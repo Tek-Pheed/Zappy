@@ -81,14 +81,15 @@ namespace Zappy
         bool getInc();
         void setBroadcast(bool ifBroadcast);
         bool getBroadcast();
+        std::map<int, Zappy::Egg> getEggs();
 
         private:
           Map _map;
           Players _playersMap;
-          //std::vector<IItems *> _items;
           std::vector<Model> _itemsModelList;
           bool _ifInc;
           bool _ifBroadcast;
           std::mutex _mut;
+          std::map<int, Zappy::Egg *> _eggs;
     };
 } // namespace Zappy

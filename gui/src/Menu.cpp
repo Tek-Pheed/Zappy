@@ -91,6 +91,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     objectPool.models.loadRessource("water", "assets/environments/water.obj");
     objectPool.models.loadRessource("island", "assets/environments/island.obj");
     objectPool.models.loadRessource("player", "assets/players/makar.obj");
+    objectPool.models.loadRessource("egg", "assets/objects/egg.obj");
 
     Camera3D camera = {22.0f, 22.0f, 22.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
         45.0f, CAMERA_PERSPECTIVE};
@@ -106,10 +107,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
 
     DisableCursor();
     SetTargetFPS(60);
-    // float velocityY = 0.0f;
-    // const float gravity = -9.81f;
-    // const float bounceFactor = 0.7f;
-    // bool firstDrop = true;
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
 
@@ -141,6 +138,9 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         }
         for (const auto &variable : listPlayers.getPlayersList()) {
             variable.second->displayPlayer(objectPool);
+        }
+        for (const auto &variable : parser.getEggs()) {
+            variable.second.displayEggs(objectPool);
         }
         EndMode3D();
         EndDrawing();

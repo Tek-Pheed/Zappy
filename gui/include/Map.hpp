@@ -63,4 +63,19 @@ namespace Zappy
         int _y;
         std::list<Bloc *> _bloc;
     };
+
+    class Egg {
+      public:
+        Egg(int x, int y, int id);
+        ~Egg();
+		    void displayEggs(RessourceManager &objPool);
+
+        int getID();
+        int getX();
+        int getY();
+      private:
+        int _x;
+        int _y;
+        int _id;
+    };
 } // namespace Zappy
