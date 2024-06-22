@@ -81,19 +81,42 @@ void loadItems(RessourceManager &objectPool)
 
 std::list <BoundingBox> Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
 {
-
-    Vector2 mousePoint = GetMousePosition();
     std::list <Bloc *> tmp = bloc;
     std::list <BoundingBox> rectList;
-    bool isHovered = false;
-    int i = 0;
-    std::cout << "bonjour je rentre dans displayInventory" << std::endl;
+
     while(!tmp.empty()) {
-        rectList.push_front({{(float)tmp.front()->getX(), 0.0f, (float)tmp.front()->getY()},
-                            {(float)tmp.front()->getX(), 0.0f, (float)tmp.front()->getY()}});
+        rectList.push_front({{(float)tmp.front()->getX() * 5.0f, 0.0f, (float)tmp.front()->getY() * 5.0f},
+                            {(float)tmp.front()->getX() * 5.0f + 5.0f, 5.0f, (float)tmp.front()->getY() * 5.0f + 5.0f}});
         tmp.pop_front();
     }
     return rectList;
+}
+
+bool Zappy::Menu::CheckCollisionRayBox(Ray raycam, BoundingBox hitbox)
+{
+    float tminX = (hitbox.min.x - raycam.position.x) / raycam.direction.x;
+    float tmaxX = (hitbox.max.x - raycam.position.x) / raycam.direction.x;
+    float tminY = (hitbox.min.y - raycam.position.y) / raycam.direction.y;
+    float tmaxY = (hitbox.max.y - raycam.position.y) / raycam.direction.y;
+    float tminZ = (hitbox.min.z - raycam.position.z) / raycam.direction.z;
+    float tmaxZ = (hitbox.max.z - raycam.position.z) / raycam.direction.z;
+
+    if (tminX > tmaxX) std::swap(tminX, tmaxX);
+    if (tminY > tmaxY) std::swap(tminY, tmaxY);
+    if (tminZ > tmaxZ) std::swap(tminZ, tmaxZ);
+    if ((tminX > tmaxY) || (tminY > tmaxX))
+        return false;
+    if (tminY > tminX)
+        tminX = tminY;
+    if (tmaxY < tmaxX)
+        tmaxX = tmaxY;
+    if ((tminX > tmaxZ) || (tminZ > tmaxX))
+        return false;
+    if (tminZ > tminX)
+        tminX = tminZ;
+    if (tmaxZ < tmaxX)
+        tmaxX = tmaxZ;
+    return true;
 }
 
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
@@ -131,7 +154,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
     bool cursorVisible = true;
-    std::list <BoundingBox> rectList = displayInventory(parser.getMap().getBloc());
 
     while (!WindowShouldClose()) {
         if (!cursorVisible) {
@@ -147,6 +169,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             }
         }
         blocks = parser.getMap().getBloc();
+        std::list <BoundingBox> rectList = displayInventory(blocks);
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
 
@@ -160,7 +183,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
                 rectListTmp.pop_front();
             }
         }
-
         if (parser.getInc())
             UpdateMusicStream(incMusic);
         else
@@ -187,6 +209,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             variable.second->displayPlayer(objectPool);
         }
         std::list <BoundingBox> rectTmp = rectList;
+        // printf("%d\n", rectTmp.empty());
         while (!rectTmp.empty()) {
             DrawBoundingBox(rectTmp.front(), RED);
             rectTmp.pop_front();
