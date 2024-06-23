@@ -74,7 +74,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
 {
     float cameraAngle = 0.0f;
     float baseCameraDistance = 10.0f;
-    float zoomFactor = 2.5f;
+    float zoomFactor = 4.0f;
     float cameraDistance = baseCameraDistance;
     Zappy::Thread threadZappy;
     Zappy::Parser parser;
