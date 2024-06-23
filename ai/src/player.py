@@ -36,7 +36,6 @@ class Player:
         self.team_slot = 0
         self.verbose = False
         self.client_id = uuid.uuid4()
-        self.no_response = 0
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -185,6 +184,7 @@ class Player:
         action = []
         if direction == 0:
             action = [f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"]
+            self.data_to_send = f"Broadcast {sender_id};ready;{self.level};{self.client_id}\n"
             self.step = 12
             return action
         if direction == 1:
@@ -228,7 +228,7 @@ class Player:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
         elif self.step == 1:
-            if (self.incantation_possible()):
+            if self.incantation_possible():
                 self.step = 11
             else:
                 self.ready_to_level_up = False
@@ -292,12 +292,9 @@ class Player:
                 self.ready_to_level_up = True
                 self.step = 4
         elif self.step == 12:
-            if self.action:
-                self.data_to_send = self.action[0]
-                self.action = self.action[1:]
-            else:
+            if "ready" in self.data_to_send and self.ready_to_level_up:
                 self.data_to_send = ""
-                self.ready_to_level_up = True
+            self.ready_to_level_up = True
         elif self.step == 13:
             if self.action:
                 self.data_to_send = self.action[0]

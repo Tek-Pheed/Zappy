@@ -58,6 +58,7 @@ namespace Zappy
         std::list <BoundingBox> setHitBox(std::list<Bloc *> bloc, RessourceManager &objectPool);
         bool CheckCollisionRayBox(Ray raycam, BoundingBox hitbox);
         void displayBlocinventory(Bloc *block);
+        void DrawLevels(Zappy::Parser &parser, std::map<int, int> listLvl);
 
       protected:
       private:

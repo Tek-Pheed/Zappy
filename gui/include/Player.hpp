@@ -31,6 +31,8 @@ namespace Zappy
         int getPositionN();
         void setID(int id);
         int getID();
+        int getLvl();
+        void setLvl(int lvl);
         std::mutex &getMutex();
         void createModel(
         RessourceManager &objectPool, const std::string &modelPath);
@@ -49,6 +51,7 @@ namespace Zappy
         int _orien;
         int _id;
         std::mutex _mut;
+        int _lvl;
     };
 
     class Players {

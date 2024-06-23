@@ -12,6 +12,6 @@ Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
-map_Kd ../textures/heart2_defaultMat1_albedo.jpeg
-map_Pm ../textures/heart2_defaultMat1_metallic.jpeg
-map_Pr ../textures/heart2_defaultMat1_roughness.jpeg
+map_Kd ../textures/heart2_defaultMat1_albedo.png
+map_Pm ../textures/heart2_defaultMat1_metallic.png
+map_Pr ../textures/heart2_defaultMat1_roughness.png

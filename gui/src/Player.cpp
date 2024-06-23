@@ -25,6 +25,7 @@ Zappy::Player::Player(const Zappy::Player &player)
     _y = player._y;
     _orien = player._orien;
     _id = player._id;
+    _lvl = player._lvl;
 }
 
 Zappy::Player &Zappy::Player::operator=(const Zappy::Player &player)
@@ -37,6 +38,7 @@ Zappy::Player &Zappy::Player::operator=(const Zappy::Player &player)
     _y = player._y;
     _orien = player._orien;
     _id = player._id;
+    _lvl = player._lvl;
     return (*this);
 }
 
@@ -124,8 +126,9 @@ void Zappy::Player::createModel(
 
 void Zappy::Player::displayPlayer(RessourceManager &objPool)
 {
-    Model player = objPool.models.dynamicLoad("player", "assets/korok.obj");
     Vector3 pos = {getPositionX() * 5.0f, 1.5f, getPositionY() * 5.0f};
+    std::unique_lock lock(_mut);
+    Model player = objPool.models.dynamicLoad("player", "assets/korok.obj");
     float rot = 270.0f;
     switch (_orien) {
         case 1: rot -= 270.0f; break;
@@ -136,6 +139,18 @@ void Zappy::Player::displayPlayer(RessourceManager &objPool)
     }
     // player.transform = MatrixRotateXYZ((Vector3){0.0f, DEG2RAD * rot,
     // 0.0f}); DrawModel(player, pos, 5.0f, WHITE);
-    DrawModelEx(player, pos, (Vector3){0.0f, 1.0f, 0.0f}, rot,
-        (Vector3){5.0f, 5.0f, 5.0f}, WHITE);
+    DrawModelEx(player, pos, (Vector3){0.0f, 1.5f, 0.0f}, rot,
+        (Vector3){2.5f, 2.5f, 2.5f}, WHITE);
+}
+
+int Zappy::Player::getLvl()
+{
+    std::unique_lock lock(_mut);
+    return _lvl;
+}
+
+void Zappy::Player::setLvl(int lvl)
+{
+    std::unique_lock lock(_mut);
+    _lvl = lvl;
 }

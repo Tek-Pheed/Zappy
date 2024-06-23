@@ -125,7 +125,6 @@ Zappy::Player *Zappy::Parser::newPlayer(std::queue<std::string> player)
     player.pop();
     int orien = std::stoi(player.front());
     player.pop();
-    // int level = std::stoi(player.front());
     player.pop();
     std::string team = player.front();
     Player *newPlayer = new Player();
@@ -133,13 +132,15 @@ Zappy::Player *Zappy::Parser::newPlayer(std::queue<std::string> player)
     newPlayer->setPositionX(x);
     newPlayer->setPositionY(y);
     newPlayer->setPositionN(orien);
+    newPlayer->setLvl(1);
     return newPlayer;
-    // _player.createModel(objectPool, "../assets/korok.obj");
 }
 
 void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
+    if (player.size() <= 3)
+        return;
     int nb_p = std::stoi(player.front());
     player.pop();
     int x = std::stoi(player.front());
@@ -157,33 +158,31 @@ void Zappy::Parser::positionPlayer(std::queue<std::string> player)
 void Zappy::Parser::levelPlayer(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
-    // int nb_p = std::stoi(player.front());
+    int nb_p = std::stoi(player.front());
     player.pop();
-    // int level = std::stoi(player.front());
+    _playersMap.getPlayersList()[nb_p]->setLvl(std::stoi(player.front()));
 }
 
 void Zappy::Parser::inventoryPlayer(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
-    // int nb_p = std::stoi(player.front());
-    player.pop();
-    // int x = std::stoi(player.front());
-    player.pop();
-    // int y = std::stoi(player.front());
-    player.pop();
-    // items;
+
+    if (player.size() > 0)
+        player.pop();
+    if (player.size() > 0)
+        player.pop();
+    if (player.size() > 0)
+        player.pop();
 }
 
 void Zappy::Parser::expulsion(std::queue<std::string> player)
 {
     (void) player;
-    // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::broadcast(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
-    // int nb_p = std::stoi(player.front());
     player.pop();
     std::queue<std::string> message = player;
     _ifBroadcast = true;
@@ -193,11 +192,8 @@ void Zappy::Parser::startInc(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
     std::list<int> list_n;
-    // int x = std::stoi(player.front());
     player.pop();
-    // int y = std::stoi(player.front());
     player.pop();
-    // int level = std::stoi(player.front());
     player.pop();
     while (!player.empty()) {
         list_n.push_back(std::stoi(player.front()));
@@ -209,9 +205,7 @@ void Zappy::Parser::startInc(std::queue<std::string> player)
 void Zappy::Parser::endInc(std::queue<std::string> player)
 {
     std::unique_lock lock(_mut);
-    // int x = std::stoi(player.front());
     player.pop();
-    // int y = std::stoi(player.front());
     player.pop();
     std::string result = player.front();
     _ifInc = false;
@@ -219,26 +213,17 @@ void Zappy::Parser::endInc(std::queue<std::string> player)
 
 void Zappy::Parser::layingEgg(std::queue<std::string> player)
 {
-    std::unique_lock lock(_mut);
     (void) player;
-    // int nb_p = std::stoi(player.front());
 }
 
 void Zappy::Parser::dropRess(std::queue<std::string> player)
 {
-    std::unique_lock lock(_mut);
-    // int nb_p = std::stoi(player.front());
-    player.pop();
-    // int nb_i = std::stoi(player.front());
+    (void)player;
 }
 
 void Zappy::Parser::collectRess(std::queue<std::string> player)
 {
-    std::unique_lock lock(_mut);
     (void) player;
-    // int nb_p = std::stoi(player.front());
-    player.pop();
-    // int nb_i = std::stoi(player.front());
 }
 
 void Zappy::Parser::death(std::queue<std::string> player)
@@ -249,7 +234,7 @@ void Zappy::Parser::death(std::queue<std::string> player)
     doppel = _playersMap.getPlayersList();
     auto keydelete = doppel.find(nb_p);
     if (keydelete != doppel.end()) {
-        delete keydelete->second;
+        std::unique_lock player_lock(keydelete->second->getMutex());
         doppel.erase(keydelete);
     }
     _playersMap.setPlayersList(doppel);
@@ -257,45 +242,32 @@ void Zappy::Parser::death(std::queue<std::string> player)
 
 void Zappy::Parser::laidEgg(std::queue<std::string> egg)
 {
-    std::unique_lock lock(_mut);
     (void) egg;
-    // int nb_e = std::stoi(egg.front());
-    egg.pop();
-    // int nb_p = std::stoi(egg.front());
-    egg.pop();
-    // int x = std::stoi(egg.front());
-    egg.pop();
-    // int y = std::stoi(egg.front());
 }
 
 void Zappy::Parser::connectEgg(std::queue<std::string> egg)
 {
     (void) egg;
-    // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::deathEgg(std::queue<std::string> egg)
 {
     (void) egg;
-    // int nb_e = std::stoi(egg.front());
 }
 
 void Zappy::Parser::frequModification(std::queue<std::string> freq)
 {
     (void) freq;
-    // int time_frq = std::stoi(freq.front());
 }
 
 void Zappy::Parser::endGame(std::queue<std::string> team)
 {
     (void) team;
-    // std::string team_name = team.front();
 }
 
 void Zappy::Parser::messServer(std::queue<std::string> mess)
 {
     (void) mess;
-    // utiliser la queue
 }
 
 void Zappy::Parser::unknowCommand()
@@ -398,9 +370,6 @@ void Zappy::Parser::parsing(std::queue<std::queue<std::string>> data)
             tmpFront.pop();
             messServer(tmpFront);
         }
-        // if (tmpFront.front() == "sbp") {
-        //     tmpFront.pop();
-        // }
         if (tmpFront.front() == "suc") {
             tmpFront.pop();
             unknowCommand();
