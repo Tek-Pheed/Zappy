@@ -69,6 +69,72 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
+std::list <BoundingBox> Zappy::Menu::setHitBox(std::list<Bloc *> bloc, RessourceManager &objectPool)
+{
+    std::list <Bloc *> tmp = bloc;
+    std::list <BoundingBox> rectList;
+    Model modelref = objectPool.models.dynamicLoad("water", "assets/water.obj");
+
+    while(!tmp.empty()) {
+        Vector3 posBase = {tmp.front()->getX() * 5.0f, 0.0f, tmp.front()->getY() * 5.0f};
+        rectList.push_back(GetModelBoundingBox(modelref));
+        Vector3 center = Vector3Scale(Vector3Add(rectList.back().min, rectList.back().max), 0.5f);
+        Vector3 extents = Vector3Scale(Vector3Subtract(rectList.back().max, rectList.back().min), 0.5f * 0.5f);
+        rectList.back().min = Vector3Subtract(center, extents);
+        rectList.back().max = Vector3Add(center, extents);
+        rectList.back().min = Vector3Add(rectList.back().min, posBase);
+        rectList.back().max = Vector3Add(rectList.back().max, posBase);
+        tmp.pop_front();
+    }
+    return rectList;
+}
+
+bool Zappy::Menu::CheckCollisionRayBox(Ray raycam, BoundingBox hitbox)
+{
+    float tminX = (hitbox.min.x - raycam.position.x) / raycam.direction.x;
+    float tmaxX = (hitbox.max.x - raycam.position.x) / raycam.direction.x;
+    float tminY = (hitbox.min.y - raycam.position.y) / raycam.direction.y;
+    float tmaxY = (hitbox.max.y - raycam.position.y) / raycam.direction.y;
+    float tminZ = (hitbox.min.z - raycam.position.z) / raycam.direction.z;
+    float tmaxZ = (hitbox.max.z - raycam.position.z) / raycam.direction.z;
+
+    if (tminX > tmaxX) std::swap(tminX, tmaxX);
+    if (tminY > tmaxY) std::swap(tminY, tmaxY);
+    if (tminZ > tmaxZ) std::swap(tminZ, tmaxZ);
+    if ((tminX > tmaxY) || (tminY > tmaxX))
+        return false;
+    if (tminY > tminX)
+        tminX = tminY;
+    if (tmaxY < tmaxX)
+        tmaxX = tmaxY;
+    if ((tminX > tmaxZ) || (tminZ > tmaxX))
+        return false;
+    if (tminZ > tminX)
+        tminX = tminZ;
+    if (tmaxZ < tmaxX)
+        tmaxX = tmaxZ;
+    return true;
+}
+
+void Zappy::Menu::displayBlocinventory(Bloc *block)
+{
+    int food = block->countItem(items::food);
+    int linemate = block->countItem(items::linemate);
+    int deraumere = block->countItem(items::deraumere);
+    int sibur = block->countItem(items::sibur);
+    int mendiane = block->countItem(items::mendiane);
+    int phiras = block->countItem(items::phiras);
+    int thystame = block->countItem(items::thystame);
+    DrawRectangle(0, GetScreenHeight() - 220, 200, 500, DARKGRAY);
+    DrawText(TextFormat("Food: %d", food), 20, GetScreenHeight() - 200, 20, WHITE);
+    DrawText(TextFormat("Linemate: %d", linemate), 20, GetScreenHeight() - 180, 20, WHITE);
+    DrawText(TextFormat("Deraumere: %d", deraumere), 20, GetScreenHeight() - 160, 20, WHITE);
+    DrawText(TextFormat("Sibur: %d", sibur), 20, GetScreenHeight() - 140, 20, WHITE);
+    DrawText(TextFormat("Mendiane: %d", mendiane), 20, GetScreenHeight() - 120, 20, WHITE);
+    DrawText(TextFormat("Phiras: %d", phiras), 20, GetScreenHeight() - 100, 20, WHITE);
+    DrawText(TextFormat("Thystame: %d", thystame), 20, GetScreenHeight() - 80, 20, WHITE);
+}
+
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic)
 {
@@ -100,6 +166,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     camera.projection = CAMERA_PERSPECTIVE;
 
     std::list<Bloc *> blocks;
+    std::list<Bloc *> tmpBlocks;
+    Bloc *disInvBlock;
     loadItems(objectPool);
 
     (void)bounds;
@@ -110,13 +178,45 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
 
     DisableCursor();
     SetTargetFPS(60);
+    EnableCursor();
+    bool isBlocClicked = false;
 
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
+    bool cursorVisible = true;
 
     while (!WindowShouldClose()) {
+        if (!cursorVisible) {
+            UpdateCamera(&camera, CAMERA_FREE);
+        }
+
+        if (IsKeyPressed(KEY_C)) {
+            cursorVisible = !cursorVisible;
+            if (cursorVisible) {
+                EnableCursor();
+            } else {
+                DisableCursor();
+            }
+        }
         blocks = parser.getMap().getBloc();
+        tmpBlocks = blocks;
+        std::list <BoundingBox> rectList = setHitBox(blocks, objectPool);
         listPlayers = parser.getPlayersList();
+        UpdateCamera(&camera, CAMERA_FREE);
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            std::list <BoundingBox> rectListTmp = rectList;
+            Ray ray = GetMouseRay(GetMousePosition(), camera);
+            while (!rectListTmp.empty()) {
+                if (CheckCollisionRayBox(ray, rectListTmp.front())){
+                   isBlocClicked = true;
+                   disInvBlock = tmpBlocks.front();
+                }
+                rectListTmp.pop_front();
+                tmpBlocks.pop_front();
+            }
+        }
 
         if (IsKeyDown(KEY_RIGHT)) {
             cameraAngle += GetFrameTime();
@@ -161,6 +261,9 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
                 variable.second->displayPlayer(objectPool);
         }
         EndMode3D();
+        if (isBlocClicked) {
+            displayBlocinventory(disInvBlock);
+        }
         EndDrawing();
     }
     CloseWindow();

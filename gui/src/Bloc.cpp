@@ -74,6 +74,15 @@ void Zappy::Bloc::removeItem(Zappy::items item, size_t quantity)
         _items.erase(item);
 }
 
+int Zappy::Bloc::countItem(Zappy::items item)
+{
+    std::unique_lock lock(_mut);
+    if (_items.find(item) != _items.end()) {
+        return _items[item];
+    }
+    return 0;
+}
+
 void Zappy::Bloc::setItems(std::vector<Zappy::items> items)
 {
     _mut.lock();
