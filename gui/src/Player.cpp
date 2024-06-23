@@ -25,6 +25,7 @@ Zappy::Player::Player(const Zappy::Player &player)
     _y = player._y;
     _orien = player._orien;
     _id = player._id;
+    _lvl = player._lvl;
 }
 
 Zappy::Player &Zappy::Player::operator=(const Zappy::Player &player)
@@ -37,6 +38,7 @@ Zappy::Player &Zappy::Player::operator=(const Zappy::Player &player)
     _y = player._y;
     _orien = player._orien;
     _id = player._id;
+    _lvl = player._lvl;
     return (*this);
 }
 
@@ -139,4 +141,16 @@ void Zappy::Player::displayPlayer(RessourceManager &objPool)
     // 0.0f}); DrawModel(player, pos, 5.0f, WHITE);
     DrawModelEx(player, pos, (Vector3){0.0f, 1.5f, 0.0f}, rot,
         (Vector3){2.5f, 2.5f, 2.5f}, WHITE);
+}
+
+int Zappy::Player::getLvl()
+{
+    std::unique_lock lock(_mut);
+    return _lvl;
+}
+
+void Zappy::Player::setLvl(int lvl)
+{
+    std::unique_lock lock(_mut);
+    _lvl = lvl;
 }

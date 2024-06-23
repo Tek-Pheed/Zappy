@@ -77,6 +77,10 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     Zappy::Thread threadZappy;
     Zappy::Parser parser;
     bool isBroadMusicPlaying = false;
+    std::map<int, int> listLvl;
+    for (int i = 1; i <= 8; i++) {
+        listLvl[i] = 0;
+    }
 
     std::string response;
     Players listPlayers;
@@ -146,13 +150,15 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             camera.position = (Vector3){mapCenter.x + cameraDistance * cos(cameraAngle), 30.0f, mapCenter.z + cameraDistance * sin(cameraAngle)};
             camera.target = mapCenter;
         ClearBackground(RAYWHITE);
+        DrawLevels(parser, listLvl);
         BeginMode3D(camera);
         while (blocks.size() != 0) {
             blocks.front()->display(objectPool);
             blocks.pop_front();
         }
         for (const auto &variable : listPlayers.getPlayersList()) {
-            variable.second->displayPlayer(objectPool);
+            if (variable.second != nullptr)
+                variable.second->displayPlayer(objectPool);
         }
         EndMode3D();
         EndDrawing();
@@ -251,3 +257,29 @@ void Zappy::Menu::UnloadResources(
     UnloadModel(model);
     CloseWindow();
 }
+
+void Zappy::Menu::DrawLevels(Zappy::Parser &parser, std::map<int, int> listLvl)
+{
+    std::map<int, Player*> playerListTmp = parser.getPlayersList().getPlayersList();
+    int y = 45;
+
+    for (const auto &variable : playerListTmp) {
+        if (variable.second != nullptr)
+            listLvl[variable.second->getLvl()] += 1;
+    }
+
+    DrawRectangle(15, 15, 240, 330, BLACK);
+    DrawRectangle(20, 20, 230, 320, GRAY);
+    DrawText("LVL 1 :", 40, 45, 30, BLACK);
+    DrawText("LVL 2 :", 40, 80, 30, BLACK);
+    DrawText("LVL 3 :", 40, 115, 30, BLACK);
+    DrawText("LVL 4 :", 40, 150, 30, BLACK);
+    DrawText("LVL 5 :", 40, 185, 30, BLACK);
+    DrawText("LVL 6 :", 40, 220, 30, BLACK);
+    DrawText("LVL 7 :", 40, 255, 30, BLACK);
+    DrawText("LVL 8 :", 40, 290, 30, BLACK);
+    for (int i = 1; i <= listLvl.size(); i++) {
+        DrawText((std::to_string(listLvl[i])).c_str(), 150, y, 30, BLACK);
+        y += 35;
+    }
+}   
