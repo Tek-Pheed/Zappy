@@ -17,19 +17,33 @@
 #include "server.h"
 #include "strings_array.h"
 
+static void flush_buffer(client_t *client, const char *data)
+{
+    size_t offset = 0;
+    size_t total_len = strlen(data);
+
+    if (strlen(client->write_buffer) != 0)
+        write(client->fd, client->write_buffer, strlen(client->write_buffer));
+    while (total_len - offset > 0 && offset < total_len) {
+        memset(client->write_buffer, 0, sizeof(client->write_buffer));
+        strncat(client->write_buffer, data + offset,
+            sizeof(client->write_buffer) - 1);
+        write(client->fd, client->write_buffer, strlen(client->write_buffer));
+        offset += sizeof(client->write_buffer) - 1;
+    }
+}
+
 void server_send_data(client_t *client, const char *data)
 {
     if (data == NULL)
         return;
-    if (client->write_buffer[0] == '\0') {
+    if (client->write_buffer[0] == '\0'
+        && strlen(data) < sizeof(client->write_buffer)) {
         strcpy(client->write_buffer, data);
-    } else if (strlen(client->write_buffer) + strlen(data)
-        < BUFFER_MAX_SIZE) {
+    } else if (strlen(client->write_buffer) + strlen(data) < BUFFER_MAX_SIZE) {
         strcat(client->write_buffer, data);
     } else {
-        write(client->fd, client->write_buffer, strlen(client->write_buffer));
-        memset(client->write_buffer, 0, sizeof(client->write_buffer));
-        strcat(client->write_buffer, data);
+        flush_buffer(client, data);
     }
 }
 
