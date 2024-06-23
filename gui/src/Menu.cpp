@@ -138,7 +138,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             camera.target = (Vector3){0.0f, 0.0f, 0.0f};
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawLogs(parser, listLvl);
+        DrawLevels(parser, listLvl);
         BeginMode3D(camera);
         while (blocks.size() != 0) {
             blocks.front()->display(objectPool);
@@ -246,12 +246,6 @@ void Zappy::Menu::UnloadResources(
     CloseWindow();
 }
 
-
-void Zappy::Menu::DrawLogs(Zappy::Parser &parser, std::map<int, int> listLvl)
-{
-    DrawLevels(parser, listLvl);
-}
-
 void Zappy::Menu::DrawLevels(Zappy::Parser &parser, std::map<int, int> listLvl)
 {
     std::map<int, Player*> playerListTmp = parser.getPlayersList().getPlayersList();
@@ -276,4 +270,4 @@ void Zappy::Menu::DrawLevels(Zappy::Parser &parser, std::map<int, int> listLvl)
         DrawText((std::to_string(listLvl[i])).c_str(), 150, y, 30, BLACK);
         y += 35;
     }
-}
+}   
