@@ -36,7 +36,6 @@ class Player:
         self.team_slot = 0
         self.verbose = False
         self.client_id = uuid.uuid4()
-        self.no_response = 0
 
     def incantation_possible(self) -> bool:
         required_ressources = LVLS_MANDATORY[self.level].copy()
@@ -229,7 +228,7 @@ class Player:
                 self.data_to_send = "Inventory\n"
                 self.step += 1
         elif self.step == 1:
-            if (self.incantation_possible()):
+            if self.incantation_possible():
                 self.step = 11
             else:
                 self.ready_to_level_up = False

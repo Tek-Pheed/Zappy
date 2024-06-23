@@ -105,6 +105,11 @@ int main(int argc, char *argv[])
         destroy_server(serv);
         return 84;
     }
+    if (serv->resX * serv->resY > 1000) {
+        printf("The map will be too big, aborting\n");
+        destroy_server(serv);
+        return (84);
+    }
     print_serv(serv);
     serv->map = create_map(serv);
     create_teams_eggs(serv);

@@ -30,6 +30,7 @@ namespace Zappy
         void removeItem(Zappy::items item, size_t quantity);
         void setItems(std::vector<Zappy::items> items);
         std::vector<Zappy::items> getItems();
+        int countItem (Zappy::items);
 
         void setPlayers(std::vector<Zappy::Player> players);
         std::vector<Zappy::Player> getPlayers();
