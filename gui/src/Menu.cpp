@@ -73,7 +73,9 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic)
 {
     float cameraAngle = 0.0f;
-    float cameraDistance = 50.0f;
+    float baseCameraDistance = 10.0f;
+    float zoomFactor = 2.5f;
+    float cameraDistance = baseCameraDistance;
     Zappy::Thread threadZappy;
     Zappy::Parser parser;
     bool isBroadMusicPlaying = false;
@@ -89,8 +91,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     Vector3 mapCenter = {0.0f, 0.0f, 0.0f};
 
     Camera3D camera;
-    camera.position = {0.0f, 0.0f, 0.0f}; // Initialisation explicite
-    camera.target = {0.0f, 0.0f, 0.0f};   // Initialisation explicite
+    camera.position = {0.0f, 0.0f, 0.0f};
+    camera.target = {0.0f, 0.0f, 0.0f};
     camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
@@ -121,9 +123,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             cameraAngle -= GetFrameTime();
         }
 
-        camera.position.x = mapCenter.x + cameraDistance * cos(cameraAngle);
-        camera.position.z = mapCenter.z + cameraDistance * sin(cameraAngle);
-
         if (parser.getInc())
             UpdateMusicStream(incMusic);
         else
@@ -139,12 +138,15 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             isBroadMusicPlaying = false;
         if (IsKeyPressed('Z'))
             camera.target = mapCenter;
+
         BeginDrawing();
             mapX = parser.getMap().getX();
             mapY = parser.getMap().getY();
             mapCenter = {(mapX / 2.0f) * 5 - 2.5f, 0.0f, (mapY / 2.0f) * 5 - 2.5f};
+            cameraDistance = baseCameraDistance + sqrt(mapX * mapX + mapY * mapY) * zoomFactor;
             camera.position = (Vector3){mapCenter.x + cameraDistance * cos(cameraAngle), 30.0f, mapCenter.z + cameraDistance * sin(cameraAngle)};
             camera.target = mapCenter;
+
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
         while (blocks.size() != 0) {
