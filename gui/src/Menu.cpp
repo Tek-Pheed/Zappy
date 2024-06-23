@@ -79,14 +79,21 @@ void loadItems(RessourceManager &objectPool)
         objectPool.models.loadRessource(Zappy::itemNames[i], models[i]);
 }
 
-std::list <BoundingBox> Zappy::Menu::displayInventory(std::list<Bloc *> bloc)
+std::list <BoundingBox> Zappy::Menu::setHitBox(std::list<Bloc *> bloc, RessourceManager &objectPool)
 {
     std::list <Bloc *> tmp = bloc;
     std::list <BoundingBox> rectList;
+    Model modelref = objectPool.models.dynamicLoad("water", "assets/water.obj");
 
     while(!tmp.empty()) {
-        rectList.push_front({{(float)tmp.front()->getX() * 5.0f, 0.0f, (float)tmp.front()->getY() * 5.0f},
-                            {(float)tmp.front()->getX() * 5.0f + 5.0f, 5.0f, (float)tmp.front()->getY() * 5.0f + 5.0f}});
+        Vector3 posBase = {tmp.front()->getX() * 5.0f, 0.0f, tmp.front()->getY() * 5.0f};
+        rectList.push_back(GetModelBoundingBox(modelref));
+        Vector3 center = Vector3Scale(Vector3Add(rectList.back().min, rectList.back().max), 0.5f);
+        Vector3 extents = Vector3Scale(Vector3Subtract(rectList.back().max, rectList.back().min), 0.5f * 0.5f);
+        rectList.back().min = Vector3Subtract(center, extents);
+        rectList.back().max = Vector3Add(center, extents);
+        rectList.back().min = Vector3Add(rectList.back().min, posBase);
+        rectList.back().max = Vector3Add(rectList.back().max, posBase);
         tmp.pop_front();
     }
     return rectList;
@@ -169,7 +176,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             }
         }
         blocks = parser.getMap().getBloc();
-        std::list <BoundingBox> rectList = displayInventory(blocks);
+        std::list <BoundingBox> rectList = setHitBox(blocks, objectPool);
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
 
@@ -209,7 +216,6 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             variable.second->displayPlayer(objectPool);
         }
         std::list <BoundingBox> rectTmp = rectList;
-        // printf("%d\n", rectTmp.empty());
         while (!rectTmp.empty()) {
             DrawBoundingBox(rectTmp.front(), RED);
             rectTmp.pop_front();
