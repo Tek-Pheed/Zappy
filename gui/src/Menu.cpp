@@ -126,6 +126,25 @@ bool Zappy::Menu::CheckCollisionRayBox(Ray raycam, BoundingBox hitbox)
     return true;
 }
 
+void Zappy::Menu::displayBlocinventory(Bloc *block)
+{
+    int food = block->countItem(items::food);
+    int linemate = block->countItem(items::linemate);
+    int deraumere = block->countItem(items::deraumere);
+    int sibur = block->countItem(items::sibur);
+    int mendiane = block->countItem(items::mendiane);
+    int phiras = block->countItem(items::phiras);
+    int thystame = block->countItem(items::thystame);
+    DrawRectangle(0, GetScreenHeight() - 220, 200, 500, DARKGRAY);
+    DrawText(TextFormat("Food: %d", food), 20, GetScreenHeight() - 200, 20, WHITE);
+    DrawText(TextFormat("Linemate: %d", linemate), 20, GetScreenHeight() - 180, 20, WHITE);
+    DrawText(TextFormat("Deraumere: %d", deraumere), 20, GetScreenHeight() - 160, 20, WHITE);
+    DrawText(TextFormat("Sibur: %d", sibur), 20, GetScreenHeight() - 140, 20, WHITE);
+    DrawText(TextFormat("Mendiane: %d", mendiane), 20, GetScreenHeight() - 120, 20, WHITE);
+    DrawText(TextFormat("Phiras: %d", phiras), 20, GetScreenHeight() - 100, 20, WHITE);
+    DrawText(TextFormat("Thystame: %d", thystame), 20, GetScreenHeight() - 80, 20, WHITE);
+}
+
 void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     BoundingBox bounds, Zappy::Server server, Music music, Music incMusic, Music broadMusic)
 {
@@ -143,6 +162,8 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         45.0f, CAMERA_PERSPECTIVE};
 
     std::list<Bloc *> blocks;
+    std::list<Bloc *> tmpBlocks;
+    Bloc *disInvBlock;
     loadItems(objectPool);
 
     (void) bounds;
@@ -158,6 +179,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
     // const float gravity = -9.81f;
     // const float bounceFactor = 0.7f;
     // bool firstDrop = true;
+    bool isBlocClicked = false;
     std::thread SPThread(&Zappy::Thread::ManageServer, &threadZappy,
         std::ref(server), std::ref(parser));
     bool cursorVisible = true;
@@ -176,6 +198,7 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             }
         }
         blocks = parser.getMap().getBloc();
+        tmpBlocks = blocks;
         std::list <BoundingBox> rectList = setHitBox(blocks, objectPool);
         listPlayers = parser.getPlayersList();
         UpdateCamera(&camera, CAMERA_FREE);
@@ -185,9 +208,12 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
             std::list <BoundingBox> rectListTmp = rectList;
             Ray ray = GetMouseRay(GetMousePosition(), camera);
             while (!rectListTmp.empty()) {
-                if (CheckCollisionRayBox(ray, rectListTmp.front()))
-                   std::cout << "hitbox est cliqué" << std::endl;
+                if (CheckCollisionRayBox(ray, rectListTmp.front())){
+                   isBlocClicked = true;
+                   disInvBlock = tmpBlocks.front();
+                }
                 rectListTmp.pop_front();
+                tmpBlocks.pop_front();
             }
         }
         if (parser.getInc())
@@ -215,12 +241,10 @@ void Zappy::Menu::GameScene(RessourceManager &objectPool, Vector3 position,
         for (const auto &variable : listPlayers.getPlayersList()) {
             variable.second->displayPlayer(objectPool);
         }
-        std::list <BoundingBox> rectTmp = rectList;
-        while (!rectTmp.empty()) {
-            DrawBoundingBox(rectTmp.front(), RED);
-            rectTmp.pop_front();
-        }
         EndMode3D();
+        if (isBlocClicked) {
+            displayBlocinventory(disInvBlock);
+        }
         EndDrawing();
     }
     CloseWindow();

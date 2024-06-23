@@ -57,6 +57,7 @@ namespace Zappy
         void getPort(char **args);
         std::list <BoundingBox> setHitBox(std::list<Bloc *> bloc, RessourceManager &objectPool);
         bool CheckCollisionRayBox(Ray raycam, BoundingBox hitbox);
+        void displayBlocinventory(Bloc *block);
 
       protected:
       private:
