@@ -278,8 +278,8 @@ void Zappy::Menu::DrawLevels(Zappy::Parser &parser, std::map<int, int> listLvl)
     DrawText("LVL 6 :", 40, 220, 30, BLACK);
     DrawText("LVL 7 :", 40, 255, 30, BLACK);
     DrawText("LVL 8 :", 40, 290, 30, BLACK);
-    for (int i = 1; i <= listLvl.size(); i++) {
+    for (size_t i = 1; i <= listLvl.size(); i++) {
         DrawText((std::to_string(listLvl[i])).c_str(), 150, y, 30, BLACK);
         y += 35;
     }
-}   
+}
